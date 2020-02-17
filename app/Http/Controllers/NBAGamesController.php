@@ -28,16 +28,18 @@ class NBAGamesController extends Controller
     	}
 
     	$requests = [
-    		'teams' => $this->client->get('nba/scores/json/teams'),
+    		'teams' => $this->client->get('nba/scores/json/AllTeams'),
+            'stadiums' => $this->client->get('nba/scores/json/Stadiums'),
     		'games' => $this->client->get("nba/scores/json/GamesByDate/{$date}")
     	];
 
     	$responses = Promise\settle($requests)->wait();
 
     	$teams = collect(json_decode($responses['teams']['value']->getBody()->getContents()));
+        $stadiums = collect(json_decode($responses['stadiums']['value']->getBody()->getContents()));
     	$games = collect(json_decode($responses['games']['value']->getBody()->getContents()));
 
-    	$mappedGames = $games->map(function ($game) use ($teams) {
+    	$mappedGames = $games->map(function ($game) use ($teams, $stadiums) {
     		$homeTeam = $teams->filter(function ($team) use ($game) {
     			return $team->TeamID === $game->HomeTeamID;
     		})->first();
@@ -46,6 +48,10 @@ class NBAGamesController extends Controller
     			return $team->TeamID === $game->AwayTeamID;
     		})->first();
 
+            $stadium = $stadiums->filter(function ($stadium) use ($game) {
+                return $stadium->StadiumID === $game->StadiumID;
+            })->first();
+
     		return [
     			'game_id' => $game->GameID,
     			'game_time' => $game->DateTime,
@@ -53,6 +59,7 @@ class NBAGamesController extends Controller
     				'id' => $game->HomeTeamID,
     				'name' => $game->HomeTeam,
     				'full_name' => $homeTeam->City.' '.$homeTeam->Name,
+                    'rotation_number' => $game->HomeRotationNumber,
     				'score' => $game->HomeTeamScore,
     				'money_line' => $game->HomeTeamMoneyLine,
     				'point_spread_money_line' => $game->PointSpreadHomeTeamMoneyLine,
@@ -61,11 +68,14 @@ class NBAGamesController extends Controller
     				'id' => $game->AwayTeamID,
     				'name' => $game->AwayTeam,
     				'full_name' => $awayTeam->City.' '.$awayTeam->Name,
+                    'rotation_number' => $game->AwayRotationNumber,
     				'score' => $game->AwayTeamScore,
     				'money_line' => $game->AwayTeamMoneyLine,
     				'point_spread_money_line' => $game->PointSpreadAwayTeamMoneyLine,
     			],
     			'quarters' => $game->Quarters,
+                'stadium' => $stadium,
+                'status' => $game->Status
     		];
     	});
 
