@@ -5,7 +5,9 @@ namespace App\Http\Controllers;
 use Carbon\Carbon;
 use GuzzleHttp\Client;
 use GuzzleHttp\Promise;
+use GuzzleHttp\HandlerStack;
 use Illuminate\Http\Request;
+use Brightfish\CachingGuzzle\Middleware;
 
 class NBAGamesController extends Controller
 {
@@ -13,7 +15,14 @@ class NBAGamesController extends Controller
 
 	public function __construct()
 	{
+        $store = app('cache')->store('database'); // Laravel
+        $handler = new Middleware($store, 3600 * 24);
+        $stack = HandlerStack::create();
+        $stack->push($handler);
+
 		$this->client = new Client([
+            'handler' => $stack,
+            'cache_ttl' => 3600 * 24, // 24 Hours
 			'base_uri' => 'https://api.sportsdata.io/v3/',
 			'headers' => [
 				'Ocp-Apim-Subscription-Key' => 'ead3c888cb1447e6b50d2a2e204ed2bf'
@@ -30,7 +39,7 @@ class NBAGamesController extends Controller
     	$requests = [
     		'teams' => $this->client->get('nba/scores/json/AllTeams'),
             'stadiums' => $this->client->get('nba/scores/json/Stadiums'),
-    		'games' => $this->client->get("nba/scores/json/GamesByDate/{$date}")
+    		'games' => $this->client->get("nba/scores/json/GamesByDate/{$date}", ['cache' => false])
     	];
 
     	$responses = Promise\settle($requests)->wait();
@@ -63,6 +72,7 @@ class NBAGamesController extends Controller
     				'score' => $game->HomeTeamScore,
     				'money_line' => $game->HomeTeamMoneyLine,
     				'point_spread_money_line' => $game->PointSpreadHomeTeamMoneyLine,
+                    'logo' => $homeTeam->WikipediaLogoUrl
     			],
     			'away_team' => [
     				'id' => $game->AwayTeamID,
@@ -72,6 +82,7 @@ class NBAGamesController extends Controller
     				'score' => $game->AwayTeamScore,
     				'money_line' => $game->AwayTeamMoneyLine,
     				'point_spread_money_line' => $game->PointSpreadAwayTeamMoneyLine,
+                    'logo' => $awayTeam->WikipediaLogoUrl
     			],
     			'quarters' => $game->Quarters,
                 'stadium' => $stadium,
