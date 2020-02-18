@@ -91,7 +91,7 @@ class NBAGamesController extends Controller
     	});
 
     	return response()->json($mappedGames, 200)->withHeaders([
-    		'Access-Control-Allow-Origin' => 'http://localhost:8080'
+    		'Access-Control-Allow-Origin' => config('app.url')
     	]);
     }
 }
