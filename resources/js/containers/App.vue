@@ -1,0 +1,293 @@
+<template>
+  <div
+    class="min-h-screen flex flex-col text-gray-900 bg-gray-100 font-inter text-xs antialiased"
+  >
+    <header>
+      <div class="text-white bg-swl-black-light">
+        <div class="container mx-auto px-4">
+          <div class="h-32 flex justify-between items-center">
+            <div>
+              <img
+                class="h-12"
+                src="./../assets/images/logo.png"
+                alt="Sports Watchlist"
+              />
+            </div>
+            <nav class="flex text-sm">
+              <a href="#">My Watchlist</a>
+              <a href="#" class="ml-4">FAQ's</a>
+              <div class="ml-4 pl-4 border-l border-gray-700">
+                <a href="#">Sign Up</a>
+                <a href="#" class="ml-4 px-4 py-2 bg-swl-green rounded-sm"
+                  >Login</a
+                >
+              </div>
+            </nav>
+          </div>
+        </div>
+      </div>
+      <div class="bg-swl-black-dark">
+        <div class="h-12 flex justify-between items-stretch text-white">
+          <div
+            class="w-1/4 flex items-center justify-center bg-swl-green text-center cursor-pointer"
+          >
+            <span>All Sports</span>
+            <span class="ml-4">
+              <svg
+                class="h-4 w-4"
+                aria-hidden="true"
+                xmlns="http://www.w3.org/2000/svg"
+                viewBox="0 0 320 512"
+              >
+                <path
+                  fill="currentColor"
+                  d="M31.3 192h257.3c17.8 0 26.7 21.5 14.1 34.1L174.1 354.8c-7.8 7.8-20.5 7.8-28.3 0L17.2 226.1C4.6 213.5 13.5 192 31.3 192z"
+                />
+              </svg>
+            </span>
+          </div>
+          <div
+            class="flex items-center justify-center w-24 bg-swl-black-lighter text-center cursor-pointer px-4"
+          >
+            <span class="flex flex-col">
+              <svg
+                class="h-4 w-4 -mb-1"
+                aria-hidden="true"
+                xmlns="http://www.w3.org/2000/svg"
+                viewBox="0 0 320 512"
+              >
+                <path
+                  fill="currentColor"
+                  d="M288.662 352H31.338c-17.818 0-26.741-21.543-14.142-34.142l128.662-128.662c7.81-7.81 20.474-7.81 28.284 0l128.662 128.662c12.6 12.599 3.676 34.142-14.142 34.142z"
+                />
+              </svg>
+              <svg
+                class="h-4 w-4 -mt-1"
+                aria-hidden="true"
+                xmlns="http://www.w3.org/2000/svg"
+                viewBox="0 0 320 512"
+              >
+                <path
+                  fill="currentColor"
+                  d="M31.3 192h257.3c17.8 0 26.7 21.5 14.1 34.1L174.1 354.8c-7.8 7.8-20.5 7.8-28.3 0L17.2 226.1C4.6 213.5 13.5 192 31.3 192z"
+                />
+              </svg>
+            </span>
+            <span class="ml-1">Sort</span>
+          </div>
+          <div
+            class="flex items-stretch justify-center flex-shrink-0 text-center"
+          >
+            <v-date-picker
+              :is-required="true"
+              @input="updateDate"
+              :value="date"
+              :popover="{ placement: 'bottom', visibility: 'click' }"
+            >
+              <div class="h-full flex items-center px-4 cursor-pointer">
+                <span class="block h-full flex items-center">
+                  <svg
+                    class="h-5 w-5 text-white"
+                    aria-hidden="true"
+                    xmlns="http://www.w3.org/2000/svg"
+                    viewBox="0 0 448 512"
+                  >
+                    <path
+                      fill="currentColor"
+                      d="M148 288h-40c-6.6 0-12-5.4-12-12v-40c0-6.6 5.4-12 12-12h40c6.6 0 12 5.4 12 12v40c0 6.6-5.4 12-12 12zm108-12v-40c0-6.6-5.4-12-12-12h-40c-6.6 0-12 5.4-12 12v40c0 6.6 5.4 12 12 12h40c6.6 0 12-5.4 12-12zm96 0v-40c0-6.6-5.4-12-12-12h-40c-6.6 0-12 5.4-12 12v40c0 6.6 5.4 12 12 12h40c6.6 0 12-5.4 12-12zm-96 96v-40c0-6.6-5.4-12-12-12h-40c-6.6 0-12 5.4-12 12v40c0 6.6 5.4 12 12 12h40c6.6 0 12-5.4 12-12zm-96 0v-40c0-6.6-5.4-12-12-12h-40c-6.6 0-12 5.4-12 12v40c0 6.6 5.4 12 12 12h40c6.6 0 12-5.4 12-12zm192 0v-40c0-6.6-5.4-12-12-12h-40c-6.6 0-12 5.4-12 12v40c0 6.6 5.4 12 12 12h40c6.6 0 12-5.4 12-12zm96-260v352c0 26.5-21.5 48-48 48H48c-26.5 0-48-21.5-48-48V112c0-26.5 21.5-48 48-48h48V12c0-6.6 5.4-12 12-12h40c6.6 0 12 5.4 12 12v52h128V12c0-6.6 5.4-12 12-12h40c6.6 0 12 5.4 12 12v52h48c26.5 0 48 21.5 48 48zm-48 346V160H48v298c0 3.3 2.7 6 6 6h340c3.3 0 6-2.7 6-6z"
+                    />
+                  </svg>
+                </span>
+                <span class="pl-2">{{ prettyDate }}</span>
+              </div>
+            </v-date-picker>
+          </div>
+          <div class="flex items-center">
+            <button @click="previousDay" type="button" class="px-2">
+              <svg
+                class="h-5 w-5"
+                aria-hidden="true"
+                xmlns="http://www.w3.org/2000/svg"
+                viewBox="0 0 192 512"
+              >
+                <path
+                  fill="currentColor"
+                  d="M192 127.338v257.324c0 17.818-21.543 26.741-34.142 14.142L29.196 270.142c-7.81-7.81-7.81-20.474 0-28.284l128.662-128.662c12.599-12.6 34.142-3.676 34.142 14.142z"
+                />
+              </svg>
+            </button>
+            <table class="table-fixed">
+              <tbody>
+                <tr>
+                  <td class="flex text-gray-600">
+                    <button
+                      v-for="(day, index) in week"
+                      :key="`row-${day.date}`"
+                      class="flex flex-col mx-1 leading-tight font-semibold"
+                      :class="index === 3 ? 'text-white' : ''"
+                      type="button"
+                      @click="setDate(index)"
+                    >
+                      <span class="text-xs uppercase">{{ day.day }}</span>
+                      <span>{{ day.date }}</span>
+                    </button>
+                  </td>
+                </tr>
+              </tbody>
+            </table>
+            <button @click="nextDay" type="button" class="px-2">
+              <svg
+                class="h-5 w-5"
+                aria-hidden="true"
+                xmlns="http://www.w3.org/2000/svg"
+                viewBox="0 0 192 512"
+              >
+                <path
+                  fill="currentColor"
+                  d="M0 384.662V127.338c0-17.818 21.543-26.741 34.142-14.142l128.662 128.662c7.81 7.81 7.81 20.474 0 28.284L34.142 398.804C21.543 411.404 0 402.48 0 384.662z"
+                />
+              </svg>
+            </button>
+          </div>
+          <div class="relative flex flex-1 items-center">
+            <div class="absolute top-0 bottom-0 left-0 flex items-center pl-2">
+              <svg
+                class="w-4 h-4 text-gray-600"
+                aria-hidden="true"
+                xmlns="http://www.w3.org/2000/svg"
+                viewBox="0 0 512 512"
+              >
+                <path
+                  fill="currentColor"
+                  d="M505 442.7L405.3 343c-4.5-4.5-10.6-7-17-7H372c27.6-35.3 44-79.7 44-128C416 93.1 322.9 0 208 0S0 93.1 0 208s93.1 208 208 208c48.3 0 92.7-16.4 128-44v16.3c0 6.4 2.5 12.5 7 17l99.7 99.7c9.4 9.4 24.6 9.4 33.9 0l28.3-28.3c9.4-9.4 9.4-24.6.1-34zM208 336c-70.7 0-128-57.2-128-128 0-70.7 57.2-128 128-128 70.7 0 128 57.2 128 128 0 70.7-57.2 128-128 128z"
+                />
+              </svg>
+            </div>
+            <input
+              type="text"
+              class="w-64 pl-8 pr-4 py-1 bg-swl-black-light rounded placeholder-gray-400"
+              placeholder="Search"
+            />
+          </div>
+          <div class="w-1/6"></div>
+        </div>
+      </div>
+    </header>
+    <section class="flex flex-1">
+      <main class="container mx-auto px-4">
+        <nba-game-list :date="date"></nba-game-list>
+      </main>
+      <!-- <aside class="w-1/4"></aside> -->
+    </section>
+    <footer>
+      <div class="py-8 bg-swl-black-light text-white">
+        <nav
+          class="container mx-auto px-4 flex justify-end text-xl font-semibold tracking-wide"
+        >
+          <a class="ml-4" href="#">MLB</a>
+          <a class="ml-4" href="#">NBA</a>
+          <a class="ml-4" href="#">NCAAB</a>
+          <a class="ml-4" href="#">NCAAF</a>
+          <a class="ml-4" href="#">NFL</a>
+          <a class="ml-4" href="#">NHL</a>
+        </nav>
+      </div>
+      <div class="bg-swl-black-lighter text-white py-8">
+        <div class="container mx-auto px-4 text-center">
+          <div class="inline-block uppercase tracking-wide font-semibold">
+            <div class="flex">
+              <a href="#">Advertise with Us</a>
+              <span class="px-4">|</span>
+              <a href="#">Privacy Policy</a>
+              <span class="px-4">|</span>
+              <a href="#">Sports Betting</a>
+            </div>
+          </div>
+        </div>
+        <div class="container mx-auto px-4 text-center text-gray-500 mt-8">
+          <p>
+            The acitivities offered by advertising links to other sites, may be
+            deemed an illegal activity in certain juristrictions and are void
+            when prohibited. The viewer is specifically warned that they should
+            make their own inquiry into the legality of participating in any of
+            these games and/or activities. The owner of the web sites assumes no
+            responsibility or endorsement of any these games and/or activities
+            if they are in the juristriction of the reader of client of this
+            site.
+          </p>
+          <p class="mt-4 font-semibold">
+            Sports Watchlist {{ theYear }} &copy; All Rights Reserved
+          </p>
+        </div>
+      </div>
+    </footer>
+  </div>
+</template>
+
+<script>
+import moment from "moment";
+import NBAGameList from "./../components/NBAGameList";
+
+export default {
+  components: {
+    'nba-game-list': NBAGameList
+  },
+  data() {
+    return {
+      date: ''
+    }
+  },
+  watch: {
+    date(newValue) {
+      this.buildWeekRow(newValue);
+    }
+  },
+  created() {
+    this.date = moment().toString();
+    this.buildWeekRow();
+  },
+  computed: {
+    prettyDate() {
+      return moment(this.date).format("MMM D, YYYY");
+    },
+    theYear() {
+      return new Date().getFullYear();
+    }
+  },
+  methods: {
+    updateDate(e) {
+      this.date = moment(e).toString();
+    },
+    buildWeekRow(start) {
+      const week = [];
+
+      const date = start ? start : new Date();
+
+      for (let i = -3; i < 4; i++) {
+        const day = moment(date).add(i, "days");
+
+        week.push({
+          dateTime: day,
+          date: day.format("D"),
+          day: day.format("ddd")
+        });
+      }
+
+      this.week = week;
+    },
+    setDate(index) {
+      this.date = this.week[index].dateTime;
+    },
+    previousDay() {
+      this.date = moment(this.date)
+        .subtract(1, "days")
+        .toString();
+    },
+    nextDay() {
+      this.date = moment(this.date)
+        .add(1, "days")
+        .toString();
+    }
+  }
+}
+</script>
