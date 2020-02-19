@@ -1,6 +1,6 @@
 <template>
   <div>
-    <div class="shadow-md rounded overflow-hidden">
+    <div class="bg-white shadow-md rounded overflow-hidden">
       <table class="w-full table-fixed">
         <thead class="bg-swl-black-dark text-white text-xs uppercase">
           <tr>
