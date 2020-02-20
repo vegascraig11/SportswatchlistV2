@@ -17,7 +17,7 @@
         <tbody>
           <tr>
             <td>
-              <div :class="homeWon" class="pl-4 py-4 w-full flex relative">
+              <div :class="homeClasses" class="pl-4 w-full flex relative">
                 <span
                   v-if="homeWon"
                   class="absolute top-0 bottom-0 left-0 flex items-center -mx-2"
@@ -34,11 +34,14 @@
                     />
                   </svg>
                 </span>
-                <div>
+                <div class="flex items-center">
                   <p>{{ game.home_team.rotation_number }}</p>
-                </div>
-                <div class="ml-4">
-                  <p>{{ game.home_team.full_name }}</p>
+                  <img 
+                    class="ml-4 h-12 w-12"
+                    v-if="game.home_team.logo"
+                    :src="game.home_team.logo"
+                    :alt="game.home_team.full_name">
+                  <p class="ml-2">{{ game.home_team.full_name }}</p>
                   <!-- <p class="invisible">(1-0-0)</p> -->
                 </div>
               </div>
@@ -77,7 +80,7 @@
                 </table>
               </div>
             </td>
-            <td :class="homeWon" class="text-right border-r pr-4">
+            <td :class="homeClasses" class="text-right border-r pr-4">
               {{ game.home_team.score || "??" }}
             </td>
             <td class="text-center">
@@ -88,7 +91,7 @@
           </tr>
           <tr>
             <td>
-              <div :class="awayWon" class="pl-4 py-4 w-full flex relative">
+              <div :class="awayClasses" class="pl-4 w-full flex relative">
                 <span
                   v-if="awayWon"
                   class="absolute top-0 bottom-0 left-0 flex items-center -mx-2"
@@ -105,16 +108,19 @@
                     />
                   </svg>
                 </span>
-                <div>
+                <div class="flex items-center">
                   <p>{{ game.away_team.rotation_number }}</p>
-                </div>
-                <div class="ml-4">
-                  <p>{{ game.away_team.full_name }}</p>
+                  <img 
+                    class="ml-4 h-12 w-12"
+                    v-if="game.away_team.logo"
+                    :src="game.away_team.logo"
+                    :alt="game.away_team.full_name">
+                  <p class="ml-2">{{ game.away_team.full_name }}</p>
                   <!-- <p class="invisible">(1-0-0)</p> -->
                 </div>
               </div>
             </td>
-            <td :class="awayWon" class="text-right border-r pr-4">
+            <td :class="awayClasses" class="text-right border-r pr-4">
               {{ game.away_team.score || "??" }}
             </td>
             <td class="text-center">
@@ -192,13 +198,23 @@ export default {
       return home_team.score > away_team.score ? "home" : "away";
     },
     homeWon() {
-      return this.winner === "home" ? "font-semibold text-green-500" : "";
+      return this.winner === "home";
     },
     awayWon() {
-      return this.winner === "away" ? "font-semibold text-green-500" : "";
+      return this.winner === "away";
     },
     quarters() {
       return this.game.quarters.length > 0;
+    },
+    homeClasses() {
+      let out = this.game.home_team.logo ? 'py-2' : 'py-4';
+      out += this.homeWon ? " font-semibold text-green-500" : "";
+      return out;
+    },
+    awayClasses() {
+      let out = this.game.away_team.logo ? 'py-2' : 'py-4';
+      out += this.awayWon ? " font-semibold text-green-500" : "";
+      return out;
     }
   }
 };

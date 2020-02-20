@@ -18,7 +18,8 @@ mix.js('resources/js/app.js', 'public/js')
     		require('tailwindcss')('./tailwind.config.js'),
     		require('autoprefixer')
     	]
-    })
-    .purgeCss()
-    .extract()
-    .version();
+    });
+
+if (mix.inProduction()) {
+    mix.purgeCss().extract().version();
+}
