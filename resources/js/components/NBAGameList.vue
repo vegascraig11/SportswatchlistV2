@@ -1,5 +1,5 @@
 <template>
-  <div class="py-6">
+  <div class="px-2 sm:px-0 py-6">
     <h2 class="text-xl font-semibold">NBA Game List</h2>
     <div v-if="loading" class="flex justify-center py-6">
       <loading></loading>
