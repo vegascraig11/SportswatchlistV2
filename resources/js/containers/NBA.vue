@@ -23,11 +23,11 @@
 
 <script>
 import moment from "moment";
-import Loading from "./Loading";
-import NBAGameListItem from "./NBAGameListItem";
+import Loading from "./../components/Loading";
+import NBAGameListItem from "./../components/NBAGameListItem";
 
 export default {
-  props: ["date"],
+  // props: ["date"],
   components: {
     Loading,
     "nba-game-list-item": NBAGameListItem
@@ -45,6 +45,11 @@ export default {
   },
   created() {
     this.getGames();
+  },
+  computed: {
+    date() {
+      return this.$store.state.date;
+    }
   },
   methods: {
     getGames() {

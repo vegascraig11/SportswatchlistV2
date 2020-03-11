@@ -29,9 +29,17 @@
       <div class="bg-swl-black-dark">
         <div class="h-12 flex justify-between items-stretch text-white">
           <div
-            class="w-1/4 flex items-center justify-center bg-swl-green text-center cursor-pointer"
+            class="relative w-1/4 flex items-center justify-center bg-swl-green text-center cursor-pointer"
+            @click="openSportDropdown"
           >
-            <span>All Sports</span>
+            <div v-if="sportDropdown" class="absolute top-0 left-0 right-0 mt-12 z-50">
+              <ul class="w-full bg-swl-black-light">
+                <li @click="selectSport($event, index)" v-for="(sport, index) in sports" :key="`sport-${sport.url}`" class="hover:bg-gray-700">
+                  <router-link class="block py-2" :to="sport.url">{{ sport.name }}</router-link>
+                </li>
+              </ul>
+            </div>
+            <span>{{ sports[loadedSport].name }}</span>
             <span class="ml-4">
               <svg
                 class="h-4 w-4"
@@ -178,7 +186,9 @@
     <section class="flex-1">
       <main class="w-full max-w-6xl mx-auto sm:px-4">
         <div class="flex">
-          <nba-game-list class="w-full" :date="date"></nba-game-list>
+          <div class="w-full">
+            <router-view></router-view>
+          </div>
           <aside class="hidden md:block pl-4 py-6">
             <h2 class="text-xl invisible mb-6">Sidebar</h2>
             <div class="flex items-center">
@@ -241,14 +251,42 @@
 
 <script>
 import moment from "moment";
-import NBAGameList from "./../components/NBAGameList";
 
 export default {
-  components: {
-    'nba-game-list': NBAGameList
-  },
   data() {
     return {
+      sports: [
+        {
+          name: 'All Sports',
+          url: '/'
+        },
+        {
+          name: 'MLB',
+          url: 'mlb'
+        },
+        {
+          name: 'NBA',
+          url: 'nba'
+        },
+        {
+          name: 'NCAAB',
+          url: 'ncaab'
+        },
+        {
+          name: 'NCAAF',
+          url: 'ncaaf'
+        },
+        {
+          name: 'NFL',
+          url: 'nfl'
+        },
+        {
+          name: 'NHL',
+          url: 'nhl'
+        },
+      ],
+      loadedSport: 0,
+      sportDropdown: false,
       date: '',
       attributes: [],
       time: new Date()
@@ -256,10 +294,12 @@ export default {
   },
   watch: {
     date(newValue) {
+      this.$store.commit('setDate', newValue.toString())
       this.buildWeekRow(newValue);
     }
   },
   created() {
+    console.log(this.$route.path)
     this.date = moment().toString();
     this.buildWeekRow();
 
@@ -321,6 +361,27 @@ export default {
     },
     dayClicked(e) {
       this.updateDate(e.date);
+    },
+    openSportDropdown(e) {
+      e.stopPropagation();
+
+      this.sportDropdown = true;
+
+      document.querySelector('body').addEventListener('click', this.bodyClickListener);
+    },
+    closeSportDropdown(e) {
+      e.stopPropagation();
+
+      this.sportDropdown = false;
+
+      document.querySelector('body').removeEventListener('click', this.bodyClickListener);
+    },
+    bodyClickListener(e) {
+      this.closeSportDropdown(e);
+    },
+    selectSport(e, index) {
+      this.loadedSport = index;
+      this.closeSportDropdown(e);
     }
   }
 }
