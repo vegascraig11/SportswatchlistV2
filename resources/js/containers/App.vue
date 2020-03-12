@@ -13,7 +13,7 @@
                 alt="Sports Watchlist"
               />
             </div>
-            <nav class="flex text-sm">
+            <nav class="hidden lg:flex text-sm">
               <a href="#">My Watchlist</a>
               <a href="#" class="ml-4">FAQ's</a>
               <div class="ml-4 pl-4 border-l border-gray-700">
@@ -23,13 +23,16 @@
                 >
               </div>
             </nav>
+            <button class="lg:hidden">
+              <svg viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg" class="fill-current h-6 w-6"><title>Menu</title><path d="M0 3h20v2H0V3zm0 6h20v2H0V9zm0 6h20v2H0v-2z"></path></svg>
+            </button>
           </div>
         </div>
       </div>
       <div class="bg-swl-black-dark">
-        <div class="h-12 flex justify-between items-stretch text-white">
+        <div class="flex flex-wrap items-stretch text-white">
           <div
-            class="relative w-1/4 flex items-center justify-center bg-swl-green text-center cursor-pointer"
+            class="relative w-1/2 md:w-1/4 flex items-center justify-center bg-swl-green text-center cursor-pointer"
             @click="openSportDropdown"
           >
             <div v-if="sportDropdown" class="absolute top-0 left-0 right-0 mt-12 z-50">
@@ -39,7 +42,7 @@
                 </li>
               </ul>
             </div>
-            <span>{{ sports[loadedSport].name }}</span>
+            <span class="py-4">{{ sports[loadedSport].name }}</span>
             <span class="ml-4">
               <svg
                 class="h-4 w-4"
@@ -54,9 +57,7 @@
               </svg>
             </span>
           </div>
-          <div
-            class="flex items-center justify-center w-24 bg-swl-black-lighter text-center cursor-pointer px-4"
-          >
+          <div class="flex items-center justify-center w-1/2 md:w-24 bg-swl-black-lighter text-center cursor-pointer px-4">
             <span class="flex flex-col">
               <svg
                 class="h-4 w-4 -mb-1"
@@ -83,84 +84,84 @@
             </span>
             <span class="ml-1">Sort</span>
           </div>
-          <div
-            class="flex items-stretch justify-center flex-shrink-0 text-center"
-          >
-            <v-date-picker
-              :attributes="attributes"
-              is-dark
-              :is-required="true"
-              @input="updateDate"
-              :value="date"
-              :popover="{ placement: 'bottom', visibility: 'click' }"
-            >
-              <div class="h-full flex items-center px-4 cursor-pointer">
-                <span class="block h-full flex items-center">
-                  <svg
-                    class="h-5 w-5 text-white"
-                    aria-hidden="true"
-                    xmlns="http://www.w3.org/2000/svg"
-                    viewBox="0 0 448 512"
-                  >
-                    <path
-                      fill="currentColor"
-                      d="M148 288h-40c-6.6 0-12-5.4-12-12v-40c0-6.6 5.4-12 12-12h40c6.6 0 12 5.4 12 12v40c0 6.6-5.4 12-12 12zm108-12v-40c0-6.6-5.4-12-12-12h-40c-6.6 0-12 5.4-12 12v40c0 6.6 5.4 12 12 12h40c6.6 0 12-5.4 12-12zm96 0v-40c0-6.6-5.4-12-12-12h-40c-6.6 0-12 5.4-12 12v40c0 6.6 5.4 12 12 12h40c6.6 0 12-5.4 12-12zm-96 96v-40c0-6.6-5.4-12-12-12h-40c-6.6 0-12 5.4-12 12v40c0 6.6 5.4 12 12 12h40c6.6 0 12-5.4 12-12zm-96 0v-40c0-6.6-5.4-12-12-12h-40c-6.6 0-12 5.4-12 12v40c0 6.6 5.4 12 12 12h40c6.6 0 12-5.4 12-12zm192 0v-40c0-6.6-5.4-12-12-12h-40c-6.6 0-12 5.4-12 12v40c0 6.6 5.4 12 12 12h40c6.6 0 12-5.4 12-12zm96-260v352c0 26.5-21.5 48-48 48H48c-26.5 0-48-21.5-48-48V112c0-26.5 21.5-48 48-48h48V12c0-6.6 5.4-12 12-12h40c6.6 0 12 5.4 12 12v52h128V12c0-6.6 5.4-12 12-12h40c6.6 0 12 5.4 12 12v52h48c26.5 0 48 21.5 48 48zm-48 346V160H48v298c0 3.3 2.7 6 6 6h340c3.3 0 6-2.7 6-6z"
-                    />
-                  </svg>
-                </span>
-                <span class="pl-2">{{ prettyDate }}</span>
-              </div>
-            </v-date-picker>
-          </div>
-          <div class="flex items-center">
-            <button @click="previousDay" type="button" class="px-2">
-              <svg
-                class="h-5 w-5"
-                aria-hidden="true"
-                xmlns="http://www.w3.org/2000/svg"
-                viewBox="0 0 192 512"
+          <div class="flex overflow-x-auto">
+            <div class="flex items-stretch justify-center flex-shrink-0 text-center">
+              <v-date-picker
+                :attributes="attributes"
+                is-dark
+                :is-required="true"
+                @input="updateDate"
+                :value="date"
+                :popover="{ placement: 'bottom', visibility: 'click' }"
               >
-                <path
-                  fill="currentColor"
-                  d="M192 127.338v257.324c0 17.818-21.543 26.741-34.142 14.142L29.196 270.142c-7.81-7.81-7.81-20.474 0-28.284l128.662-128.662c12.599-12.6 34.142-3.676 34.142 14.142z"
-                />
-              </svg>
-            </button>
-            <table class="table-fixed">
-              <tbody>
-                <tr>
-                  <td class="flex text-gray-600">
-                    <button
-                      v-for="(day, index) in week"
-                      :key="`row-${day.date}`"
-                      class="flex flex-col mx-1 leading-tight font-semibold"
-                      :class="index === 3 ? 'text-white' : ''"
-                      type="button"
-                      @click="setDate(index)"
+                <div class="h-full flex items-center px-4 cursor-pointer">
+                  <span class="block h-full flex items-center">
+                    <svg
+                      class="h-5 w-5 text-white"
+                      aria-hidden="true"
+                      xmlns="http://www.w3.org/2000/svg"
+                      viewBox="0 0 448 512"
                     >
-                      <span class="text-xs uppercase">{{ day.day }}</span>
-                      <span>{{ day.date }}</span>
-                    </button>
-                  </td>
-                </tr>
-              </tbody>
-            </table>
-            <button @click="nextDay" type="button" class="px-2">
-              <svg
-                class="h-5 w-5"
-                aria-hidden="true"
-                xmlns="http://www.w3.org/2000/svg"
-                viewBox="0 0 192 512"
-              >
-                <path
-                  fill="currentColor"
-                  d="M0 384.662V127.338c0-17.818 21.543-26.741 34.142-14.142l128.662 128.662c7.81 7.81 7.81 20.474 0 28.284L34.142 398.804C21.543 411.404 0 402.48 0 384.662z"
-                />
-              </svg>
-            </button>
+                      <path
+                        fill="currentColor"
+                        d="M148 288h-40c-6.6 0-12-5.4-12-12v-40c0-6.6 5.4-12 12-12h40c6.6 0 12 5.4 12 12v40c0 6.6-5.4 12-12 12zm108-12v-40c0-6.6-5.4-12-12-12h-40c-6.6 0-12 5.4-12 12v40c0 6.6 5.4 12 12 12h40c6.6 0 12-5.4 12-12zm96 0v-40c0-6.6-5.4-12-12-12h-40c-6.6 0-12 5.4-12 12v40c0 6.6 5.4 12 12 12h40c6.6 0 12-5.4 12-12zm-96 96v-40c0-6.6-5.4-12-12-12h-40c-6.6 0-12 5.4-12 12v40c0 6.6 5.4 12 12 12h40c6.6 0 12-5.4 12-12zm-96 0v-40c0-6.6-5.4-12-12-12h-40c-6.6 0-12 5.4-12 12v40c0 6.6 5.4 12 12 12h40c6.6 0 12-5.4 12-12zm192 0v-40c0-6.6-5.4-12-12-12h-40c-6.6 0-12 5.4-12 12v40c0 6.6 5.4 12 12 12h40c6.6 0 12-5.4 12-12zm96-260v352c0 26.5-21.5 48-48 48H48c-26.5 0-48-21.5-48-48V112c0-26.5 21.5-48 48-48h48V12c0-6.6 5.4-12 12-12h40c6.6 0 12 5.4 12 12v52h128V12c0-6.6 5.4-12 12-12h40c6.6 0 12 5.4 12 12v52h48c26.5 0 48 21.5 48 48zm-48 346V160H48v298c0 3.3 2.7 6 6 6h340c3.3 0 6-2.7 6-6z"
+                      />
+                    </svg>
+                  </span>
+                  <span class="pl-2">{{ prettyDate }}</span>
+                </div>
+              </v-date-picker>
+            </div>
+            <div class="flex items-center py-2">
+              <button @click="previousDay" type="button" class="px-2">
+                <svg
+                  class="h-5 w-5"
+                  aria-hidden="true"
+                  xmlns="http://www.w3.org/2000/svg"
+                  viewBox="0 0 192 512"
+                >
+                  <path
+                    fill="currentColor"
+                    d="M192 127.338v257.324c0 17.818-21.543 26.741-34.142 14.142L29.196 270.142c-7.81-7.81-7.81-20.474 0-28.284l128.662-128.662c12.599-12.6 34.142-3.676 34.142 14.142z"
+                  />
+                </svg>
+              </button>
+              <table class="table-fixed">
+                <tbody>
+                  <tr>
+                    <td class="flex text-gray-600">
+                      <button
+                        v-for="(day, index) in week"
+                        :key="`row-${day.date}`"
+                        class="flex flex-col mx-1 leading-tight font-semibold"
+                        :class="index === 3 ? 'text-white' : ''"
+                        type="button"
+                        @click="setDate(index)"
+                      >
+                        <span class="text-xs uppercase">{{ day.day }}</span>
+                        <span>{{ day.date }}</span>
+                      </button>
+                    </td>
+                  </tr>
+                </tbody>
+              </table>
+              <button @click="nextDay" type="button" class="px-2">
+                <svg
+                  class="h-5 w-5"
+                  aria-hidden="true"
+                  xmlns="http://www.w3.org/2000/svg"
+                  viewBox="0 0 192 512"
+                >
+                  <path
+                    fill="currentColor"
+                    d="M0 384.662V127.338c0-17.818 21.543-26.741 34.142-14.142l128.662 128.662c7.81 7.81 7.81 20.474 0 28.284L34.142 398.804C21.543 411.404 0 402.48 0 384.662z"
+                  />
+                </svg>
+              </button>
+            </div>
           </div>
-          <div class="relative flex flex-1 items-center">
-            <div class="absolute top-0 bottom-0 left-0 flex items-center pl-2">
+          <div class="w-full md:w-auto px-6 md:px-0 py-1 relative flex items-center">
+            <div class="absolute top-0 bottom-0 left-0 flex items-center pl-8 md:pl-2">
               <svg
                 class="w-4 h-4 text-gray-600"
                 aria-hidden="true"
@@ -175,11 +176,10 @@
             </div>
             <input
               type="text"
-              class="w-64 pl-8 pr-4 py-1 bg-swl-black-light rounded placeholder-gray-400"
+              class="w-full pl-8 pr-4 py-2 bg-swl-black-light rounded placeholder-gray-400"
               placeholder="Search"
             />
           </div>
-          <div class="w-1/6"></div>
         </div>
       </div>
     </header>
@@ -189,7 +189,7 @@
           <div class="w-full">
             <router-view></router-view>
           </div>
-          <aside class="hidden md:block pl-4 py-6">
+          <aside class="hidden lg:block pl-4 py-6">
             <h2 class="text-xl invisible mb-6">Sidebar</h2>
             <div class="flex items-center">
               <svg class="h-6 w-6 fill-current text-gray-600" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20"><path d="M10 0.4c-5.3 0-9.6 4.3-9.6 9.6 0 5.3 4.3 9.6 9.6 9.6 5.3 0 9.6-4.3 9.6-9.6C19.6 4.7 15.3 0.4 10 0.4zM10 17.6c-4.2 0-7.6-3.4-7.6-7.6 0-4.2 3.4-7.6 7.6-7.6 4.2 0 7.6 3.4 7.6 7.6C17.6 14.2 14.2 17.6 10 17.6zM11 9.3V4H9v6.2l-3.5 2 1 1.7 4.1-2.4C10.8 11.5 11 11.2 11 10.9v-0.2l4.2-4.2c-0.2-0.3-0.4-0.5-0.6-0.8L11 9.3z" /></svg>
