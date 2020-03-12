@@ -21,3 +21,5 @@ Route::middleware('auth:api')->get('/user', function (Request $request) {
 Route::get('nba/gamesByDate/{date}', 'NBAGamesController@gamesByDate');
 
 Route::get('nhl/gamesByDate/{date}', 'NHLGamesController@gamesByDate');
+
+Route::get('mlb/gamesByDate/{date}', 'MLBGamesController@gamesByDate');
