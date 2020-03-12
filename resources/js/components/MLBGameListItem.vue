@@ -6,8 +6,7 @@
           <table class="min-w-full">
             <thead class="bg-swl-black-dark text-white text-xs uppercase">
               <tr class="whitespace-no-wrap">
-                <th class="w-1/3 px-4 py-2 text-left">NHL | {{ gameTime }}</th>
-                <th class="px-4">&nbsp;</th>
+                <th class="w-1/3 px-4 py-2 text-left">NHL | {{ gameTime }} <span v-if="isCanceled" class="ml-2 px-2 py-1 rounded bg-red-600 text-white">Canceled</span></th>
                 <th class="px-4 text-right">
                   {{ game.status === "F/OT" ? "F/OT" : "Final Score" }}
                 </th>
@@ -43,47 +42,16 @@
                         v-if="game.home_team.logo"
                         :src="game.home_team.logo"
                         :alt="game.home_team.full_name">
-                      <p class="ml-2 whitespace-no-wrap">{{ game.home_team.full_name }}</p>
+                      <div class="ml-2 whitespace-no-wrap">
+                        <p class="">{{ game.home_team.full_name }}</p>
+                        <p class="text-gray-600 font-normal">{{ homeWon ? game.winningPitcher : game.losingPitcher }}</p>
+                      </div>
                       <!-- <p class="invisible">(1-0-0)</p> -->
                     </div>
                   </div>
                 </td>
-                <td rowspan="2">
-                  <!-- <div v-if="quarters" class="border">
-                    <table class="w-full">
-                      <thead class="bg-swl-black-dark text-white">
-                        <tr>
-                          <th
-                            v-for="quarter in game.quarters"
-                            :key="`q-${quarter.QuarterID}`"
-                          >
-                            {{ quarter.Name }}
-                          </th>
-                        </tr>
-                      </thead>
-                      <tbody class="text-center">
-                        <tr>
-                          <td
-                            v-for="quarter in game.quarters"
-                            :key="`home-${quarter.QuarterID}`"
-                          >
-                            {{ quarter.HomeScore }}
-                          </td>
-                        </tr>
-                        <tr>
-                          <td
-                            v-for="quarter in game.quarters"
-                            :key="`away-${quarter.QuarterID}`"
-                          >
-                            {{ quarter.AwayScore }}
-                          </td>
-                        </tr>
-                      </tbody>
-                    </table>
-                  </div> -->
-                </td>
                 <td :class="homeClasses" class="text-right border-r pr-4">
-                  {{ game.home_team.score || "??" }}
+                  {{ game.home_team.runs || "??" }}
                 </td>
                 <td class="text-center">
                   {{ game.home_team.money_line || "??" }}
@@ -117,13 +85,16 @@
                         v-if="game.away_team.logo"
                         :src="game.away_team.logo"
                         :alt="game.away_team.full_name">
-                      <p class="ml-2 whitespace-no-wrap">{{ game.away_team.full_name }}</p>
+                      <div class="ml-2 whitespace-no-wrap">
+                        <p>{{ game.away_team.full_name }}</p>
+                        <p class="text-gray-600 font-normal">{{ awayWon ? game.winningPitcher : game.losingPitcher }}</p>
+                      </div>
                       <!-- <p class="invisible">(1-0-0)</p> -->
                     </div>
                   </div>
                 </td>
                 <td :class="awayClasses" class="text-right border-r pr-4">
-                  {{ game.away_team.score || "??" }}
+                  {{ game.away_team.runs || "??" }}
                 </td>
                 <td class="text-center">
                   {{ game.away_team.money_line || "??" }}
@@ -190,7 +161,7 @@ export default {
 
       if (!stadium) return "USA";
 
-      return `${stadium.Name}, ${stadium.Address}, ${stadium.City}, ${stadium.State}, ${stadium.Country}`;
+      return `${stadium.Name}${stadium.City ? ', ' + stadium.City : ''}${stadium.State ? ', ' + stadium.State : ''}${stadium.Country ? ', ' + stadium.Country : ''}`;
     },
     winner() {
       const { status, home_team, away_team } = this.game;
@@ -199,7 +170,7 @@ export default {
         return null;
       }
 
-      return home_team.score > away_team.score ? "home" : "away";
+      return home_team.runs > away_team.runs ? "home" : "away";
     },
     homeWon() {
       return this.winner === "home";
@@ -219,6 +190,9 @@ export default {
       let out = this.game.away_team.logo ? 'py-2' : 'py-4';
       out += this.awayWon ? " font-semibold text-green-500" : "";
       return out;
+    },
+    isCanceled() {
+      return this.game.status === 'Canceled';
     }
   }
 };

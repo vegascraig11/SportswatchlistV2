@@ -69,7 +69,9 @@ class MLBGamesController extends Controller
     				'name' => $game->HomeTeam,
     				'full_name' => $homeTeam->City.' '.$homeTeam->Name,
                     'rotation_number' => $game->HomeRotationNumber,
-    				// 'score' => $game->HomeTeamScore,
+    				'runs' => $game->HomeTeamRuns,
+                    'errors' => $game->HomeTeamErrors,
+                    'hits' => $game->HomeTeamHits,
     				'money_line' => $game->HomeTeamMoneyLine,
     				'point_spread_money_line' => $game->PointSpreadHomeTeamMoneyLine,
                     'logo' => $homeTeam->WikipediaLogoUrl
@@ -79,14 +81,18 @@ class MLBGamesController extends Controller
     				'name' => $game->AwayTeam,
     				'full_name' => $awayTeam->City.' '.$awayTeam->Name,
                     'rotation_number' => $game->AwayRotationNumber,
-    				// 'score' => $game->AwayTeamScore,
+    				'runs' => $game->AwayTeamRuns,
+                    'errors' => $game->AwayTeamErrors,
+                    'hits' => $game->AwayTeamHits,
     				'money_line' => $game->AwayTeamMoneyLine,
     				'point_spread_money_line' => $game->PointSpreadAwayTeamMoneyLine,
                     'logo' => $awayTeam->WikipediaLogoUrl
     			],
     			'innings' => $game->Innings,
                 'stadium' => $stadium,
-                'status' => $game->Status
+                'status' => $game->Status,
+                'winningPitcher' => $game->WinningPitcher,
+                'losingPitcher' => $game->LosingPitcher
     		];
     	});
 
