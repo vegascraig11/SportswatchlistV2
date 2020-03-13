@@ -27,7 +27,7 @@ import Loading from "./../components/Loading";
 import NHLGameListItem from "./../components/NHLGameListItem";
 
 export default {
-  props: ["date"],
+  // props: ["date"],
   components: {
     Loading,
     "nhl-game-list-item": NHLGameListItem
@@ -41,6 +41,11 @@ export default {
   watch: {
     date() {
       this.getGames();
+    }
+  },
+  computed: {
+    date() {
+      return this.$store.state.date;
     }
   },
   created() {
