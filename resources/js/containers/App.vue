@@ -299,7 +299,8 @@ export default {
     }
   },
   created() {
-    console.log(this.$route.path)
+    let index = this.sports.findIndex(sport => sport.url === this.$route.path.split('/')[1]);
+    this.loadedSport = index === -1 ? 0 : index;
     this.date = moment().toString();
     this.buildWeekRow();
 
