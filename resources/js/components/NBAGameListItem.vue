@@ -12,7 +12,7 @@
                   {{ game.status === "F/OT" ? "F/OT" : "Final Score" }}
                 </th>
                 <th class="px-4">Money Line</th>
-                <th class="px-4">Run Line</th>
+                <th class="px-4">Point Spread</th>
                 <th class="px-4">Total</th>
               </tr>
             </thead>
@@ -88,7 +88,7 @@
                 <td class="text-center">
                   {{ game.home_team.money_line || "??" }}
                 </td>
-                <td class="text-center">+1.5 (+0)</td>
+                <td class="text-center">-110</td>
                 <td class="text-center">7.5 o-116</td>
               </tr>
               <tr>
@@ -128,7 +128,7 @@
                 <td class="text-center">
                   {{ game.away_team.money_line || "??" }}
                 </td>
-                <td class="text-center">-1.5 (+0)</td>
+                <td class="text-center">-110</td>
                 <td class="text-center">7.5 u-101</td>
               </tr>
               <tr class="border-t">
