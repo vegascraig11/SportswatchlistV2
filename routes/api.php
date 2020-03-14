@@ -25,3 +25,5 @@ Route::get('nhl/gamesByDate/{date}', 'NHLGamesController@gamesByDate');
 Route::get('mlb/gamesByDate/{date}', 'MLBGamesController@gamesByDate');
 
 Route::get('ncaab/gamesByDate/{date}', 'NCAABGamesController@gamesByDate');
+
+Route::get('ncaaf/gamesByDate/{date}', 'NCAAFGamesController@gamesByDate');
