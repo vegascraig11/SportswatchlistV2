@@ -3,11 +3,11 @@
     <div class="bg-white shadow-md rounded overflow-hidden">
       <div class="overflow-x-auto">
         <div class="inline-block min-w-full overflow-hidden">
-          <table class="min-w-full">
+          <table class="min-w-full table-fixed">
             <thead class="bg-swl-black-dark text-white text-xs uppercase">
               <tr class="whitespace-no-wrap">
-                <th class="w-1/3 px-4 py-2 text-left">NBA | {{ gameTime }}</th>
-                <th class="px-4">&nbsp;</th>
+                <th class="w-1/3 pl-4 pr-32 py-2 text-left">NBA | {{ gameTime }}</th>
+                <th class="px-4">{{ overUnder }}</th>
                 <th class="px-4 text-right">
                   {{ game.status === "F/OT" ? "F/OT" : "Final Score" }}
                 </th>
@@ -219,6 +219,12 @@ export default {
       let out = this.game.away_team.logo ? 'py-2' : 'py-4';
       out += this.awayWon ? " font-semibold text-green-500" : "";
       return out;
+    },
+    overUnder() {
+      if (!this.winner) return '';
+      const { home_team, away_team, over_under } = this.game;
+      let ou = home_team.score + away_team.score > over_under ? 'Over' : 'Under';
+      return `${over_under} (${ou})`;
     }
   }
 };

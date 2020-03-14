@@ -84,6 +84,7 @@ class NBAGamesController extends Controller
     				'point_spread_money_line' => $game->PointSpreadAwayTeamMoneyLine,
                     'logo' => $awayTeam->WikipediaLogoUrl
     			],
+                'over_under' => $game->OverUnder,
     			'quarters' => $game->Quarters,
                 'stadium' => $stadium,
                 'status' => $game->Status
