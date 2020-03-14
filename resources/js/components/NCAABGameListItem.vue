@@ -178,12 +178,16 @@
 
 <script>
 import moment from "moment";
+import momentTimezone from "moment-timezone";
 
 export default {
   props: ["game"],
   computed: {
     gameTime() {
-      return moment(this.game.game_time).format("HH:mm A z");
+      return `${moment(this.game.game_time).format("hh:mm A")} ${this.zone}`;
+    },
+    zone() {
+      return momentTimezone.tz(this.game.game_time, moment.tz.guess()).zoneAbbr();
     },
     venue() {
       const { stadium } = this.game;
