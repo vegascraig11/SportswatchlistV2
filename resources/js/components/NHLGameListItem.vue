@@ -12,7 +12,7 @@
                   {{ game.status === "F/OT" ? "F/OT" : "Final Score" }}
                 </th>
                 <th class="px-4">Money Line</th>
-                <th class="px-4">Run Line</th>
+                <th class="px-4">Puck Line</th>
                 <th class="px-4">Total</th>
               </tr>
             </thead>
