@@ -8,6 +8,7 @@ import NFL from './containers/NFL';
 import NCAAF from './containers/NCAAF';
 import NCAAB from './containers/NCAAB';
 import MLB from './containers/MLB';
+import ForOhFor from './pages/404';
 
 Vue.use(VueRouter);
 
@@ -48,6 +49,11 @@ const router = new VueRouter({
       path: '/nhl',
       component: NHL,
       name: 'NHL'
+    },
+    {
+      path: '*',
+      component: ForOhFor,
+      name: 'for-oh-for'
     }
   ]
 });
