@@ -8,6 +8,7 @@ import NFL from './containers/NFL';
 import NCAAF from './containers/NCAAF';
 import NCAAB from './containers/NCAAB';
 import MLB from './containers/MLB';
+import Register from './pages/Register';
 import ForOhFor from './pages/404';
 
 Vue.use(VueRouter);
@@ -15,11 +16,11 @@ Vue.use(VueRouter);
 const router = new VueRouter({
   mode: 'history',
   routes: [
-    // {
-    //   path: '/',
-    //   component: App,
-    //   name: 'home'
-    // },
+    {
+      path: '/signup',
+      component: Register,
+      name: 'register'
+    },
     {
       path: '/nba',
       component: NBA,
