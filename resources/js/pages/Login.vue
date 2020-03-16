@@ -32,7 +32,21 @@ export default {
       const { email, password } = this;
 
       this.$http.post('/login', { email, password })
-        .then(response => console.log(response))
+        .then(async response => {
+          const user = await this.$http.get('/api/user');
+
+          window.localStorage.setItem('loggedIn', true);
+          this.$store.commit('authenticate')
+          this.$store.commit('setUser', user.data)
+
+          if (this.$route.query.r) {
+            console.log('go to the path in the query')
+            this.$router.push(this.$route.query.r)
+          } else {
+            console.log('redirect to the default page')
+            this.$router.push('/my-watchlist')
+          }
+        })
         .catch(err => console.log(err))
     },
   }

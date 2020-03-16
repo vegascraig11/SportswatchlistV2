@@ -18,7 +18,14 @@
             <nav class="hidden lg:flex text-sm">
               <a href="#">My Watchlist</a>
               <a href="#" class="ml-4">FAQ's</a>
-              <div class="ml-4 pl-4 border-l border-gray-700">
+              <div v-if="loggedIn" class="ml-4 relative group">
+                <p class="inline-block font-semibold">{{ username }}</p>
+                <p class="ml-2 inline-block cursor-pointer" @click="logout">Logout</p>
+                <!-- <div class="hidden absolute right-0 w-32 py-1 bg-gray-800 border border-gray-800 rounded overflow-hidden group-hover:block">
+                  <span class="block w-full px-4 py-2 cursor-pointer hover:bg-gray-900" @click="logout">Logout</span>
+                </div> -->
+              </div>
+              <div v-else class="ml-4 pl-4 border-l border-gray-700">
                 <router-link to="/signup">Sign Up</router-link>
                 <router-link to="/login" class="ml-4 px-4 py-2 bg-swl-green rounded-sm">Login</router-link>
               </div>
@@ -313,6 +320,12 @@ export default {
     this.updateTime();
   },
   computed: {
+    username() {
+      return this.$store.state.user.name;
+    },
+    loggedIn() {
+      return this.$store.getters.isLoggedIn;
+    },
     prettyDate() {
       return moment(this.date).format("MMM D, YYYY");
     },
@@ -383,6 +396,16 @@ export default {
     selectSport(e, index) {
       this.loadedSport = index;
       this.closeSportDropdown(e);
+    },
+    logout() {
+      this.$http.post('/logout')
+        .then(() => {
+          this.$store.commit('unauthenticate')
+          this.$store.commit('setUser', {})
+          window.localStorage.setItem('loggedIn', false)
+        })
+        .catch(err => {})
+        .finally(() => this.$router.push('/'))
     }
   }
 }
