@@ -7,20 +7,20 @@
         <div class="container mx-auto px-4">
           <div class="h-32 flex justify-between items-center">
             <div>
-              <img
-                class="h-12"
-                src="./../assets/images/logo.png"
-                alt="Sports Watchlist"
-              />
+              <router-link to="/">
+                <img
+                  class="h-12"
+                  src="./../assets/images/logo.png"
+                  alt="Sports Watchlist"
+                />
+              </router-link>
             </div>
             <nav class="hidden lg:flex text-sm">
               <a href="#">My Watchlist</a>
               <a href="#" class="ml-4">FAQ's</a>
               <div class="ml-4 pl-4 border-l border-gray-700">
-                <a href="#">Sign Up</a>
-                <a href="#" class="ml-4 px-4 py-2 bg-swl-green rounded-sm"
-                  >Login</a
-                >
+                <router-link to="/signup">Sign Up</router-link>
+                <router-link to="/login" class="ml-4 px-4 py-2 bg-swl-green rounded-sm">Login</router-link>
               </div>
             </nav>
             <button class="lg:hidden">
