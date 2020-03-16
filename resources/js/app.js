@@ -8,13 +8,22 @@ import store from './store';
 
 import App from './containers/App';
 
-Vue.use(VCalendar);
-Vue.prototype.$http = axios.create({
-  baseURL: '/api'
-});
+axios.defaults.withCredentials = true;
 
-window.app = new Vue({
-  render: h => h(App),
-  router,
-  store
-}).$mount('#app');
+Vue.use(VCalendar);
+Vue.prototype.$http = axios.create({});
+
+// Make sure these values are set in the .env file
+// SESSION_DRIVER=cookie
+// SESSION_DOMAIN=<the-server-ip-or-domain>
+// AIRLOCK_STATEFUL_DOMAINS=<the-server-ip-or-domain>
+
+axios.get('/airlock/csrf-cookie')
+  .then(() => {
+    window.app = new Vue({
+      render: h => h(App),
+      router,
+      store
+    }).$mount('#app');
+  })
+  .catch(err => console.log(err))

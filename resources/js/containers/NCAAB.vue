@@ -57,7 +57,7 @@ export default {
       const formattedDate = this.getFormattedDate();
 
       this.$http
-        .get(`ncaab/gamesByDate/${formattedDate}`)
+        .get(`api/ncaab/gamesByDate/${formattedDate}`)
         .then(response => {
           this.games = Array.isArray(response.data) ? response.data : [];
         })

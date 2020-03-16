@@ -11,4 +11,10 @@
 |
 */
 
+// Auth::routes([
+//   'register' => false
+// ]);
+
+Route::post('/login', 'Auth\LoginController@login');
+Route::post('/register', 'Auth\RegisterController@register');
 Route::get('{any}', 'FrontEndController')->where('any', '.*');
