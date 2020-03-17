@@ -56,19 +56,22 @@ export default {
   },
   methods: {
     register() {
-      const { firstname, lastname, email, password, agreement } = this;
+      const { firstname, lastname, email, password, confirmPassword, agreement } = this;
 
       if (!this.validateFields()) return;
 
       console.log('registering user...')
-      // axios.post('/signup', {
-      //   firstname,
-      //   lastname,
-      //   email,
-      //   password
-      // })
-      //   .then(response => console.log(response))
-      //   .catch(err => console.log(err));
+      axios.post('/register', {
+        name: `${firstname} ${lastname}`,
+        email,
+        password,
+        password_confirmation: confirmPassword
+      })
+        .then(response => {
+          this.$store.commit('registerMessage', 'Your user account was created.');
+          this.$router.push('/login');
+        })
+        .catch(err => console.log(err));
     },
     validateFields() {
       const { firstname, lastname, email, password, confirmPassword, agreement } = this;
@@ -85,6 +88,9 @@ export default {
 
       if (password === '')
         errors['password'] = 'Password is required.';
+
+      if (password.length < 8)
+        errors['password'] = 'Password needs to be at least 8 characters.';
 
       if (password !== confirmPassword)
         errors['confirmPassword'] = 'The passwords do not match.';

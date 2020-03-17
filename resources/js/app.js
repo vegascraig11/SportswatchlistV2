@@ -36,6 +36,10 @@ axios.get('/airlock/csrf-cookie')
         next({ path: `/login?r=${to.path}`, })
       }
 
+      if (to.meta.requiresGuest && store.getters.isLoggedIn) {
+        next({ path: `/my-watchlist`, })
+      }
+
       next()
     });
 

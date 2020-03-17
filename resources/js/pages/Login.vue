@@ -3,6 +3,7 @@
     <h2 class="text-xl font-semibold">Login</h2>
 
     <form class="max-w-sm" @submit.prevent="login">
+      <p class="mt-2 pl-6 py-2 pr-2 border-l-4 border-green-800 bg-green-200 text-green-800" v-if="message">{{ message }}</p>
       <div class="mt-2">
         <label for="email">Email</label>
         <div><input class="w-full px-2 py-1 border rounded" type="text" v-model="email" id="email" required placeholder="john@example.com"></div>
@@ -25,6 +26,12 @@ export default {
       email: '',
       password: '',
       errors: {}
+    }
+  },
+  computed: {
+    message() {
+      return this.$store.state.registerMessage;
+      // return "Message"
     }
   },
   methods: {
