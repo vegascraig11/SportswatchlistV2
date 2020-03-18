@@ -200,11 +200,11 @@
         <nav
           class="container mx-auto px-4 flex justify-end text-xl font-semibold tracking-wide"
         >
-          <router-link class="ml-4" to="/games/mlb">MLB</router-link>
+          <router-link class="ml-4" to="/games/nfl">NFL</router-link>
+          <router-link class="ml-4" to="/games/ncaaf">NCAAF</router-link>
           <router-link class="ml-4" to="/games/nba">NBA</router-link>
           <router-link class="ml-4" to="/games/ncaab">NCAAB</router-link>
-          <router-link class="ml-4" to="/games/ncaaf">NCAAF</router-link>
-          <router-link class="ml-4" to="/games/nfl">NFL</router-link>
+          <router-link class="ml-4" to="/games/mlb">MLB</router-link>
           <router-link class="ml-4" to="/games/nhl">NHL</router-link>
         </nav>
       </div>
@@ -252,8 +252,12 @@ export default {
           url: '/'
         },
         {
-          name: 'MLB',
-          url: '/games/mlb'
+          name: 'NFL',
+          url: '/games/nfl'
+        },
+        {
+          name: 'NCAAF',
+          url: '/games/ncaaf'
         },
         {
           name: 'NBA',
@@ -264,12 +268,8 @@ export default {
           url: '/games/ncaab'
         },
         {
-          name: 'NCAAF',
-          url: '/games/ncaaf'
-        },
-        {
-          name: 'NFL',
-          url: '/games/nfl'
+          name: 'MLB',
+          url: '/games/mlb'
         },
         {
           name: 'NHL',
