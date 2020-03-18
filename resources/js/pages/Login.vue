@@ -31,7 +31,6 @@ export default {
   computed: {
     message() {
       return this.$store.state.registerMessage;
-      // return "Message"
     }
   },
   methods: {

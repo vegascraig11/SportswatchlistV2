@@ -9,6 +9,7 @@ import MLB from './containers/MLB';
 import NBA from './containers/NBA';
 import NFL from './containers/NFL';
 import NHL from './containers/NHL';
+import Games from './containers/Games';
 import NCAAB from './containers/NCAAB';
 import NCAAF from './containers/NCAAF';
 import Register from './pages/Register';
@@ -46,34 +47,40 @@ const router = new VueRouter({
       }
     },
     {
-      path: '/nba',
-      component: NBA,
-      name: 'NBA'
-    },
-    {
-      path: '/mlb',
-      component: MLB,
-      name: 'MLB'
-    },
-    {
-      path: '/ncaab',
-      component: NCAAB,
-      name: 'NCAAB'
-    },
-    {
-      path: '/ncaaf',
-      component: NCAAF,
-      name: 'NCAAF'
-    },
-    {
-      path: '/nfl',
-      component: NFL,
-      name: 'NFL'
-    },
-    {
-      path: '/nhl',
-      component: NHL,
-      name: 'NHL'
+      path: '/games',
+      component: Games,
+      children: [
+        {
+          path: 'nba',
+          component: NBA,
+          name: 'NBA'
+        },
+        {
+          path: 'mlb',
+          component: MLB,
+          name: 'MLB'
+        },
+        {
+          path: 'ncaab',
+          component: NCAAB,
+          name: 'NCAAB'
+        },
+        {
+          path: 'ncaaf',
+          component: NCAAF,
+          name: 'NCAAF'
+        },
+        {
+          path: 'nfl',
+          component: NFL,
+          name: 'NFL'
+        },
+        {
+          path: 'nhl',
+          component: NHL,
+          name: 'NHL'
+        }
+      ]
     },
     {
       path: '*',

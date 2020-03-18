@@ -192,23 +192,7 @@
     </header>
     <section class="flex-1">
       <main class="w-full max-w-6xl mx-auto sm:px-4">
-        <div class="flex">
-          <div class="w-full">
-            <router-view></router-view>
-          </div>
-          <aside class="hidden lg:block pl-4 py-6">
-            <h2 class="text-xl invisible mb-6">Sidebar</h2>
-            <div class="flex items-center">
-              <svg class="h-6 w-6 fill-current text-gray-600" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20"><path d="M10 0.4c-5.3 0-9.6 4.3-9.6 9.6 0 5.3 4.3 9.6 9.6 9.6 5.3 0 9.6-4.3 9.6-9.6C19.6 4.7 15.3 0.4 10 0.4zM10 17.6c-4.2 0-7.6-3.4-7.6-7.6 0-4.2 3.4-7.6 7.6-7.6 4.2 0 7.6 3.4 7.6 7.6C17.6 14.2 14.2 17.6 10 17.6zM11 9.3V4H9v6.2l-3.5 2 1 1.7 4.1-2.4C10.8 11.5 11 11.2 11 10.9v-0.2l4.2-4.2c-0.2-0.3-0.4-0.5-0.6-0.8L11 9.3z" /></svg>
-              <span class="ml-2">{{ time }}</span>
-            </div>
-            <v-calendar 
-              class="mt-4" 
-              is-dark 
-              :attributes="attributes"
-              @dayclick="dayClicked"></v-calendar>
-          </aside>
-        </div>
+        <router-view></router-view>
       </main>
     </section>
     <footer>
@@ -216,12 +200,12 @@
         <nav
           class="container mx-auto px-4 flex justify-end text-xl font-semibold tracking-wide"
         >
-          <a class="ml-4" href="#">MLB</a>
-          <a class="ml-4" href="#">NBA</a>
-          <a class="ml-4" href="#">NCAAB</a>
-          <a class="ml-4" href="#">NCAAF</a>
-          <a class="ml-4" href="#">NFL</a>
-          <a class="ml-4" href="#">NHL</a>
+          <router-link class="ml-4" to="/games/mlb">MLB</router-link>
+          <router-link class="ml-4" to="/games/nba">NBA</router-link>
+          <router-link class="ml-4" to="/games/ncaab">NCAAB</router-link>
+          <router-link class="ml-4" to="/games/ncaaf">NCAAF</router-link>
+          <router-link class="ml-4" to="/games/nfl">NFL</router-link>
+          <router-link class="ml-4" to="/games/nhl">NHL</router-link>
         </nav>
       </div>
       <div class="bg-swl-black-lighter text-white py-8">
@@ -269,46 +253,43 @@ export default {
         },
         {
           name: 'MLB',
-          url: 'mlb'
+          url: '/games/mlb'
         },
         {
           name: 'NBA',
-          url: 'nba'
+          url: '/games/nba'
         },
         {
           name: 'NCAAB',
-          url: 'ncaab'
+          url: '/games/ncaab'
         },
         {
           name: 'NCAAF',
-          url: 'ncaaf'
+          url: '/games/ncaaf'
         },
         {
           name: 'NFL',
-          url: 'nfl'
+          url: '/games/nfl'
         },
         {
           name: 'NHL',
-          url: 'nhl'
+          url: '/games/nhl'
         },
       ],
       loadedSport: 0,
       sportDropdown: false,
-      date: '',
       attributes: [],
       time: new Date()
     }
   },
   watch: {
     date(newValue) {
-      this.$store.commit('setDate', newValue.toString())
       this.buildWeekRow(newValue);
     }
   },
   created() {
     let index = this.sports.findIndex(sport => sport.url === this.$route.path.split('/')[1]);
     this.loadedSport = index === -1 ? 0 : index;
-    this.date = moment().toString();
     this.buildWeekRow();
 
     this.attributes.push({
@@ -320,6 +301,9 @@ export default {
     this.updateTime();
   },
   computed: {
+    date() {
+      return this.$store.state.date
+    },
     username() {
       return this.$store.state.user.name;
     },
@@ -335,7 +319,7 @@ export default {
   },
   methods: {
     updateDate(e) {
-      this.date = moment(e).toString();
+      this.$store.commit('setDate', moment(e).toString())
     },
     buildWeekRow(start) {
       const week = [];
@@ -355,20 +339,15 @@ export default {
       this.week = week;
     },
     setDate(index) {
-      this.date = this.week[index].dateTime;
+      this.$store.commit('setDate', this.week[index].dateTime);
     },
     previousDay() {
-      this.date = moment(this.date)
-        .subtract(1, "days")
-        .toString();
+      this.$store.commit('setDate', moment(this.date).subtract(1, "days").toString());
     },
     nextDay() {
-      this.date = moment(this.date)
-        .add(1, "days")
-        .toString();
+      this.$store.commit('setDate', moment(this.date).add(1, "days").toString());
     },
     updateTime() {
-      // this.time = moment().format("LL LTS [ZZ]")
       setInterval(() => {
         this.time = moment(new Date()).toDate();
       }, 1000);

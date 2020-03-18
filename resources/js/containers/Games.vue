@@ -1,0 +1,51 @@
+<template>
+  <div class="flex">
+    <div class="w-full">
+      <router-view></router-view>
+    </div>
+    <aside class="hidden lg:block pl-4 py-6">
+      <h2 class="text-xl invisible mb-6">Sidebar</h2>
+      <div class="flex items-center">
+        <svg class="h-6 w-6 fill-current text-gray-600" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20"><path d="M10 0.4c-5.3 0-9.6 4.3-9.6 9.6 0 5.3 4.3 9.6 9.6 9.6 5.3 0 9.6-4.3 9.6-9.6C19.6 4.7 15.3 0.4 10 0.4zM10 17.6c-4.2 0-7.6-3.4-7.6-7.6 0-4.2 3.4-7.6 7.6-7.6 4.2 0 7.6 3.4 7.6 7.6C17.6 14.2 14.2 17.6 10 17.6zM11 9.3V4H9v6.2l-3.5 2 1 1.7 4.1-2.4C10.8 11.5 11 11.2 11 10.9v-0.2l4.2-4.2c-0.2-0.3-0.4-0.5-0.6-0.8L11 9.3z" /></svg>
+        <span class="ml-2">{{ time }}</span>
+      </div>
+      <v-calendar 
+        class="mt-4" 
+        is-dark 
+        :attributes="attributes"
+        @dayclick="dayClicked"></v-calendar>
+    </aside>
+  </div>
+</template>
+
+<script>
+import moment from 'moment';
+
+export default {
+  data() {
+    return {
+      time: new Date(),
+      attributes: [],
+    }
+  },
+  created() {
+    this.attributes.push({
+      key: 'today',
+      highlight: true,
+      dates: new Date()
+    });
+
+    this.updateTime();
+  },
+  methods: {
+    updateTime() {
+      setInterval(() => {
+        this.time = moment(new Date()).toDate();
+      }, 1000);
+    },
+    dayClicked(e) {
+      this.$store.commit('setDate', moment(e.date).toString())
+    },
+  }
+}
+</script>
