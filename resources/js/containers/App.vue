@@ -16,7 +16,7 @@
               </router-link>
             </div>
             <nav class="hidden lg:flex text-sm">
-              <a href="#">My Watchlist</a>
+              <router-link to="/my-watchlist">My Watchlist</router-link>
               <a href="#" class="ml-4">FAQ's</a>
               <div v-if="loggedIn" class="ml-4 relative group">
                 <p class="inline-block font-semibold">{{ username }}</p>

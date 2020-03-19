@@ -18,19 +18,17 @@ Vue.prototype.$http = axios.create({});
 // SESSION_DOMAIN=<the-server-ip-or-domain>
 // AIRLOCK_STATEFUL_DOMAINS=<the-server-ip-or-domain>
 
-axios.get('/airlock/csrf-cookie')
-  .then(async () => {
-    var user = null;
-
-    if (window.localStorage.getItem('loggedIn')) {
-      user = await axios.get('/api/user').catch(err => {});
-    }
-
+axios.get('/api/user')
+  .then(user => {
     if (user) {
       store.commit('authenticate')
       store.commit('setUser', user.data)
     }
-
+  })
+  .catch(err => {
+    console.log(err)
+  })
+  .finally(() => {
     router.beforeEach((to, from, next) => {
       if (to.meta.requiresAuth && !store.getters.isLoggedIn) {
         next({ path: `/login?r=${to.path}`, })
@@ -49,4 +47,3 @@ axios.get('/airlock/csrf-cookie')
       store
     }).$mount('#app');
   })
-  .catch(err => console.log(err))

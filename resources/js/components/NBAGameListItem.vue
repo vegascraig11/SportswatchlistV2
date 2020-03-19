@@ -155,6 +155,7 @@
       </div>
       <div>
         <button
+          @click="addToWatchlist"
           type="button"
           class="w-full flex items-center justify-center bg-swl-green text-white py-2"
         >
@@ -183,6 +184,9 @@ import momentTimezone from "moment-timezone";
 export default {
   props: ["game"],
   computed: {
+    loggedIn() {
+      return this.$store.getters.isLoggedIn;
+    },
     gameTime() {
       return `${moment(this.game.game_time).format("hh:mm A")} ${this.zone}`;
     },
@@ -229,6 +233,23 @@ export default {
       const { home_team, away_team, over_under } = this.game;
       let ou = home_team.score + away_team.score > over_under ? 'Over' : 'Under';
       return `${over_under} (${ou})`;
+    }
+  },
+  methods: {
+    addToWatchlist() {
+      if (! this.loggedIn) {
+        this.$router.push(`/login?r=/my-watchlist&add=nba,${this.game.game_id}`)
+      }
+
+      this.$http.post('/api/watchlist', {
+        gameId: this.game.game_id,
+        gameType: 'nba',
+        gameTime: this.game.game_time
+      })
+        .then(response => {
+          console.log(response)
+        })
+        .catch(err => console.log(err))
     }
   }
 };

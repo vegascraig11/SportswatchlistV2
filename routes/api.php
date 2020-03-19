@@ -28,6 +28,9 @@ Route::get('ncaab/gamesByDate/{date}', 'NCAABGamesController@gamesByDate');
 
 Route::get('ncaaf/gamesByDate/{date}', 'NCAAFGamesController@gamesByDate');
 
+Route::middleware('auth:airlock')->get('watchlist', 'WatchlistController@index');
+Route::middleware('auth:airlock')->post('watchlist', 'WatchlistController@store');
+
 Route::get('{any}', function () {
   return response()->json([], 404);
 });

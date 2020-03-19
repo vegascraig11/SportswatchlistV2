@@ -20,6 +20,8 @@
 </template>
 
 <script>
+import axios from 'axios';
+
 export default {
   data() {
     return {
@@ -36,8 +38,11 @@ export default {
   methods: {
     login() {
       const { email, password } = this;
-
-      this.$http.post('/login', { email, password })
+      
+      axios.get('/airlock/csrf-cookie')
+        .then(() => {
+          return this.$http.post('/login', { email, password })
+        })
         .then(async response => {
           const user = await this.$http.get('/api/user');
 
