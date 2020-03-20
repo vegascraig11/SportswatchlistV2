@@ -18,20 +18,29 @@
             <nav class="hidden lg:flex text-sm">
               <router-link to="/my-watchlist">My Watchlist</router-link>
               <a href="#" class="ml-4">FAQ's</a>
-              <div v-if="loggedIn" class="ml-4 relative group">
+              <div v-if="loggedIn" class="ml-4">
                 <p class="inline-block font-semibold">{{ username }}</p>
                 <p class="ml-2 inline-block cursor-pointer" @click="logout">Logout</p>
-                <!-- <div class="hidden absolute right-0 w-32 py-1 bg-gray-800 border border-gray-800 rounded overflow-hidden group-hover:block">
-                  <span class="block w-full px-4 py-2 cursor-pointer hover:bg-gray-900" @click="logout">Logout</span>
-                </div> -->
               </div>
               <div v-else class="ml-4 pl-4 border-l border-gray-700">
                 <router-link to="/signup">Sign Up</router-link>
                 <router-link to="/login" class="ml-4 px-4 py-2 bg-swl-green rounded-sm">Login</router-link>
               </div>
             </nav>
-            <button class="lg:hidden">
+            <button class="lg:hidden group relative p-4">
               <svg viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg" class="fill-current h-6 w-6"><title>Menu</title><path d="M0 3h20v2H0V3zm0 6h20v2H0V9zm0 6h20v2H0v-2z"></path></svg>
+              <div class="mt-1 text-sm invisible absolute right-0 w-48 py-1 bg-gray-800 border border-gray-800 rounded overflow-hidden group-hover:visible z-50">
+                <router-link class="block py-2 hover:bg-gray-900" to="/my-watchlist">My Watchlist</router-link>
+                <router-link class="block py-2 hover:bg-gray-900" to="/faq">FAQ's</router-link>
+                <div v-if="loggedIn" class="border-t mt-2">
+                  <p class="mb-2 block py-2 font-semibold">{{ username }}</p>
+                  <p class="block py-2 cursor-pointer hover:bg-gray-900" @click="logout">Logout</p>
+                </div>
+                <div v-else class="px-2 border-t mt-2">
+                  <router-link to="/signup" class="block py-2 mb-2 hover:bg-gray-900">Sign Up</router-link>
+                  <router-link to="/login" class="block py-2 px-4 py-2 bg-swl-green hover:bg-green-500 rounded-sm">Login</router-link>
+                </div>
+              </div>
             </button>
           </div>
         </div>
