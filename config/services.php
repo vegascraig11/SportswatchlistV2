@@ -30,4 +30,12 @@ return [
         'region' => env('AWS_DEFAULT_REGION', 'us-east-1'),
     ],
 
+    'apiKeys' => [
+        'nba' => env('NBA_API_KEY'),
+        'ncaab' => env('NCAAB_API_KEY'),
+        'ncaaf' => env('NCAAF_API_KEY'),
+        'nhl' => env('NHL_API_KEY'),
+        'mlb' => env('MLB_API_KEY'),
+    ],
+
 ];

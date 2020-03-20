@@ -3,92 +3,56 @@
 namespace App\Http\Controllers;
 
 use Carbon\Carbon;
-use GuzzleHttp\Client;
-use GuzzleHttp\Promise;
-use GuzzleHttp\HandlerStack;
 use Illuminate\Http\Request;
-use Brightfish\CachingGuzzle\Middleware;
+use Illuminate\Support\Facades\Cache;
+use Illuminate\Support\Facades\Http;
 
 class NHLGamesController extends Controller
 {
-	protected $client;
-
-	public function __construct()
-	{
-        $store = app('cache')->store('database'); // Laravel
-        $handler = new Middleware($store, 3600 * 24);
-        $stack = HandlerStack::create();
-        $stack->push($handler);
-
-		$this->client = new Client([
-            'handler' => $stack,
-            'cache_ttl' => 3600 * 24, // 24 Hours
-			'base_uri' => 'https://api.sportsdata.io/v3/',
-			'headers' => [
-				'Ocp-Apim-Subscription-Key' => 'f43f32ccaf1d4cf38eb8410261ef388d'
-			]
-		]);
-	}
-
     public function gamesByDate($date = null)
     {
     	if (is_null($date)) {
     		$date = now()->format('Y-M-d');
     	}
 
-    	$requests = [
-    		'teams' => $this->client->get('nhl/scores/json/AllTeams'),
-            'stadiums' => $this->client->get('nhl/scores/json/Stadiums'),
-    		'games' => $this->client->get("nhl/scores/json/GamesByDate/{$date}", ['cache' => false])
-    	];
+        $teams = Cache::get('nhl_teams');
+        $stadiums = Cache::get('nhl_stadiums');
+        
+    	$games = Http::withHeaders(['Ocp-Apim-Subscription-Key' => config('services.apiKeys.nhl')])
+                    ->get("https://api.sportsdata.io/v3/nhl/scores/json/GamesByDate/{$date}")
+                    ->json();
 
-    	$responses = Promise\settle($requests)->wait();
-
-    	$teams = collect(json_decode($responses['teams']['value']->getBody()->getContents()));
-        $stadiums = collect(json_decode($responses['stadiums']['value']->getBody()->getContents()));
-    	$games = collect(json_decode($responses['games']['value']->getBody()->getContents()));
-
-        // return response()->json($games, 200);
-
-    	$mappedGames = $games->map(function ($game) use ($teams, $stadiums) {
-    		$homeTeam = $teams->filter(function ($team) use ($game) {
-    			return $team->TeamID === $game->HomeTeamID;
-    		})->first();
-
-    		$awayTeam = $teams->filter(function ($team) use ($game) {
-    			return $team->TeamID === $game->AwayTeamID;
-    		})->first();
-
-            $stadium = $stadiums->filter(function ($stadium) use ($game) {
-                return $stadium->StadiumID === $game->StadiumID;
-            })->first();
+    	$mappedGames = collect($games)->map(function ($game) use ($teams, $stadiums) {
+            $homeTeam = $teams->where('TeamID', $game['HomeTeamID'])->first();
+            $awayTeam = $teams->where('TeamID', $game['AwayTeamID'])->first();
+            $stadium = $stadiums->where('StadiumID', $game['StadiumID'])->first();
 
     		return [
-    			'game_id' => $game->GameID,
-    			'game_time' => $game->DateTime,
+    			'game_id' => $game['GameID'],
+    			'game_time' => $game['DateTime'],
     			'home_team' => [
-    				'id' => $game->HomeTeamID,
-    				'name' => $game->HomeTeam,
-    				'full_name' => $homeTeam->City.' '.$homeTeam->Name,
-                    'rotation_number' => $game->HomeRotationNumber,
-    				'score' => $game->HomeTeamScore,
-    				'money_line' => $game->HomeTeamMoneyLine,
-    				'point_spread_money_line' => $game->PointSpreadHomeTeamMoneyLine,
-                    'logo' => $homeTeam->WikipediaLogoUrl
+    				'id' => $game['HomeTeamID'],
+    				'name' => $game['HomeTeam'],
+    				'full_name' => $homeTeam['City'].' '.$homeTeam['Name'],
+                    'rotation_number' => $game['HomeRotationNumber'],
+    				'score' => $game['HomeTeamScore'],
+    				'money_line' => $game['HomeTeamMoneyLine'],
+    				'point_spread_money_line' => $game['PointSpreadHomeTeamMoneyLine'],
+                    'logo' => $homeTeam['WikipediaLogoUrl']
     			],
     			'away_team' => [
-    				'id' => $game->AwayTeamID,
-    				'name' => $game->AwayTeam,
-    				'full_name' => $awayTeam->City.' '.$awayTeam->Name,
-                    'rotation_number' => $game->AwayRotationNumber,
-    				'score' => $game->AwayTeamScore,
-    				'money_line' => $game->AwayTeamMoneyLine,
-    				'point_spread_money_line' => $game->PointSpreadAwayTeamMoneyLine,
-                    'logo' => $awayTeam->WikipediaLogoUrl
+    				'id' => $game['AwayTeamID'],
+    				'name' => $game['AwayTeam'],
+    				'full_name' => $awayTeam['City'].' '.$awayTeam['Name'],
+                    'rotation_number' => $game['AwayRotationNumber'],
+    				'score' => $game['AwayTeamScore'],
+    				'money_line' => $game['AwayTeamMoneyLine'],
+    				'point_spread_money_line' => $game['PointSpreadAwayTeamMoneyLine'],
+                    'logo' => $awayTeam['WikipediaLogoUrl']
     			],
-    			// 'quarters' => $game->Quarters,
+    			// 'quarters' => $game['Quarters'],
                 'stadium' => $stadium,
-                'status' => $game->Status
+                'status' => $game['Status']
     		];
     	});
 

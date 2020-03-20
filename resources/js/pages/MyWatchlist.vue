@@ -7,8 +7,7 @@
     <template v-else>
       <div v-if="watchlist.length" class="mt-6">
         <div v-for="(game, index) in watchlist">
-          <!-- <nba-game-list-item :game="game.details.Game"></nba-game-list-item> -->
-          <p class="mb-4">Game {{ index + 1 }} - {{ game.game_type }} || {{ game.game_id }} || <span class="rounded uppercase border-l-4 border-red-900 px-2 py-1 bg-red-200 text-red-900">details - Work in Progress</span></p>
+          <nba-game-list-item v-if="game.game_type === 'nba'" :game="game.details" class="mt-6 first:mt-0"></nba-game-list-item>
         </div>
       </div>
       <div v-else class="mt-6">
