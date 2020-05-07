@@ -38,8 +38,8 @@ export default {
   methods: {
     login() {
       const { email, password } = this;
-      
-      axios.get('/airlock/csrf-cookie')
+
+      axios.get('/sanctum/csrf-cookie')
         .then(() => {
           return this.$http.post('/login', { email, password })
         })
