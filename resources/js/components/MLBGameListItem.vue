@@ -126,6 +126,7 @@
       </div>
       <div>
         <button
+          @click="addToWatchlist"
           type="button"
           class="w-full flex items-center justify-center bg-swl-green text-white py-2"
         >
@@ -197,6 +198,23 @@ export default {
     },
     isCanceled() {
       return this.game.status === 'Canceled';
+    }
+  },
+  methods: {
+    addToWatchlist() {
+      if (! this.loggedIn) {
+        this.$router.push(`/login?r=/my-watchlist&add=mlb,${this.game.game_id}`)
+      }
+
+      this.$http.post('/api/watchlist', {
+        gameId: this.game.game_id,
+        gameType: 'mlb',
+        gameTime: this.game.game_time
+      })
+        .then(response => {
+          console.log(response)
+        })
+        .catch(err => console.log(err))
     }
   }
 };

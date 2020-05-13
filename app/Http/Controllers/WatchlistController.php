@@ -2,6 +2,11 @@
 
 namespace App\Http\Controllers;
 
+use App\Builders\MLBGameBuilder;
+use App\Builders\NBAGameBuilder;
+use App\Builders\NCAABGameBuilder;
+use App\Builders\NCAAFGameBuilder;
+use App\Builders\NHLGameBuilder;
 use Brightfish\CachingGuzzle\Middleware;
 use GuzzleHttp\Client;
 use GuzzleHttp\HandlerStack;
@@ -15,8 +20,20 @@ class WatchlistController extends Controller
 {
   protected $client;
 
-  public function __construct()
+  public function __construct(
+    NBAGameBuilder $nbaBuilder, 
+    NCAABGameBuilder $ncaabBuilder,
+    NCAAFGameBuilder $ncaafBuilder,
+    NHLGameBuilder $nhlBuilder,
+    MLBGameBuilder $mlbBuilder
+  )
   {
+    $this->nbaBuilder = $nbaBuilder;
+    $this->ncaabBuilder = $ncaabBuilder;
+    $this->ncaafBuilder = $ncaafBuilder;
+    $this->nhlBuilder = $nhlBuilder;
+    $this->mlbBuilder = $mlbBuilder;
+
     $store = app('cache')->store('database'); // Laravel
     $handler = new Middleware($store, 3600 * 24);
     $stack = HandlerStack::create();
@@ -32,7 +49,6 @@ class WatchlistController extends Controller
   public function index()
   {
     $games = auth()->user()->watchlist;
-    // game_id, game_type, game_time
 
     $mapped = $games->map(function ($game) {
       $date = Carbon::parse($game->game_time)->format('Y-M-d');
@@ -44,47 +60,70 @@ class WatchlistController extends Controller
                     ->get("https://api.sportsdata.io/v3/nba/scores/json/GamesByDate/{$date}")
                     ->json();
           });
-          
-          $gameDetails = collect($gamesOnThatDay)->where('GameID', $game->game_id)->first();
-          $teams = Cache::get('nba_teams');
-          $stadiums = Cache::get('nba_stadiums');
 
-          $homeTeam = $teams->where('TeamID', $gameDetails['HomeTeamID'])->first();
-          $awayTeam = $teams->where('TeamID', $gameDetails['AwayTeamID'])->first();
-          $stadium = $stadiums->where('StadiumID', $gameDetails['StadiumID'])->first();
+          $gameDetails = collect($gamesOnThatDay)->where('GameID', $game->game_id)->first();
 
           $game = $game->toArray();
-          $game['details'] = [
-            'game_id' => $gameDetails['GameID'],
-            'game_time' => $gameDetails['DateTime'],
-            'home_team' => [
-              'id' => $gameDetails['HomeTeamID'],
-              'name' => $gameDetails['HomeTeam'],
-              'full_name' => $homeTeam['City'].' '.$homeTeam['Name'],
-              'rotation_number' => $gameDetails['HomeRotationNumber'],
-              'score' => $gameDetails['HomeTeamScore'],
-              'money_line' => $gameDetails['HomeTeamMoneyLine'],
-              'point_spread_money_line' => $gameDetails['PointSpreadHomeTeamMoneyLine'],
-              'logo' => $homeTeam['WikipediaLogoUrl']
-            ],
-            'away_team' => [
-              'id' => $gameDetails['AwayTeamID'],
-              'name' => $gameDetails['AwayTeam'],
-              'full_name' => $awayTeam['City'].' '.$awayTeam['Name'],
-              'rotation_number' => $gameDetails['AwayRotationNumber'],
-              'score' => $gameDetails['AwayTeamScore'],
-              'money_line' => $gameDetails['AwayTeamMoneyLine'],
-              'point_spread_money_line' => $gameDetails['PointSpreadAwayTeamMoneyLine'],
-              'logo' => $awayTeam['WikipediaLogoUrl']
-            ],
-            'over_under' => $gameDetails['OverUnder'],
-            'quarters' => $gameDetails['Quarters'],
-            'stadium' => $stadium,
-            'status' => $gameDetails['Status']
-          ];
+          $game['details'] = $this->nbaBuilder->buildGame($gameDetails);
 
           return $game;
-        
+
+        case 'ncaab':
+          $gamesOnThatDay = Cache::get("ncaab_games_{$date}", function () use ($date) {
+            return Http::withHeaders(['Ocp-Apim-Subscription-Key' => config('services.apiKeys.ncaab')])
+                    ->get("https://api.sportsdata.io/v3/cbb/scores/json/GamesByDate/{$date}")
+                    ->json();
+          });
+
+          $gameDetails = collect($gamesOnThatDay)->where('GameID', $game->game_id)->first();
+
+          $game = $game->toArray();
+          $game['details'] = $this->ncaabBuilder->buildGame($gameDetails);
+
+          return $game;
+
+        case 'ncaaf':
+          $gamesOnThatDay = Cache::get("ncaaf_games_{$date}", function () use ($date) {
+            return Http::withHeaders(['Ocp-Apim-Subscription-Key' => config('services.apiKeys.ncaaf')])
+                    ->get("https://api.sportsdata.io/v3/cfb/scores/json/GamesByDate/{$date}")
+                    ->json();
+          });
+
+          $gameDetails = collect($gamesOnThatDay)->where('GameID', $game->game_id)->first();
+
+          $game = $game->toArray();
+          $game['details'] = $this->ncaabBuilder->buildGame($gameDetails);
+
+          return $game;
+
+        case 'nhl':
+          $gamesOnThatDay = Cache::get("nhl_games_{$date}", function () use ($date) {
+            return Http::withHeaders(['Ocp-Apim-Subscription-Key' => config('services.apiKeys.nhl')])
+                    ->get("https://api.sportsdata.io/v3/nhl/scores/json/GamesByDate/{$date}")
+                    ->json();
+          });
+
+          $gameDetails = collect($gamesOnThatDay)->where('GameID', $game->game_id)->first();
+
+          $game = $game->toArray();
+          $game['details'] = $this->ncaabBuilder->buildGame($gameDetails);
+
+          return $game;
+
+        case 'mlb':
+          $gamesOnThatDay = Cache::get("nhl_games_{$date}", function () use ($date) {
+            return Http::withHeaders(['Ocp-Apim-Subscription-Key' => config('services.apiKeys.mlb')])
+                    ->get("https://api.sportsdata.io/v3/mlb/scores/json/GamesByDate/{$date}")
+                    ->json();
+          });
+
+          $gameDetails = collect($gamesOnThatDay)->where('GameID', $game->game_id)->first();
+
+          $game = $game->toArray();
+          $game['details'] = $this->mlbBuilder->buildGame($gameDetails);
+
+          return $game;
+
         default:
           # code...
           break;

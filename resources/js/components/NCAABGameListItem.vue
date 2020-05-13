@@ -155,6 +155,7 @@
       </div>
       <div>
         <button
+          @click="addToWatchlist"
           type="button"
           class="w-full flex items-center justify-center bg-swl-green text-white py-2"
         >
@@ -223,6 +224,23 @@ export default {
       let out = this.game.away_team.logo ? 'py-2' : 'py-4';
       out += this.awayWon ? " font-semibold text-green-500" : "";
       return out;
+    }
+  },
+  methods: {
+    addToWatchlist() {
+      if (! this.loggedIn) {
+        this.$router.push(`/login?r=/my-watchlist&add=ncaab,${this.game.game_id}`)
+      }
+
+      this.$http.post('/api/watchlist', {
+        gameId: this.game.game_id,
+        gameType: 'ncaab',
+        gameTime: this.game.game_time
+      })
+        .then(response => {
+          console.log(response)
+        })
+        .catch(err => console.log(err))
     }
   }
 };
