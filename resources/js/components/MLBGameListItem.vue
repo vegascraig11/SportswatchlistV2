@@ -6,7 +6,7 @@
           <table class="min-w-full">
             <thead class="bg-swl-black-dark text-white text-xs uppercase">
               <tr class="whitespace-no-wrap">
-                <th class="w-1/3 px-4 py-2 text-left">NHL | {{ gameTime }} <span v-if="isCanceled" class="ml-2 px-2 py-1 rounded bg-red-600 text-white">Canceled</span></th>
+                <th class="w-1/3 px-4 py-2 text-left">MLB | {{ gameTime }} <span v-if="isCanceled" class="ml-2 px-2 py-1 rounded bg-red-600 text-white">Canceled</span></th>
                 <th class="px-4 text-right">
                   {{ game.status === "F/OT" ? "F/OT" : "Final Score" }}
                 </th>
