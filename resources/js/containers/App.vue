@@ -246,13 +246,18 @@
         </div>
       </div>
     </footer>
+    <flash-message />
   </div>
 </template>
 
 <script>
 import moment from "moment";
+import FlashMessage from "./../components/FlashMessage";
 
 export default {
+  components: {
+    FlashMessage
+  },
   data() {
     return {
       sports: [

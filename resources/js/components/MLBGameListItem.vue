@@ -198,12 +198,16 @@ export default {
     },
     isCanceled() {
       return this.game.status === 'Canceled';
+    },
+    loggedIn() {
+      return this.$store.getters.isLoggedIn;
     }
   },
   methods: {
     addToWatchlist() {
       if (! this.loggedIn) {
         this.$router.push(`/login?r=/my-watchlist&add=mlb,${this.game.game_id}`)
+        return
       }
 
       this.$http.post('/api/watchlist', {
@@ -212,7 +216,8 @@ export default {
         gameTime: this.game.game_time
       })
         .then(response => {
-          console.log(response)
+          // console.log(response)
+          flash({body: 'Game was added to watchlist successfully!', type: 'success'});
         })
         .catch(err => console.log(err))
     }

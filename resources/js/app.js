@@ -47,3 +47,8 @@ axios.get('/api/user')
       store
     }).$mount('#app');
   })
+
+window.events = new Vue();
+window.flash = message => {
+  window.events.$emit('flash', message)
+}
