@@ -39,17 +39,11 @@ export default {
     login() {
       const { email, password } = this;
 
-      axios.get('/sanctum/csrf-cookie')
+      this.$store.dispatch('login', {
+        email,
+        password
+      })
         .then(() => {
-          return this.$http.post('/login', { email, password })
-        })
-        .then(async response => {
-          const user = await this.$http.get('/api/user');
-
-          window.localStorage.setItem('loggedIn', true);
-          this.$store.commit('authenticate')
-          this.$store.commit('setUser', user.data)
-
           if (this.$route.query.r) {
             console.log('go to the path in the query')
             this.$router.push(this.$route.query.r)
@@ -57,6 +51,10 @@ export default {
             console.log('redirect to the default page')
             this.$router.push('/my-watchlist')
           }
+          flash({
+            body: 'Logged in successfully!',
+            type: 'success'
+          });
         })
         .catch(err => console.log(err))
     },

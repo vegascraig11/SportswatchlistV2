@@ -29,6 +29,7 @@ Route::get('ncaab/gamesByDate/{date}', 'NCAABGamesController@gamesByDate');
 Route::get('ncaaf/gamesByDate/{date}', 'NCAAFGamesController@gamesByDate');
 
 Route::middleware('auth:sanctum')->get('watchlist', 'WatchlistController@index');
+Route::middleware('auth:sanctum')->get('watchlist/raw', 'WatchlistController@raw');
 Route::middleware('auth:sanctum')->post('watchlist', 'WatchlistController@store');
 
 Route::get('{any}', function () {

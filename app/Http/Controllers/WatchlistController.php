@@ -133,6 +133,11 @@ class WatchlistController extends Controller
     return response()->json($mapped, 200);
   }
 
+  public function raw()
+  {
+    return auth()->user()->watchlist;
+  }
+
   public function store()
   {
     $watchlist = auth()->user()->watchlist()->create([

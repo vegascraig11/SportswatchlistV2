@@ -19,10 +19,15 @@ Vue.prototype.$http = axios.create({});
 // AIRLOCK_STATEFUL_DOMAINS=<the-server-ip-or-domain>
 
 axios.get('/api/user')
-  .then(user => {
+  .then(async user => {
     if (user) {
       store.commit('authenticate')
       store.commit('setUser', user.data)
+
+      const watchlist = await axios.get('api/watchlist/raw')
+      if (watchlist.status === 200) {
+        store.commit('setWatchlist', watchlist.data)
+      }
     }
   })
   .catch(err => {

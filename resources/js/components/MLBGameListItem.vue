@@ -124,7 +124,7 @@
           </table>
         </div>
       </div>
-      <div>
+      <div :class="inWatchlist ? 'hidden' : 'block'">
         <button
           @click="addToWatchlist"
           type="button"
@@ -201,6 +201,10 @@ export default {
     },
     loggedIn() {
       return this.$store.getters.isLoggedIn;
+    },
+    inWatchlist() {
+      return this.$store.getters.watchlistIds
+        .includes(this.game.game_id.toString());
     }
   },
   methods: {

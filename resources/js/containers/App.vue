@@ -391,14 +391,13 @@ export default {
       this.closeSportDropdown(e);
     },
     logout() {
-      this.$http.post('/logout')
+      this.$store.dispatch('logout')
         .then(() => {
-          this.$store.commit('unauthenticate')
-          this.$store.commit('setUser', {})
-          window.localStorage.setItem('loggedIn', false)
+          this.$router.push('/')
         })
-        .catch(err => {})
-        .finally(() => this.$router.push('/'))
+        .catch(err => {
+          console.log('Error logging out', err)
+        })
     }
   }
 }
