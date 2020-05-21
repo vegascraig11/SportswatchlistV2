@@ -222,6 +222,7 @@ export default {
         .then(response => {
           // console.log(response)
           flash({body: 'Game was added to watchlist successfully!', type: 'success'});
+          this.$store.dispatch('fetchWatchlist')
         })
         .catch(err => console.log(err))
     }

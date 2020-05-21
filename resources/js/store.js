@@ -45,7 +45,7 @@ const store = new Vuex.Store({
       })
     },
     fetchWatchlist: ctx => {
-      axios.get('api/watchlist/raw')
+      axios.get('/api/watchlist/raw')
         .then(response => ctx.commit('setWatchlist', response.data))
         .catch(err => console.log('Error fetching watchlist for user', err))
     },

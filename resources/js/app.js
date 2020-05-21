@@ -24,7 +24,7 @@ axios.get('/api/user')
       store.commit('authenticate')
       store.commit('setUser', user.data)
 
-      const watchlist = await axios.get('api/watchlist/raw')
+      const watchlist = await axios.get('/api/watchlist/raw')
       if (watchlist.status === 200) {
         store.commit('setWatchlist', watchlist.data)
       }
