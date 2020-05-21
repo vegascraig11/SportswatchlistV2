@@ -51,7 +51,7 @@ const store = new Vuex.Store({
     },
     logout: ctx => {
       return new Promise((resolve, reject) => {
-        axios.post('logout')
+        axios.post('/logout')
           .then(() => {
             ctx.commit('unauthenticate')
             ctx.commit('setUser', {})
