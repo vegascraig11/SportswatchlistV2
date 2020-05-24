@@ -17,7 +17,7 @@ class CreateGamesTable extends Migration
             $table->id();
             $table->timestamps();
 
-            $table->integer('GlobalGameID');
+            $table->integer('GlobalGameID')->unique();
             $table->integer('GlobalAwayTeamID');
             $table->integer('GlobalHomeTeamID');
             $table->string('Date');

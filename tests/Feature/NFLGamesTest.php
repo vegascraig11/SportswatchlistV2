@@ -18,7 +18,7 @@ class NFLGamesTest extends TestCase
 
         // We need to populate the databse with the NFL game data
         $nfl = new NFLGames();
-        $nfl->syncAll();
+        $nfl->populateAll();
     }
 
     /**

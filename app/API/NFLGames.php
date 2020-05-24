@@ -22,21 +22,21 @@ class NFLGames extends Model
     private $apiKey = "eb6298e992f04d598f4d33e692fd8bb6";
     private $gameType = 'nfl';
 
-    public function sync()
+    public function populate()
     {
-    	$this->syncTeams();
+        $this->populateTeams();
     }
 
-    public function syncAll()
+    public function populateAll()
     {
-        $team = $this->syncTeams();
-        $game = $this->syncGames();
-        $stadium = $this->syncStadiums();
+        $team = $this->populateTeams();
+        $game = $this->populateGames();
+        $stadium = $this->populateStadiums();
 
         return $team && $game && $stadium;
     }
 
-    public function syncTeams()
+    public function populateTeams()
     {
         $teams = Http::withHeaders(['Ocp-Apim-Subscription-Key' => $this->apiKey])
                     ->get("{$this->apiBaseUrl}/scores/json/AllTeams")
@@ -75,7 +75,7 @@ class NFLGames extends Model
         }
     }
 
-    public function syncStadiums()
+    public function populateStadiums()
     {
         $stadiums = Http::withHeaders(['Ocp-Apim-Subscription-Key' => $this->apiKey])
                     ->get("{$this->apiBaseUrl}/scores/json/Stadiums")
@@ -89,7 +89,6 @@ class NFLGames extends Model
                 'StadiumID' => $stadium->StadiumID,
                 'Name' => $stadium->Name,
                 'City' => $stadium->City,
-                'State' => $stadium->State,
                 'Country' => $stadium->Country,
                 'All' => json_encode($stadium),
                 'created_at' => $date,
@@ -114,7 +113,7 @@ class NFLGames extends Model
         }
     }
 
-    public function syncGames()
+    public function populateGames()
     {
         // Current Timeframe
         $timeframe = Http::withHeaders(['Ocp-Apim-Subscription-Key' => $this->apiKey])
@@ -201,16 +200,16 @@ class NFLGames extends Model
 
     public function timeframeFromDate($date = null)
     {
-    	if (is_null($date)) {
-    		$date = now();
-    	}
+        if (is_null($date)) {
+            $date = now();
+        }
 
-    	$localTimeframes = collect(json_decode(Redis::get('nfl_timeframes')));
+        $localTimeframes = collect(json_decode(Redis::get('nfl_timeframes')));
 
-    	$localTimeframes = $localTimeframes->map(function ($timeframe) {
-        	$timeframe->StartDate = Carbon::parse($timeframe->StartDate);
-        	$timeframe->EndDate = Carbon::parse($timeframe->EndDate);
-        	return $timeframe;
+        $localTimeframes = $localTimeframes->map(function ($timeframe) {
+            $timeframe->StartDate = Carbon::parse($timeframe->StartDate);
+            $timeframe->EndDate = Carbon::parse($timeframe->EndDate);
+            return $timeframe;
         });
 
         return $localTimeframes->where('StartDate', '<=', $date)->where('EndDate', '>=', $date)->first();
