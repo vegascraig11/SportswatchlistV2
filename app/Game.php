@@ -33,6 +33,7 @@ class Game extends Model
     		'id' => $this->id,
     		'game_id' => $game->GlobalGameID,
     		'game_time' => $game->DateTime,
+            'game_type' => $this->GameType,
     		'home_team' => [
     			'id' => $game->GlobalHomeTeamID,
     			'name' => $game->HomeTeam,

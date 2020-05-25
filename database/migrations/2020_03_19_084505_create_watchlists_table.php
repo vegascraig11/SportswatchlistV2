@@ -19,8 +19,6 @@ class CreateWatchlistsTable extends Migration
 
             $table->string('game_id');
             $table->bigInteger('user_id');
-            $table->string('game_type');
-            $table->datetime('game_time');
         });
     }
 

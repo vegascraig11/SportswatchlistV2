@@ -10,8 +10,15 @@ class Watchlist extends Model
 
   protected $dates = ['game_time'];
 
+  protected $with = ['game'];
+
   public function user()
   {
     return $this->belongsTo(User::class);
+  }
+
+  public function game()
+  {
+  	return $this->hasOne(Game::class, 'GlobalGameID', 'game_id');
   }
 }

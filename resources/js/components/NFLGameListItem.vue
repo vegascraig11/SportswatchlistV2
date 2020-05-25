@@ -154,15 +154,14 @@
           </table>
         </div>
       </div>
-      <div>
+      <div v-if="!(inWatchlist && added)">
         <button
           @click="addToWatchlist"
           type="button"
           class="w-full flex items-center justify-center bg-swl-green text-white py-2"
         >
-          <span>Add to Watchlist</span>
           <svg
-            class="ml-2 inline-block h-5 w-5"
+            class="mr-2 inline-block h-5 w-5"
             aria-hidden="true"
             xmlns="http://www.w3.org/2000/svg"
             viewBox="0 0 512 512"
@@ -172,6 +171,16 @@
               d="M256 8C119 8 8 119 8 256s111 248 248 248 248-111 248-248S393 8 256 8zm144 276c0 6.6-5.4 12-12 12h-92v92c0 6.6-5.4 12-12 12h-56c-6.6 0-12-5.4-12-12v-92h-92c-6.6 0-12-5.4-12-12v-56c0-6.6 5.4-12 12-12h92v-92c0-6.6 5.4-12 12-12h56c6.6 0 12 5.4 12 12v92h92c6.6 0 12 5.4 12 12v56z"
             />
           </svg>
+          <span>Add to Watchlist</span>
+        </button>
+      </div>
+      <div v-else>
+        <button
+          type="button"
+          class="w-full flex items-center justify-center bg-red-500 text-white py-2"
+        >
+          <svg class="mr-2 inline-block h-5 w-5" fill="currentColor" viewBox="0 0 20 20"><path d="M9 2a1 1 0 00-.894.553L7.382 4H4a1 1 0 000 2v10a2 2 0 002 2h8a2 2 0 002-2V6a1 1 0 100-2h-3.382l-.724-1.447A1 1 0 0011 2H9zM7 8a1 1 0 012 0v6a1 1 0 11-2 0V8zm5-1a1 1 0 00-1 1v6a1 1 0 102 0V8a1 1 0 00-1-1z" clip-rule="evenodd" fill-rule="evenodd"></path></svg>
+          <span>Remove from Watchlist</span>
         </button>
       </div>
     </div>
@@ -184,6 +193,14 @@ import momentTimezone from "moment-timezone";
 
 export default {
   props: ["game"],
+  data() {
+    return {
+      added: false
+    }
+  },
+  created() {
+    this.added = this.inWatchlist
+  },
   computed: {
     loggedIn() {
       return this.$store.getters.isLoggedIn;
@@ -234,6 +251,9 @@ export default {
       const { home_team, away_team, over_under } = this.game;
       let ou = home_team.score + away_team.score > over_under ? 'Over' : 'Under';
       return `${over_under} (${ou})`;
+    },
+    inWatchlist() {
+      return this.$store.getters.watchlistIds.includes(this.game.game_id.toString())
     }
   },
   methods: {
@@ -244,11 +264,14 @@ export default {
 
       this.$http.post('/api/watchlist', {
         gameId: this.game.game_id,
-        gameType: 'nfl',
-        gameTime: this.game.game_time
       })
         .then(response => {
-          console.log(response)
+          this.$store.dispatch('fetchWatchlist')
+          flash({
+            body: 'Added to watchlist successfully!',
+            type: 'success'
+          })
+          this.added = true
         })
         .catch(err => console.log(err))
     }
