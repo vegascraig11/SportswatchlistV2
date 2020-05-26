@@ -18,9 +18,14 @@ use Illuminate\Support\Facades\Redis;
 
 class NFLGames extends Model
 {
+    private $apiKey;
     private $apiBaseUrl = "https://api.sportsdata.io/v3/nfl";
-    private $apiKey = "eb6298e992f04d598f4d33e692fd8bb6";
     private $gameType = 'nfl';
+
+    public function __construct()
+    {
+        $this->apiKey = config('services.apiKeys.nfl');
+    }
 
     public function populate()
     {
@@ -213,5 +218,58 @@ class NFLGames extends Model
         });
 
         return $localTimeframes->where('StartDate', '<=', $date)->where('EndDate', '>=', $date)->first();
+    }
+
+    public function dailySync()
+    {
+        $response = Http::withHeaders(['Ocp-Apim-Subscription-Key' => $this->apiKey])
+                        ->get("{$this->apiBaseUrl}/scores/json/Timeframes/current")
+                        ->json();
+
+        $timeframe = array_pop($response);
+
+        if (!$timeframe['HasGames']) {
+            return 0;
+        }
+
+        $response = Http::withHeaders(['Ocp-Apim-Subscription-Key' => $this->apiKey])
+                ->get("{$this->apiBaseUrl}/scores/json/ScoresByWeek/{$timeframe['ApiSeason']}/{$timeframe['ApiWeek']}")
+                ->body();
+
+        $gamesForTimeframe = collect(json_decode($response));
+        $gamesOnTheDay = $gamesForTimeframe->filter(function ($game) use ($date) {
+            return Carbon::parse($game->Day) == $date;
+        });
+
+        $mappedGames = $gamesOnTheDay->map(function ($game) {
+            $output = [
+                'GameType' => $this->gameType,
+                'GlobalGameID' => $game->GlobalGameID,
+                'Date' => $game->Day,
+                'GlobalAwayTeamID' => $game->GlobalAwayTeamID,
+                'GlobalHomeTeamID' => $game->GlobalHomeTeamID,
+                'Status' => $game->Status,
+                'StadiumID' => $game->StadiumID,
+                'All' => json_encode($game),
+                'updated_at' => now(),
+            ];
+
+            return $output;
+        });
+
+        DB::beginTransaction();
+
+        try {
+            $mappedGames->each(function ($game) {
+                DB::table('games')->where('GlobalGameID', $game['GlobalGameID'])->update($game);
+            });
+            DB::commit();
+
+            return 'success';
+        } catch (Exception $e) {
+            DB::rollback();
+
+            return 'failed';
+        }
     }
 }

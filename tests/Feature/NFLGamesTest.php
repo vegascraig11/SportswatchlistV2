@@ -17,8 +17,8 @@ class NFLGamesTest extends TestCase
         parent::setUp();
 
         // We need to populate the databse with the NFL game data
-        $nfl = new NFLGames();
-        $nfl->populateAll();
+        $this->nfl = new NFLGames();
+        $this->nfl->populateAll();
     }
 
     /**
@@ -47,5 +47,10 @@ class NFLGamesTest extends TestCase
         $this->assertCount(1, $responseA->decodeResponseJson());
         $responseB->assertStatus(200);
         $this->assertCount(13, $responseB->decodeResponseJson());
+    }
+
+    public function testDailyGameSyncing()
+    {
+        dd($this->nfl->dailySync());
     }
 }

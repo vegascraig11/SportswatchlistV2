@@ -36,6 +36,7 @@ return [
         'ncaaf' => env('NCAAF_API_KEY'),
         'nhl' => env('NHL_API_KEY'),
         'mlb' => env('MLB_API_KEY'),
+        'nfl' => env('NFL_API_KEY')
     ],
 
 ];
