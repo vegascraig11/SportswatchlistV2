@@ -15,13 +15,15 @@ class CreateStadiumsTable extends Migration
     {
         Schema::create('stadiums', function (Blueprint $table) {
             $table->id();
-            $table->string('StadiumID')->unique();
+            $table->string('StadiumID');
             $table->string('StadiumType');
             $table->string('Name');
             $table->string('City');
             $table->string('Country');
             $table->json('All');
             $table->timestamps();
+
+            $table->unique(['StadiumType', 'StadiumID']);
         });
     }
 

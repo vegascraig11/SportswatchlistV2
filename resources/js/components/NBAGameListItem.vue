@@ -153,7 +153,7 @@
           </table>
         </div>
       </div>
-      <div>
+      <div v-if="!(inWatchlist && added)">
         <button
           @click="addToWatchlist"
           type="button"
@@ -173,6 +173,15 @@
           </svg>
         </button>
       </div>
+      <div v-else>
+        <button
+          type="button"
+          class="w-full flex items-center justify-center bg-red-500 text-white py-2"
+        >
+          <svg class="mr-2 inline-block h-5 w-5" fill="currentColor" viewBox="0 0 20 20"><path d="M9 2a1 1 0 00-.894.553L7.382 4H4a1 1 0 000 2v10a2 2 0 002 2h8a2 2 0 002-2V6a1 1 0 100-2h-3.382l-.724-1.447A1 1 0 0011 2H9zM7 8a1 1 0 012 0v6a1 1 0 11-2 0V8zm5-1a1 1 0 00-1 1v6a1 1 0 102 0V8a1 1 0 00-1-1z" clip-rule="evenodd" fill-rule="evenodd"></path></svg>
+          <span>Remove from Watchlist</span>
+        </button>
+      </div>
     </div>
   </div>
 </template>
@@ -183,6 +192,14 @@ import momentTimezone from "moment-timezone";
 
 export default {
   props: ["game"],
+  data() {
+    return {
+      added: false
+    }
+  },
+  created() {
+    this.added = this.inWatchlist
+  },
   computed: {
     loggedIn() {
       return this.$store.getters.isLoggedIn;
@@ -233,6 +250,9 @@ export default {
       const { home_team, away_team, over_under } = this.game;
       let ou = home_team.score + away_team.score > over_under ? 'Over' : 'Under';
       return `${over_under} (${ou})`;
+    },
+    inWatchlist() {
+      return this.$store.getters.watchlistIds.includes(this.game.game_id.toString())
     }
   },
   methods: {
@@ -243,11 +263,14 @@ export default {
 
       this.$http.post('/api/watchlist', {
         gameId: this.game.game_id,
-        gameType: 'nba',
-        gameTime: this.game.game_time
       })
         .then(response => {
-          console.log(response)
+          this.$store.dispatch('fetchWatchlist')
+          flash({
+            body: 'Added to watchlist successfully!',
+            type: 'success'
+          })
+          this.added = true
         })
         .catch(err => console.log(err))
     }

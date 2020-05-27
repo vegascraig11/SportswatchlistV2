@@ -2,33 +2,20 @@
 
 namespace App\Http\Controllers;
 
+use App\Game;
+use Carbon\Carbon;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Cache;
-use Illuminate\Support\Facades\Http;
-use App\Builders\NBAGameBuilder;
 
 class NBAGamesController extends Controller
 {
-    public function __construct(NBAGameBuilder $builder)
+    private $gameType = 'nba';
+
+    public function gamesByDate($date)
     {
-        $this->builder = $builder;
-    }
+        $games = Game::whereDate('Date', Carbon::parse($date)->toDateString())
+                        ->with(['homeTeam', 'awayTeam', 'stadium'])
+                        ->get();
 
-    public function gamesByDate($date = null)
-    {
-    	if (is_null($date)) {
-    		$date = now()->format('Y-M-d');
-    	}
-
-        Cache::remember("nba_games_{$date}", 5, function () use ($date) {
-            return Http::withHeaders(['Ocp-Apim-Subscription-Key' => config('services.apiKeys.nba')])
-                    ->get("https://api.sportsdata.io/v3/nba/scores/json/GamesByDate/{$date}")
-                    ->json();
-        });
-        $games = Cache::get("nba_games_{$date}");
-
-    	$games = $this->builder->build($games);
-
-    	return response()->json($games, 200);
+        return response()->json($games, 200);
     }
 }
