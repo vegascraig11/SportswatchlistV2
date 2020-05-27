@@ -2,13 +2,13 @@
 
 namespace Tests\Feature;
 
-use App\API\NFLGames;
+use App\API\NFL;
 use App\Stadium;
 use App\Team;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Tests\TestCase;
 
-class NFLGamesTest extends TestCase
+class NFLTest extends TestCase
 {
     use RefreshDatabase;
 
@@ -17,7 +17,7 @@ class NFLGamesTest extends TestCase
         parent::setUp();
 
         // We need to populate the databse with the NFL game data
-        $this->nfl = new NFLGames();
+        $this->nfl = new NFL();
         $this->nfl->populateAll();
     }
 

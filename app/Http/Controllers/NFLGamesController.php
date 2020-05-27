@@ -2,7 +2,6 @@
 
 namespace App\Http\Controllers;
 
-use App\API\NFLGames;
 use App\Game;
 use Carbon\Carbon;
 use Illuminate\Http\Request;

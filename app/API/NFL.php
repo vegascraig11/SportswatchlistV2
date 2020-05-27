@@ -16,7 +16,7 @@ use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Http;
 use Illuminate\Support\Facades\Redis;
 
-class NFLGames extends Model
+class NFL extends Model
 {
     private $apiKey;
     private $apiBaseUrl = "https://api.sportsdata.io/v3/nfl";

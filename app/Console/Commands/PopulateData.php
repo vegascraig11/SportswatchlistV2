@@ -2,7 +2,7 @@
 
 namespace App\Console\Commands;
 
-use App\API\NFLGames;
+use App\API\NFL;
 use Illuminate\Console\Command;
 
 class PopulateData extends Command
@@ -38,7 +38,7 @@ class PopulateData extends Command
      */
     public function handle()
     {
-        $nfl = new NFLGames();
+        $nfl = new NFL();
         $response = $nfl->populateAll();
 
         $this->info($response);
