@@ -53,12 +53,15 @@
           >
             <div v-if="sportDropdown" class="absolute top-0 left-0 right-0 mt-12 z-50">
               <ul class="w-full bg-swl-black-light">
-                <li @click="selectSport($event, index)" v-for="(sport, index) in sports" :key="`sport-${sport.url}`" class="hover:bg-gray-700">
-                  <router-link class="block py-2" :to="sport.url">{{ sport.name }}</router-link>
+                <li v-for="league in leagues" @click="toggleLeague(league)" :key="`toggle-${league}-button`" class="relative py-2 hover:bg-gray-700">
+                  <span class="uppercase">{{ league }}</span>
+                  <span class="absolute right-0 mr-4" :class="selectedLeagues.includes(league) ? 'text-mantis-500' : 'text-gray-800'">
+                    <svg class="h-4 w-4" fill="currentColor" viewBox="0 0 20 20"><path d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd" fill-rule="evenodd"></path></svg>
+                  </span>
                 </li>
               </ul>
             </div>
-            <span class="py-4">{{ sports[loadedSport].name }}</span>
+            <span class="py-4">Sports</span>
             <span class="ml-4">
               <svg
                 class="h-4 w-4"
@@ -260,37 +263,6 @@ export default {
   },
   data() {
     return {
-      sports: [
-        {
-          name: 'All Sports',
-          url: '/'
-        },
-        {
-          name: 'NFL',
-          url: '/games/nfl'
-        },
-        {
-          name: 'NCAAF',
-          url: '/games/ncaaf'
-        },
-        {
-          name: 'NBA',
-          url: '/games/nba'
-        },
-        {
-          name: 'NCAAB',
-          url: '/games/ncaab'
-        },
-        {
-          name: 'MLB',
-          url: '/games/mlb'
-        },
-        {
-          name: 'NHL',
-          url: '/games/nhl'
-        },
-      ],
-      loadedSport: 0,
       sportDropdown: false,
       attributes: [],
       time: new Date()
@@ -302,8 +274,6 @@ export default {
     }
   },
   created() {
-    let index = this.sports.findIndex(sport => sport.url === this.$route.path.split('/')[1]);
-    this.loadedSport = index === -1 ? 0 : index;
     this.buildWeekRow();
 
     this.attributes.push({
@@ -329,6 +299,12 @@ export default {
     },
     theYear() {
       return new Date().getFullYear();
+    },
+    leagues() {
+      return this.$store.state.leagues;
+    },
+    selectedLeagues() {
+      return this.$store.state.selectedLeagues;
     }
   },
   methods: {
@@ -386,10 +362,6 @@ export default {
     bodyClickListener(e) {
       this.closeSportDropdown(e);
     },
-    selectSport(e, index) {
-      this.loadedSport = index;
-      this.closeSportDropdown(e);
-    },
     logout() {
       this.$store.dispatch('logout')
         .then(() => {
@@ -398,6 +370,9 @@ export default {
         .catch(err => {
           console.log('Error logging out', err)
         })
+    },
+    toggleLeague(league) {
+      this.$store.commit('toggleLeague', league);
     }
   }
 }

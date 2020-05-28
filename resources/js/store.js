@@ -10,7 +10,9 @@ const store = new Vuex.Store({
     auth: false,
     user: {},
     registerMessage: '',
-    watchlist: []
+    watchlist: [],
+    leagues: ['nfl', 'ncaaf', 'nba', 'ncaab', 'mlb', 'nhl'],
+    selectedLeagues: []
   },
   mutations: {
     setDate: (state, newDate) => state.date = newDate,
@@ -21,7 +23,19 @@ const store = new Vuex.Store({
     },
     setUser: (state, user) => state.user = user,
     registerMessage: (state, message) => state.registerMessage = message,
-    setWatchlist: (state, watchlist) => state.watchlist = watchlist
+    setWatchlist: (state, watchlist) => state.watchlist = watchlist,
+    toggleLeague: (state, league) => {
+      const pos = state.selectedLeagues.indexOf(league);
+      if (pos === -1) {
+        const where = state.leagues.indexOf(league);
+        state.selectedLeagues.splice(where, 0, league);
+        if (state.leagues.length === state.selectedLeagues.length) {
+          state.selectedLeagues = []
+        }
+      } else {
+        state.selectedLeagues.splice(pos, 1);
+      }
+    }
   },
   getters: {
     isLoggedIn: (state) => state.auth === true,
