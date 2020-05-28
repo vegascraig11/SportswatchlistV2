@@ -12,7 +12,8 @@ class NBAGamesController extends Controller
 
     public function gamesByDate($date)
     {
-        $games = Game::whereDate('Date', Carbon::parse($date)->toDateString())
+        $games = Game::where('GameType', $this->gameType)
+        				->whereDate('Date', Carbon::parse($date)->toDateString())
                         ->with(['homeTeam', 'awayTeam', 'stadium'])
                         ->get();
 
