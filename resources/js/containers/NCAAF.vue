@@ -6,13 +6,13 @@
     </div>
     <template v-else>
       <div v-if="games.length" class="mt-6">
-        <ncaaf-game-list-item
+        <game-list-item
           v-for="game in games"
           :game="game"
           :key="game.GameId"
           class="mt-6 first:mt-0 w-full"
         >
-        </ncaaf-game-list-item>
+        </game-list-item>
       </div>
       <div v-else class="mt-6">
         <p>No games found for the day!</p>
@@ -24,13 +24,13 @@
 <script>
 import moment from "moment";
 import Loading from "./../components/Loading";
-import NCAAFGameListItem from "./../components/NCAAFGameListItem";
+import GameListItem from "./../components/GameListItem";
 
 export default {
   // props: ["date"],
   components: {
     Loading,
-    "ncaaf-game-list-item": NCAAFGameListItem
+    "game-list-item": GameListItem
   },
   data() {
     return {

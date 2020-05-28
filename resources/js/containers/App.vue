@@ -24,7 +24,7 @@
               </div>
               <div v-else class="ml-4 pl-4 border-l border-gray-700">
                 <router-link to="/signup">Sign Up</router-link>
-                <router-link to="/login" class="ml-4 px-4 py-2 bg-swl-green rounded-sm">Login</router-link>
+                <router-link to="/login" class="ml-4 px-4 py-2 bg-mantis-500 rounded-sm">Login</router-link>
               </div>
             </nav>
             <button class="lg:hidden group relative p-4">
@@ -38,7 +38,7 @@
                 </div>
                 <div v-else class="px-2 border-t mt-2">
                   <router-link to="/signup" class="block py-2 mb-2 hover:bg-gray-900">Sign Up</router-link>
-                  <router-link to="/login" class="block py-2 px-4 py-2 bg-swl-green hover:bg-green-500 rounded-sm">Login</router-link>
+                  <router-link to="/login" class="block py-2 px-4 py-2 bg-mantis-500 hover:bg-green-500 rounded-sm">Login</router-link>
                 </div>
               </div>
             </button>
@@ -48,7 +48,7 @@
       <div class="bg-swl-black-dark">
         <div class="flex flex-wrap items-stretch text-white">
           <div
-            class="relative w-1/2 md:w-1/4 flex items-center justify-center bg-swl-green text-center cursor-pointer"
+            class="relative w-1/2 md:w-1/4 flex items-center justify-center bg-mantis-500 text-center cursor-pointer"
             @click="openSportDropdown"
           >
             <div v-if="sportDropdown" class="absolute top-0 left-0 right-0 mt-12 z-50">

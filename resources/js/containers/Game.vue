@@ -1,6 +1,6 @@
 <template>
   <div class="px-2 sm:px-0 py-6">
-    <h2 class="text-xl font-semibold">NFL Game List</h2>
+    <h2 class="text-xl font-semibold">{{ header }}</h2>
     <div v-if="loading" class="flex justify-center py-6">
       <loading></loading>
     </div>
@@ -27,6 +27,7 @@ import Loading from "./../components/Loading";
 import GameListItem from "./../components/GameListItem";
 
 export default {
+  props: ['league'],
   components: {
     Loading,
     "game-list-item": GameListItem
@@ -42,13 +43,16 @@ export default {
       this.getGames();
     }
   },
+  created() {
+    this.getGames();
+  },
   computed: {
     date() {
       return this.$store.state.date;
+    },
+    header() {
+      return this.league.toUpperCase() + " Game List";
     }
-  },
-  created() {
-    this.getGames();
   },
   methods: {
     getGames() {
@@ -56,7 +60,7 @@ export default {
       const formattedDate = this.getFormattedDate();
 
       this.$http
-        .get(`/api/nfl/gamesByDate/${formattedDate}`)
+        .get(`/api/${this.league}/gamesByDate/${formattedDate}`)
         .then(response => {
           this.games = Array.isArray(response.data) ? response.data : [];
         })

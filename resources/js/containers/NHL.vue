@@ -6,13 +6,13 @@
     </div>
     <template v-else>
       <div v-if="games.length" class="mt-6">
-        <nhl-game-list-item
+        <game-list-item
           v-for="game in games"
           :game="game"
           :key="game.GameId"
           class="mt-6 first:mt-0 w-full"
         >
-        </nhl-game-list-item>
+        </game-list-item>
       </div>
       <div v-else class="mt-6">
         <p>No games found for the day!</p>
@@ -24,13 +24,13 @@
 <script>
 import moment from "moment";
 import Loading from "./../components/Loading";
-import NHLGameListItem from "./../components/NHLGameListItem";
+import GameListItem from "./../components/GameListItem";
 
 export default {
   // props: ["date"],
   components: {
     Loading,
-    "nhl-game-list-item": NHLGameListItem
+    "game-list-item": GameListItem
   },
   data() {
     return {

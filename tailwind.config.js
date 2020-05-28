@@ -8,7 +8,17 @@ module.exports = {
         inter: ["Inter", ...defaultTheme.fontFamily.sans]
       },
       colors: {
-        "swl-green": "#75c157",
+        'mantis': {
+          100: '#F1F9EE',
+          200: '#DDF0D5',
+          300: '#C8E6BC',
+          400: '#9ED489',
+          500: '#75C157',
+          600: '#69AE4E',
+          700: '#467434',
+          800: '#355727',
+          900: '#233A1A',
+        },
         "swl-black": {
           lighter: "#27282c",
           light: "#1c1e21",

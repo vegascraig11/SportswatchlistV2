@@ -4,15 +4,23 @@
       <div class="overflow-x-auto">
         <div class="inline-block min-w-full overflow-hidden">
           <table class="min-w-full table-fixed">
-            <thead class="bg-swl-black-dark text-white text-xs uppercase">
+            <thead class="bg-gray-900 text-white text-xs uppercase">
               <tr class="whitespace-no-wrap">
-                <th class="w-1/3 pl-4 pr-32 py-2 text-left">NBA | {{ gameTime }}</th>
+                <th class="w-1/3 pl-4 pr-32 py-2 text-left flex items-strech">
+                  <span class="uppercase">{{ game.game_type }} | {{ gameTime }}</span>
+                  <div v-if="!(inWatchlist && added)" class="ml-2 text-white font-semibold relative">
+                    <button @click="addToWatchlist" type="button" class="absolute inset-0 flex items-center justify-center bg-mantis-500 hover:bg-mantis-600 py-1 px-2 rounded">
+                      <svg class="mr-1 inline-block h-3 w-3" fill="currentColor" viewBox="0 0 20 20"><path d="M10 3a1 1 0 011 1v5h5a1 1 0 110 2h-5v5a1 1 0 11-2 0v-5H4a1 1 0 110-2h5V4a1 1 0 011-1z" clip-rule="evenodd" fill-rule="evenodd"></path></svg>
+                      <span class="text-xs">Add to Watchlist</span>
+                    </button>
+                  </div>
+                </th>
                 <th class="px-4">{{ overUnder }}</th>
                 <th class="px-4 text-right">
                   {{ game.status === "F/OT" ? "F/OT" : "Final Score" }}
                 </th>
                 <th class="px-4">Money Line</th>
-                <th class="px-4">Point Spread</th>
+                <th class="px-4">{{ runLineLabel }}</th>
                 <th class="px-4">Total</th>
               </tr>
             </thead>
@@ -49,7 +57,7 @@
                   </div>
                 </td>
                 <td rowspan="2">
-                  <div v-if="quarters" class="border">
+                  <!-- <div v-if="quarters" class="border">
                     <table class="w-full">
                       <thead class="bg-swl-black-dark text-white">
                         <tr>
@@ -80,7 +88,7 @@
                         </tr>
                       </tbody>
                     </table>
-                  </div>
+                  </div> -->
                 </td>
                 <td :class="homeClasses" class="text-right border-r pr-4">
                   {{ game.home_team.score || "??" }}
@@ -153,45 +161,16 @@
           </table>
         </div>
       </div>
-      <div v-if="!(inWatchlist && added)">
-        <button
-          @click="addToWatchlist"
-          type="button"
-          class="w-full flex items-center justify-center bg-swl-green text-white py-2"
-        >
-          <span>Add to Watchlist</span>
-          <svg
-            class="ml-2 inline-block h-5 w-5"
-            aria-hidden="true"
-            xmlns="http://www.w3.org/2000/svg"
-            viewBox="0 0 512 512"
-          >
-            <path
-              fill="currentColor"
-              d="M256 8C119 8 8 119 8 256s111 248 248 248 248-111 248-248S393 8 256 8zm144 276c0 6.6-5.4 12-12 12h-92v92c0 6.6-5.4 12-12 12h-56c-6.6 0-12-5.4-12-12v-92h-92c-6.6 0-12-5.4-12-12v-56c0-6.6 5.4-12 12-12h92v-92c0-6.6 5.4-12 12-12h56c6.6 0 12 5.4 12 12v92h92c6.6 0 12 5.4 12 12v56z"
-            />
-          </svg>
-        </button>
-      </div>
-      <div v-else>
-        <button
-          type="button"
-          class="w-full flex items-center justify-center bg-red-500 text-white py-2"
-        >
-          <svg class="mr-2 inline-block h-5 w-5" fill="currentColor" viewBox="0 0 20 20"><path d="M9 2a1 1 0 00-.894.553L7.382 4H4a1 1 0 000 2v10a2 2 0 002 2h8a2 2 0 002-2V6a1 1 0 100-2h-3.382l-.724-1.447A1 1 0 0011 2H9zM7 8a1 1 0 012 0v6a1 1 0 11-2 0V8zm5-1a1 1 0 00-1 1v6a1 1 0 102 0V8a1 1 0 00-1-1z" clip-rule="evenodd" fill-rule="evenodd"></path></svg>
-          <span>Remove from Watchlist</span>
-        </button>
-      </div>
     </div>
   </div>
 </template>
 
 <script>
-import moment from "moment";
-import momentTimezone from "moment-timezone";
+import moment from 'moment';
+import momentTimezone from 'moment-timezone';
 
 export default {
-  props: ["game"],
+  props: ['game'],
   data() {
     return {
       added: false
@@ -210,21 +189,14 @@ export default {
     zone() {
       return momentTimezone.tz(this.game.game_time, moment.tz.guess()).zoneAbbr();
     },
-    venue() {
-      const { stadium } = this.game;
-
-      if (!stadium) return "USA";
-
-      return `${stadium.Name}, ${stadium.Address}, ${stadium.City}, ${stadium.State}, ${stadium.Country}`;
+    inWatchlist() {
+      return this.$store.getters.watchlistIds.includes(this.game.game_id.toString())
     },
-    winner() {
-      const { status, home_team, away_team } = this.game;
-
-      if (status !== "Final" && status !== "F/OT") {
-        return null;
-      }
-
-      return home_team.score > away_team.score ? "home" : "away";
+    overUnder() {
+      if (!this.winner) return '';
+      const { home_team, away_team, over_under } = this.game;
+      let ou = home_team.score + away_team.score > over_under ? 'Over' : 'Under';
+      return `${over_under} (${ou})`;
     },
     homeWon() {
       return this.winner === "home";
@@ -233,7 +205,7 @@ export default {
       return this.winner === "away";
     },
     quarters() {
-      return this.game.quarters.length > 0;
+      return this.game.quarters && this.game.quarters.length > 0;
     },
     homeClasses() {
       let out = this.game.home_team.logo ? 'py-2' : 'py-4';
@@ -245,20 +217,25 @@ export default {
       out += this.awayWon ? " font-semibold text-green-500" : "";
       return out;
     },
-    overUnder() {
-      if (!this.winner) return '';
-      const { home_team, away_team, over_under } = this.game;
-      let ou = home_team.score + away_team.score > over_under ? 'Over' : 'Under';
-      return `${over_under} (${ou})`;
+    venue() {
+      const { stadium } = this.game;
+
+      if (!stadium) return "USA";
+
+      return `${stadium.Name}, ${stadium.City}, ${stadium.State}, ${stadium.Country}`;
     },
-    inWatchlist() {
-      return this.$store.getters.watchlistIds.includes(this.game.game_id.toString())
+    runLineLabel() {
+      if (this.game.game_type === 'mlb') {
+        return 'Run Line';
+      } else {
+        return 'Point Spread';
+      }
     }
   },
   methods: {
     addToWatchlist() {
       if (! this.loggedIn) {
-        this.$router.push(`/login?r=/my-watchlist&add=nba,${this.game.game_id}`)
+        this.$router.push(`/login?r=/my-watchlist&add=${this.game.game_id}`)
       }
 
       this.$http.post('/api/watchlist', {
@@ -275,5 +252,5 @@ export default {
         .catch(err => console.log(err))
     }
   }
-};
+}
 </script>

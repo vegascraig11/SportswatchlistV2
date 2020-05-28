@@ -35,7 +35,7 @@
         </label>
       </div>
       <div class="mt-4">
-        <button class="bg-swl-green text-white px-4 py-2 font-semibold rounded hover:bg-green-500">Sign Up</button>
+        <button class="bg-mantis-500 text-white px-4 py-2 font-semibold rounded hover:bg-green-500">Sign Up</button>
       </div>
     </form>
   </div>

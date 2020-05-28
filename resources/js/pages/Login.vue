@@ -13,7 +13,7 @@
         <div><input class="w-full px-2 py-1 border rounded" type="password" v-model="password" id="password" required placeholder="Password"></div>
       </div>
       <div class="mt-4">
-        <button class="bg-swl-green text-white px-4 py-2 font-semibold rounded hover:bg-green-500">Login</button>
+        <button class="bg-mantis-500 text-white px-4 py-2 font-semibold rounded hover:bg-green-500">Login</button>
       </div>
     </form>
   </div>
