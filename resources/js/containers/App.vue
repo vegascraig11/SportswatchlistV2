@@ -17,7 +17,6 @@
             </div>
             <nav class="hidden lg:flex text-sm">
               <router-link to="/my-watchlist">My Watchlist</router-link>
-              <a href="#" class="ml-4">FAQ's</a>
               <div v-if="loggedIn" class="ml-4">
                 <p class="inline-block font-semibold">{{ username }}</p>
                 <p class="ml-2 inline-block cursor-pointer" @click="logout">Logout</p>
