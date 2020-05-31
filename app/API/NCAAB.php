@@ -6,15 +6,15 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Http;
 
-class NBA extends Model
+class NCAAB extends Model
 {
-	private $apiBaseUrl = "https://api.sportsdata.io/v3/nba";
-	private $gameType = 'nba';
+	private $apiBaseUrl = "https://api.sportsdata.io/v3/cbb";
+	private $gameType = 'ncaab';
 	private $apiKey;
 
 	public function __construct()
 	{
-		$this->apiKey = config('services.apiKeys.nba');
+		$this->apiKey = config('services.apiKeys.ncaab');
 	}
 
     public function populateAll()
@@ -66,19 +66,21 @@ class NBA extends Model
     public function populateTeams()
     {
         $teams = Http::withHeaders(['Ocp-Apim-Subscription-Key' => $this->apiKey])
-                    ->get("{$this->apiBaseUrl}/scores/json/AllTeams")
+                    ->get("{$this->apiBaseUrl}/scores/json/teams")
                     ->body();
 
         $mappedTeams = collect(json_decode($teams))->map(function ($team) {
             $date = now();
 
+            $stadium = $team->Stadium !== null ? $team->Stadium->StadiumID : null;
+
             $output = [
                 'TeamType' => $this->gameType,
                 'Key' => $team->Key,
                 'GlobalTeamID' => $team->GlobalTeamID,
-                'City' => $team->City,
+                'City' => $team->School,
                 'Name' => $team->Name,
-                'StadiumID' => $team->StadiumID,
+                'StadiumID' => $stadium,
                 'All' => json_encode($team),
                 'created_at' => $date,
                 'updated_at' => $date

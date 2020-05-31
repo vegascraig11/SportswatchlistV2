@@ -2,14 +2,14 @@
 
 namespace Tests\Feature;
 
-use App\API\NBA;
+use App\API\NCAAF;
 use App\Game;
 use App\Stadium;
 use App\Team;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Tests\TestCase;
 
-class NBATest extends TestCase
+class NCAAFTest extends TestCase
 {
     use RefreshDatabase;
 
@@ -17,9 +17,9 @@ class NBATest extends TestCase
     {
         parent::setUp();
 
-        // We need to populate the databse with the NBA game data
-        $this->nba = new NBA();
-        // $this->nba->populateAll();
+        // We need to populate the databse with the NCAAF game data
+        $this->ncaaf = new NCAAF();
+        // $this->ncaaf->populateAll();
     }
 
     // These tests aren't extensive and should be worked on more.
@@ -28,52 +28,52 @@ class NBATest extends TestCase
     {
         $pre = Stadium::all();
 
-        $this->nba->populateStadiums();
+        $this->ncaaf->populateStadiums();
 
         $after = Stadium::all();
 
         $this->assertCount(0, $pre);
-        $this->assertCount(52, $after);
+        $this->assertCount(198, $after);
     }
 
     public function testPopulatingTeams()
     {
         $pre = Team::all();
 
-        $this->nba->populateTeams();
+        $this->ncaaf->populateTeams();
 
         $after = Team::all();
 
         $this->assertCount(0, $pre);
-        $this->assertCount(32, $after);
+        $this->assertCount(247, $after);
     }
 
     public function testPopulatingGamesForTheSeason()
     {
         $pre = Game::all();
 
-        $this->nba->populateGames();
+        $this->ncaaf->populateGames();
 
         $after = Game::all();
 
         $this->assertCount(0, $pre);
-        $this->assertCount(1232, $after); // For 2020REG Season
+        $this->assertCount(840, $after); // For 2020REG Season
     }
 
     public function testFetchingGamesByDate()
     {
         $this->withoutExceptionHandling();
 
-        $this->nba->populateStadiums();
-        $this->nba->populateTeams();
-        $this->nba->populateGames();
+        $this->ncaaf->populateStadiums();
+        $this->ncaaf->populateTeams();
+        $this->ncaaf->populateGames();
 
-        $responseA = $this->getJson('/api/nba/gamesByDate/2019-OCT-22'); // there should be 2 games according to the schedule
-        $responseB = $this->getJson('/api/nba/gamesByDate/2019-OCT-26'); // there should be 10 games according to the schedule
+        $responseA = $this->getJson('/api/ncaaf/gamesByDate/2020-SEP-26'); // there should be 59 games according to the schedule
+        $responseB = $this->getJson('/api/ncaaf/gamesByDate/2020-NOV-07'); // there should be 53 games according to the schedule
 
         $responseA->assertStatus(200);
-        $this->assertCount(2, $responseA->decodeResponseJson());
+        $this->assertCount(59, $responseA->decodeResponseJson());
         $responseB->assertStatus(200);
-        $this->assertCount(10, $responseB->decodeResponseJson());
+        $this->assertCount(53, $responseB->decodeResponseJson());
     }
 }

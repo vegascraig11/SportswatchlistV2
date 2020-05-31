@@ -6,15 +6,15 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Http;
 
-class NBA extends Model
+class NHL extends Model
 {
-	private $apiBaseUrl = "https://api.sportsdata.io/v3/nba";
-	private $gameType = 'nba';
+	private $apiBaseUrl = "https://api.sportsdata.io/v3/nhl";
+	private $gameType = 'nhl';
 	private $apiKey;
 
 	public function __construct()
 	{
-		$this->apiKey = config('services.apiKeys.nba');
+		$this->apiKey = config('services.apiKeys.nhl');
 	}
 
     public function populateAll()

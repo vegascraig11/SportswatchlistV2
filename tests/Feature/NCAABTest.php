@@ -2,14 +2,14 @@
 
 namespace Tests\Feature;
 
-use App\API\NBA;
+use App\API\NCAAB;
 use App\Game;
 use App\Stadium;
 use App\Team;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Tests\TestCase;
 
-class NBATest extends TestCase
+class NCAABTest extends TestCase
 {
     use RefreshDatabase;
 
@@ -17,9 +17,9 @@ class NBATest extends TestCase
     {
         parent::setUp();
 
-        // We need to populate the databse with the NBA game data
-        $this->nba = new NBA();
-        // $this->nba->populateAll();
+        // We need to populate the databse with the NCAAB game data
+        $this->ncaab = new NCAAB();
+        // $this->ncaab->populateAll();
     }
 
     // These tests aren't extensive and should be worked on more.
@@ -28,31 +28,33 @@ class NBATest extends TestCase
     {
         $pre = Stadium::all();
 
-        $this->nba->populateStadiums();
+        $this->ncaab->populateStadiums();
 
         $after = Stadium::all();
 
         $this->assertCount(0, $pre);
-        $this->assertCount(52, $after);
+        $this->assertCount(471, $after);
     }
 
     public function testPopulatingTeams()
     {
         $pre = Team::all();
 
-        $this->nba->populateTeams();
+        $this->ncaab->populateTeams();
 
         $after = Team::all();
 
         $this->assertCount(0, $pre);
-        $this->assertCount(32, $after);
+        $this->assertCount(896, $after);
     }
 
     public function testPopulatingGamesForTheSeason()
     {
+        $this->markTestIncomplete();
+        
         $pre = Game::all();
 
-        $this->nba->populateGames();
+        $this->ncaab->populateGames();
 
         $after = Game::all();
 
@@ -64,12 +66,12 @@ class NBATest extends TestCase
     {
         $this->withoutExceptionHandling();
 
-        $this->nba->populateStadiums();
-        $this->nba->populateTeams();
-        $this->nba->populateGames();
+        $this->ncaab->populateStadiums();
+        $this->ncaab->populateTeams();
+        $this->ncaab->populateGames();
 
-        $responseA = $this->getJson('/api/nba/gamesByDate/2019-OCT-22'); // there should be 2 games according to the schedule
-        $responseB = $this->getJson('/api/nba/gamesByDate/2019-OCT-26'); // there should be 10 games according to the schedule
+        $responseA = $this->getJson('/api/ncaab/gamesByDate/2019-OCT-22'); // there should be 2 games according to the schedule
+        $responseB = $this->getJson('/api/ncaab/gamesByDate/2019-OCT-26'); // there should be 10 games according to the schedule
 
         $responseA->assertStatus(200);
         $this->assertCount(2, $responseA->decodeResponseJson());

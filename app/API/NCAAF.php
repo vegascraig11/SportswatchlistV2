@@ -6,15 +6,15 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Http;
 
-class NBA extends Model
+class NCAAF extends Model
 {
-	private $apiBaseUrl = "https://api.sportsdata.io/v3/nba";
-	private $gameType = 'nba';
+	private $apiBaseUrl = "https://api.sportsdata.io/v3/cfb";
+	private $gameType = 'ncaaf';
 	private $apiKey;
 
 	public function __construct()
 	{
-		$this->apiKey = config('services.apiKeys.nba');
+		$this->apiKey = config('services.apiKeys.ncaaf');
 	}
 
     public function populateAll()
@@ -40,7 +40,6 @@ class NBA extends Model
                 'StadiumID' => $stadium->StadiumID,
                 'Name' => $stadium->Name,
                 'City' => $stadium->City,
-                'Country' => $stadium->Country,
                 'All' => json_encode($stadium),
                 'created_at' => $date,
                 'updated_at' => $date
@@ -66,7 +65,7 @@ class NBA extends Model
     public function populateTeams()
     {
         $teams = Http::withHeaders(['Ocp-Apim-Subscription-Key' => $this->apiKey])
-                    ->get("{$this->apiBaseUrl}/scores/json/AllTeams")
+                    ->get("{$this->apiBaseUrl}/scores/json/Teams")
                     ->body();
 
         $mappedTeams = collect(json_decode($teams))->map(function ($team) {
@@ -76,7 +75,7 @@ class NBA extends Model
                 'TeamType' => $this->gameType,
                 'Key' => $team->Key,
                 'GlobalTeamID' => $team->GlobalTeamID,
-                'City' => $team->City,
+                'City' => $team->School,
                 'Name' => $team->Name,
                 'StadiumID' => $team->StadiumID,
                 'All' => json_encode($team),
@@ -107,7 +106,7 @@ class NBA extends Model
 		                    ->get("{$this->apiBaseUrl}/scores/json/CurrentSeason")
 		                    ->body();
 
-		$apiSeason = json_decode($currentSeason)->ApiSeason;
+		$apiSeason = json_decode($currentSeason);
 
 		$gamesForTheSeason = Http::withHeaders(['Ocp-Apim-Subscription-Key' => $this->apiKey])
 			                    ->get("{$this->apiBaseUrl}/scores/json/Games/{$apiSeason}")

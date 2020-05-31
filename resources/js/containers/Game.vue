@@ -74,7 +74,7 @@ export default {
         });
     },
     getFormattedDate() {
-      return moment(this.date).format("YYYY-MMM-D");
+      return moment(this.date).format("YYYY-MMM-DD");
     }
   }
 };

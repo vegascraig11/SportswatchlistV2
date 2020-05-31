@@ -18,8 +18,8 @@ class CreateStadiumsTable extends Migration
             $table->string('StadiumID');
             $table->string('StadiumType');
             $table->string('Name');
-            $table->string('City');
-            $table->string('Country');
+            $table->string('City')->nullable();
+            $table->string('Country')->nullable();
             $table->json('All');
             $table->timestamps();
 
