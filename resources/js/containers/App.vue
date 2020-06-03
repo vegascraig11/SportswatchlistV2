@@ -383,6 +383,10 @@ export default {
         })
     },
     toggleLeague(league) {
+      if (this.$route.name !== 'home') {
+        this.$router.push('/')
+      }
+      
       this.$store.commit('toggleLeague', league);
     }
   }
