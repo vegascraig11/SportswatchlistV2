@@ -72,7 +72,7 @@
                 </li>
               </ul>
             </div>
-            <span class="py-4">Sports</span>
+            <span>Sports</span>
             <span class="ml-4">
               <svg
                 class="h-4 w-4"
@@ -87,32 +87,43 @@
               </svg>
             </span>
           </div>
-          <div class="flex items-center justify-center w-1/2 md:w-24 bg-swl-black-lighter text-center cursor-pointer px-4">
-            <span class="flex flex-col">
-              <svg
-                class="h-4 w-4 -mb-1"
-                aria-hidden="true"
-                xmlns="http://www.w3.org/2000/svg"
-                viewBox="0 0 320 512"
-              >
-                <path
-                  fill="currentColor"
-                  d="M288.662 352H31.338c-17.818 0-26.741-21.543-14.142-34.142l128.662-128.662c7.81-7.81 20.474-7.81 28.284 0l128.662 128.662c12.6 12.599 3.676 34.142-14.142 34.142z"
-                />
-              </svg>
-              <svg
-                class="h-4 w-4 -mt-1"
-                aria-hidden="true"
-                xmlns="http://www.w3.org/2000/svg"
-                viewBox="0 0 320 512"
-              >
-                <path
-                  fill="currentColor"
-                  d="M31.3 192h257.3c17.8 0 26.7 21.5 14.1 34.1L174.1 354.8c-7.8 7.8-20.5 7.8-28.3 0L17.2 226.1C4.6 213.5 13.5 192 31.3 192z"
-                />
-              </svg>
-            </span>
-            <span class="ml-1">Sort</span>
+          <div
+            @click="toggleSortDropdown"
+            class="relative flex items-center justify-center w-1/2 md:w-24 bg-swl-black-lighter text-center cursor-pointer px-4"
+          >
+            <div v-if="sortDropdownOpen" class="absolute top-0 left-0 right-0 mt-12 z-50">
+              <ul class="w-full bg-swl-black-light">
+                <li @click="sort($event, 'rot')" class="relative py-2 hover:bg-gray-700"># ROT</li>
+                <li @click="sort($event, 'time')" class="relative py-2 hover:bg-gray-700">Time</li>
+              </ul>
+            </div>
+            <div class="flex items-center">
+              <span class="flex flex-col">
+                <svg
+                  class="h-4 w-4 -mb-1"
+                  aria-hidden="true"
+                  xmlns="http://www.w3.org/2000/svg"
+                  viewBox="0 0 320 512"
+                >
+                  <path
+                    fill="currentColor"
+                    d="M288.662 352H31.338c-17.818 0-26.741-21.543-14.142-34.142l128.662-128.662c7.81-7.81 20.474-7.81 28.284 0l128.662 128.662c12.6 12.599 3.676 34.142-14.142 34.142z"
+                  />
+                </svg>
+                <svg
+                  class="h-4 w-4 -mt-1"
+                  aria-hidden="true"
+                  xmlns="http://www.w3.org/2000/svg"
+                  viewBox="0 0 320 512"
+                >
+                  <path
+                    fill="currentColor"
+                    d="M31.3 192h257.3c17.8 0 26.7 21.5 14.1 34.1L174.1 354.8c-7.8 7.8-20.5 7.8-28.3 0L17.2 226.1C4.6 213.5 13.5 192 31.3 192z"
+                  />
+                </svg>
+              </span>
+              <span class="ml-1">Sort</span>
+            </div>
           </div>
           <div class="flex overflow-x-auto">
             <div class="flex items-stretch justify-center flex-shrink-0 text-center">
@@ -275,6 +286,7 @@ export default {
   data() {
     return {
       sportDropdown: false,
+      sortDropdownOpen: false,
       attributes: [],
       time: new Date()
     }
@@ -373,6 +385,11 @@ export default {
     bodyClickListener(e) {
       this.closeSportDropdown(e);
     },
+    toggleSortDropdown(e) {
+      e.stopPropagation();
+
+      this.sortDropdownOpen = !this.sortDropdownOpen;
+    },
     logout() {
       this.$store.dispatch('logout')
         .then(() => {
@@ -386,8 +403,14 @@ export default {
       if (this.$route.name !== 'home') {
         this.$router.push('/')
       }
-      
+
       this.$store.commit('toggleLeague', league);
+    },
+    sort(e, method) {
+      e.stopPropagation();
+      this.sortDropdownOpen = false;
+
+      window.events.$emit('sort', method)
     }
   }
 }

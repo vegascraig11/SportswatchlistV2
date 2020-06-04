@@ -15,7 +15,7 @@
                     </button>
                   </div>
                 </th>
-                <th class="px-4">{{ overUnder }}</th>
+                <!-- <th class="px-4">{{ overUnder }}</th> -->
                 <th class="px-4 text-right">
                   {{ game.status === "F/OT" ? "F/OT" : "Final Score" }}
                 </th>
@@ -25,80 +25,6 @@
               </tr>
             </thead>
             <tbody>
-              <tr>
-                <td>
-                  <div :class="homeClasses" class="pl-4 w-full flex relative">
-                    <span
-                      v-if="homeWon"
-                      class="absolute top-0 bottom-0 left-0 flex items-center -mx-2"
-                    >
-                      <svg
-                        class="h-5 w-5 text-green-500"
-                        aria-hidden="true"
-                        xmlns="http://www.w3.org/2000/svg"
-                        viewBox="0 0 192 512"
-                      >
-                        <path
-                          fill="currentColor"
-                          d="M0 384.662V127.338c0-17.818 21.543-26.741 34.142-14.142l128.662 128.662c7.81 7.81 7.81 20.474 0 28.284L34.142 398.804C21.543 411.404 0 402.48 0 384.662z"
-                        />
-                      </svg>
-                    </span>
-                    <div class="flex items-center">
-                      <p>{{ game.home_team.rotation_number }}</p>
-                      <img 
-                        class="ml-4 h-12 w-12"
-                        v-if="game.home_team.logo"
-                        :src="game.home_team.logo"
-                        :alt="game.home_team.full_name">
-                      <p class="ml-2 whitespace-no-wrap">{{ game.home_team.full_name }}</p>
-                      <!-- <p class="invisible">(1-0-0)</p> -->
-                    </div>
-                  </div>
-                </td>
-                <td rowspan="2">
-                  <!-- <div v-if="quarters" class="border">
-                    <table class="w-full">
-                      <thead class="bg-swl-black-dark text-white">
-                        <tr>
-                          <th
-                            v-for="quarter in game.quarters"
-                            :key="`q-${quarter.QuarterID}`"
-                          >
-                            {{ quarter.Name }}
-                          </th>
-                        </tr>
-                      </thead>
-                      <tbody class="text-center">
-                        <tr>
-                          <td
-                            v-for="quarter in game.quarters"
-                            :key="`home-${quarter.QuarterID}`"
-                          >
-                            {{ quarter.HomeScore }}
-                          </td>
-                        </tr>
-                        <tr>
-                          <td
-                            v-for="quarter in game.quarters"
-                            :key="`away-${quarter.QuarterID}`"
-                          >
-                            {{ quarter.AwayScore }}
-                          </td>
-                        </tr>
-                      </tbody>
-                    </table>
-                  </div> -->
-                </td>
-                <td :class="homeClasses" class="text-right border-r pr-4">
-                  {{ game.home_team.score || "??" }}
-                </td>
-                <td class="text-center">
-                  {{ game.home_team.money_line || "??" }}
-                </td>
-                <td class="text-center">-110</td>
-                <td class="text-center">7.5 o-116</td>
-              </tr>
               <tr>
                 <td>
                   <div :class="awayClasses" class="pl-4 w-full flex relative">
@@ -138,6 +64,80 @@
                 </td>
                 <td class="text-center">-110</td>
                 <td class="text-center">7.5 u-101</td>
+              </tr>
+              <tr>
+                <td>
+                  <div :class="homeClasses" class="pl-4 w-full flex relative">
+                    <span
+                      v-if="homeWon"
+                      class="absolute top-0 bottom-0 left-0 flex items-center -mx-2"
+                    >
+                      <svg
+                        class="h-5 w-5 text-green-500"
+                        aria-hidden="true"
+                        xmlns="http://www.w3.org/2000/svg"
+                        viewBox="0 0 192 512"
+                      >
+                        <path
+                          fill="currentColor"
+                          d="M0 384.662V127.338c0-17.818 21.543-26.741 34.142-14.142l128.662 128.662c7.81 7.81 7.81 20.474 0 28.284L34.142 398.804C21.543 411.404 0 402.48 0 384.662z"
+                        />
+                      </svg>
+                    </span>
+                    <div class="flex items-center">
+                      <p>{{ game.home_team.rotation_number }}</p>
+                      <img 
+                        class="ml-4 h-12 w-12"
+                        v-if="game.home_team.logo"
+                        :src="game.home_team.logo"
+                        :alt="game.home_team.full_name">
+                      <p class="ml-2 whitespace-no-wrap">{{ game.home_team.full_name }}</p>
+                      <!-- <p class="invisible">(1-0-0)</p> -->
+                    </div>
+                  </div>
+                </td>
+                <!-- <td rowspan="2"> -->
+                  <!-- <div v-if="quarters" class="border">
+                    <table class="w-full">
+                      <thead class="bg-swl-black-dark text-white">
+                        <tr>
+                          <th
+                            v-for="quarter in game.quarters"
+                            :key="`q-${quarter.QuarterID}`"
+                          >
+                            {{ quarter.Name }}
+                          </th>
+                        </tr>
+                      </thead>
+                      <tbody class="text-center">
+                        <tr>
+                          <td
+                            v-for="quarter in game.quarters"
+                            :key="`home-${quarter.QuarterID}`"
+                          >
+                            {{ quarter.HomeScore }}
+                          </td>
+                        </tr>
+                        <tr>
+                          <td
+                            v-for="quarter in game.quarters"
+                            :key="`away-${quarter.QuarterID}`"
+                          >
+                            {{ quarter.AwayScore }}
+                          </td>
+                        </tr>
+                      </tbody>
+                    </table>
+                  </div> -->
+                <!-- </td> -->
+                <td :class="homeClasses" class="text-right border-r pr-4">
+                  {{ game.home_team.score || "??" }}
+                </td>
+                <td class="text-center">
+                  {{ game.home_team.money_line || "??" }}
+                </td>
+                <td class="text-center">-110</td>
+                <td class="text-center">7.5 o-116</td>
               </tr>
               <tr class="border-t">
                 <td colspan="6">

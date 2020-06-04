@@ -45,6 +45,10 @@ export default {
   },
   created() {
     this.getGames();
+
+    window.events.$on('sort', method => {
+      this.sortGames(method)
+    })
   },
   computed: {
     date() {
@@ -75,6 +79,23 @@ export default {
     },
     getFormattedDate() {
       return moment(this.date).format("YYYY-MMM-DD");
+    },
+    sortGames(method) {
+      if (method === 'rot') {
+        this.games = this.games.sort((game1, game2) => {
+          if (game1.away_team.rotation_number === null) return 1
+          if (game2.away_team.rotation_number === null) return -1
+
+          return game1.away_team.rotation_number - game2.away_team.rotation_number
+        })
+      } else if (method === 'time') {
+        this.games = this.games.sort((game1, game2) => {
+          if (game1.game_time === null) return 1
+          if (game2.game_time === null) return -1
+
+          return moment(game1.game_time).isBefore(moment(game2.game_time)) ? -1 : 1
+        })
+      }
     }
   }
 };
