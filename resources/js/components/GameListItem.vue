@@ -222,7 +222,7 @@ export default {
 
       if (!stadium) return "USA";
 
-      return `${stadium.Name}, ${stadium.City}, ${stadium.State}, ${stadium.Country}`;
+      return `${stadium.Name}, ${stadium.City}, ${stadium.State ? stadium.State + ',' : ''} ${stadium.Country}`;
     },
     runLineLabel() {
       if (this.game.game_type === 'mlb') {

@@ -15,7 +15,7 @@ trait RetrievesGames
 
         $games = Game::where('GameType', $this->gameType)
                         ->whereDate('Date', Carbon::parse($date)->toDateString())
-                        ->with(['homeTeam', 'awayTeam', 'stadium'])
+                        ->with(['homeTeam', 'awayTeam'])
                         ->get();
 
         return response()->json($games, 200);

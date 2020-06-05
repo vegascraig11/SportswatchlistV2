@@ -11,6 +11,8 @@ class Game extends Model
 		'Date' => 'datetime'
 	];
 
+    protected $appends = ['stadium'];
+
     public function homeTeam()
     {
     	return $this->hasOne(Team::class, 'GlobalTeamID', 'GlobalHomeTeamID');
@@ -21,9 +23,14 @@ class Game extends Model
     	return $this->hasOne(Team::class, 'GlobalTeamID', 'GlobalAwayTeamID');
     }
 
-    public function stadium()
+    public function stadiums()
     {
-        return $this->hasOne(Stadium::class, 'StadiumID', 'StadiumID');
+        return $this->hasMany(Stadium::class, 'StadiumID', 'StadiumID');
+    }
+
+    public function getStadiumAttribute()
+    {
+        return $this->stadiums->where('StadiumType', $this->GameType)->first();
     }
 
     public function toArray()
