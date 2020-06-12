@@ -34,6 +34,9 @@ Route::middleware('auth:sanctum')->get('watchlist', 'WatchlistController@index')
 Route::middleware('auth:sanctum')->get('watchlist/raw', 'WatchlistController@raw');
 Route::middleware('auth:sanctum')->post('watchlist', 'WatchlistController@store');
 
+Route::get('banners', 'BannerController@index');
+Route::post('banners', 'BannerController@store');
+
 Route::get('{any}', function () {
   return response()->json([], 404);
 });

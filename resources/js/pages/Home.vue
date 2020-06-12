@@ -15,6 +15,14 @@
           :attributes="attributes"
           @dayclick="dayClicked">
         </v-calendar>
+
+        <div class="mt-4 px-6">
+          <div v-for="banner in banners" :key="banner.id" class="w-full mt-4 first:mt-0 rounded-lg overflow-hidden">
+            <a class="block" target="_blank" :href="banner.url">
+              <img class="w-full" :src="`/${banner.path}`" :alt="banner.url">
+            </a>
+          </div>
+        </div>
       </div>
     </aside>
   </div>
@@ -32,6 +40,7 @@ export default {
     return {
       time: '',
       attributes: [],
+      banners: []
     }
   },
   created() {
@@ -44,6 +53,7 @@ export default {
     });
 
     this.updateTime();
+    this.getBanners();
   },
   computed: {
     selectedLeagues() {
@@ -64,6 +74,11 @@ export default {
     dayClicked(e) {
       this.$store.commit('setDate', moment(e.date).toString())
     },
+    getBanners() {
+      this.$http.get('/api/banners')
+        .then(response => this.banners = response.data)
+        .catch(err => console.log(err))
+    }
   }
 }
 </script>

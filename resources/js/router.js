@@ -5,6 +5,9 @@ import Home from './pages/Home';
 import Login from './pages/Login';
 import App from './containers/App';
 import ForOhFor from './pages/404';
+import Admin from './containers/Admin';
+import Dashboard from './pages/Dashboard';
+import BannerUpload from './pages/BannerUpload';
 import Register from './pages/Register';
 import MyWatchlist from './pages/MyWatchlist';
 
@@ -38,6 +41,26 @@ const router = new VueRouter({
       meta: {
         requiresAuth: true
       }
+    },
+    {
+      path: '/admin',
+      component: Admin,
+      name: 'admin',
+      // meta: {
+      //   requiresAuth: true
+      // },
+      children: [
+        {
+          path: '/',
+          component: Dashboard,
+          name: 'dashborad'
+        },
+        {
+          path: 'banner',
+          component: BannerUpload,
+          name: 'banner-upload'
+        }
+      ]
     },
     {
       path: '*',
