@@ -36,6 +36,7 @@ Route::middleware('auth:sanctum')->post('watchlist', 'WatchlistController@store'
 
 Route::get('banners', 'BannerController@index');
 Route::post('banners', 'BannerController@store');
+Route::delete('banners/{banner}', 'BannerController@destroy');
 
 Route::get('{any}', function () {
   return response()->json([], 404);
