@@ -2,7 +2,7 @@
   <div
     class="min-h-screen flex flex-col text-gray-900 bg-gray-100 font-inter text-xs antialiased"
   >
-    <div class="lg:hidden bg-mantis-500 text-white">
+    <div class="bg-mantis-500 text-white">
       <div class="container mx-auto py-1 md:py-2 px-4 text-center">
         <span class="font-semibold">New to Sports Watchlist?</span>
         <span>Click here to see why we are your #1 source to get live updates on your favorite sports games!</span>
@@ -20,12 +20,6 @@
                   alt="Sports Watchlist"
                 />
               </router-link>
-            </div>
-            <div class="hidden lg:block w-full max-w-xs">
-              <button class="flex flex-col w-full bg-mantis-500 hover:bg-mantis-600 text-white rounded py-1 px-4">
-                <span class="font-semibold">New to Sports Watchlist?</span>
-                <span class="mt-2">Click here to see why we are your #1 source to get live updates on your favorite sports games!</span>
-              </button>
             </div>
             <nav class="hidden lg:flex text-sm">
               <router-link to="/my-watchlist">My Watchlist</router-link>
