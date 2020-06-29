@@ -78,7 +78,7 @@ export default {
         });
     },
     getFormattedDate() {
-      return moment(this.date).format("YYYY-MMM-DD");
+      return moment(new Date(this.date)).format("YYYY-MMM-DD");
     },
     sortGames(method) {
       if (method === 'rot') {

@@ -282,7 +282,8 @@ export default {
       sportDropdown: false,
       sortDropdownOpen: false,
       attributes: [],
-      time: new Date()
+      time: {},
+      week: []
     }
   },
   watch: {
@@ -291,6 +292,8 @@ export default {
     }
   },
   created() {
+    this.time = new Date();
+
     this.buildWeekRow();
 
     this.attributes.push({
@@ -312,7 +315,7 @@ export default {
       return this.$store.getters.isLoggedIn;
     },
     prettyDate() {
-      return moment(this.date).format("MMM D, YYYY");
+      return moment(new Date(this.date)).format("MMM D, YYYY");
     },
     theYear() {
       return new Date().getFullYear();
@@ -326,6 +329,8 @@ export default {
   },
   methods: {
     updateDate(e) {
+      if (!e) return
+
       this.$store.commit('setDate', moment(e).toString())
     },
     buildWeekRow(start) {
