@@ -54,7 +54,8 @@
     
             <div class="mt-4 max-w-sm">
                 <span class="block uppercase">Banner URL</span>
-                <input ref="bannerUrlInput" v-model="url" required type="text" class="w-full px-4 py-2 border border-gray-300 rounded placeholder-gray-600" placeholder="Enter the URL asscoiated with the banner.">
+                <span v-if="urlError" class="text-red-500 pb-1"><em>{{ urlError }}</em></span>
+                <input ref="bannerUrlInput" v-model="url" required type="text" class="w-full px-4 py-2 border border-gray-300 rounded placeholder-gray-600" :class="urlError ? 'border-red-500' : ''" @blur="validateUrl" placeholder="Enter the URL asscoiated with the banner.">
             </div>
     
             <div class="mt-4">
@@ -65,6 +66,8 @@
 </template>
 
 <script>
+import isValidDomain from 'is-valid-domain'
+
 export default {
     data() {
         return {
@@ -72,7 +75,8 @@ export default {
             banner: null,
             url: '',
             banners: [],
-            showTable: false
+            showTable: false,
+            urlError: ''
         }
     },
     created() {
@@ -127,8 +131,30 @@ export default {
             reader.readAsDataURL(file)
         },
         validateFields() {
-            console.log('banner', this.banner)
-            console.log('url', this.url)
+            if (! this.banner) return false
+            if (! this.url) return false
+
+            return true
+        },
+        validateUrl(e) {
+            let url = e.target.value
+            let hasHttp = url.trim().substr(0, 7) === 'http://'
+
+            if (hasHttp) {
+                url = url.substr(7)
+            }
+
+            console.log(url)
+
+            if (! isValidDomain(url)) {
+                console.log('not a valid domain name')
+                this.urlError = "Invalid domain name provided."
+                return false
+            }
+
+            this.urlError = ''
+
+            this.url = 'http://' + url
 
             return true
         },

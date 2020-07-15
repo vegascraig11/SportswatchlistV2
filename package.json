@@ -21,6 +21,7 @@
         "vue-template-compiler": "^2.6.11"
     },
     "dependencies": {
+        "is-valid-domain": "^0.0.14",
         "moment": "^2.24.0",
         "moment-timezone": "^0.5.28",
         "tailwindcss": "^1.2.0",
