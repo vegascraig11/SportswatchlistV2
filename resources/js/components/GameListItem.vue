@@ -139,26 +139,57 @@
                 <td class="text-center">-110</td>
                 <td class="text-center">7.5 o-116</td>
               </tr>
-              <tr class="border-t">
-                <td colspan="6">
-                  <div
-                    class="w-full px-2 py-2 flex items-center text-xs text-gray-700 tracking-wide"
-                  >
-                    <svg
-                      class="h-4 w-4 text-gray-600 fill-current"
-                      xmlns="http://www.w3.org/2000/svg"
-                      viewBox="0 0 20 20"
-                    >
-                      <path
-                        d="M10 2c-2.8 0-5 2.2-5 5 0 4.8 5 11 5 11s5-6.2 5-11C15 4.2 12.8 2 10 2zM10 9.8c-1.5 0-2.7-1.2-2.7-2.7s1.2-2.7 2.7-2.7c1.5 0 2.7 1.2 2.7 2.7S11.5 9.8 10 9.8z"
-                      />
-                    </svg>
-                    <p class="pl-2">{{ venue }}</p>
-                  </div>
-                </td>
-              </tr>
             </tbody>
           </table>
+        </div>
+      </div>
+      <div class="w-full px-2 py-2 flex items-center text-xs text-gray-700 tracking-wide border-t">
+        <svg
+          class="h-4 w-4 text-gray-600 fill-current"
+          xmlns="http://www.w3.org/2000/svg"
+          viewBox="0 0 20 20"
+        >
+          <path
+            d="M10 2c-2.8 0-5 2.2-5 5 0 4.8 5 11 5 11s5-6.2 5-11C15 4.2 12.8 2 10 2zM10 9.8c-1.5 0-2.7-1.2-2.7-2.7s1.2-2.7 2.7-2.7c1.5 0 2.7 1.2 2.7 2.7S11.5 9.8 10 9.8z"
+          />
+        </svg>
+        <p class="pl-2">{{ venue }}</p>
+      </div>
+      <div class="px-4 py-2 flex space-x-4 border-t">
+        <button type="button" class="w-full flex justify-center space-x-2 bg-red-600 rounded text-white py-2 hover:bg-red-700">
+          <span>Remove from Watchlist</span>
+          <svg class="h-4 w-4" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zM8.707 7.293a1 1 0 00-1.414 1.414L8.586 10l-1.293 1.293a1 1 0 101.414 1.414L10 11.414l1.293 1.293a1 1 0 001.414-1.414L11.414 10l1.293-1.293a1 1 0 00-1.414-1.414L10 8.586 8.707 7.293z" clip-rule="evenodd"></path></svg>
+        </button>
+        <button type="button" class="w-full flex justify-center space-x-2 bg-mantis-500 rounded text-white py-2 hover:bg-mantis-600">
+          <span>Game Notifications</span>
+          <svg class="h-4 w-4" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M18 5v8a2 2 0 01-2 2h-5l-5 4v-4H4a2 2 0 01-2-2V5a2 2 0 012-2h12a2 2 0 012 2zM7 8H5v2h2V8zm2 0h2v2H9V8zm6 0h-2v2h2V8z" clip-rule="evenodd"></path></svg>
+        </button>
+      </div>
+      <div class="px-4 py-2 space-y-2">
+        <h2 class="text-sm">Game Notification Settings</h2>
+        <div>
+          <label for="lastQuarterNotification" class="flex items-center">
+            <toggle class="mr-2" key="lastQuarterNotification" />
+            <span class="flex-1">Recieve notifications for last quarter of gameplay.</span>
+          </label>
+        </div>
+        <div>
+          <label for="alertStartTimeNotification" class="flex items-center">
+            <toggle class="mr-2" key="alertStartTimeNotification" />
+            <span class="flex-1">Recieve notifications for alerts of your selected games start time.</span>
+          </label>
+        </div>
+        <div>
+          <label for="alertEndTimeNotification" class="flex items-center">
+            <toggle class="mr-2" key="alertEndTimeNotification" />
+            <span class="flex-1">Recieve notifications for alerts of your selected games end time.</span>
+          </label>
+        </div>
+        <div>
+          <label for="keyPlayerChangeNotification" class="flex items-center">
+            <toggle class="mr-2" key="keyPlayerChangeNotification" />
+            <span class="flex-1">Recieve notifications when the key player of your selected game changes.</span>
+          </label>
         </div>
       </div>
     </div>
@@ -168,9 +199,22 @@
 <script>
 import moment from 'moment';
 import momentTimezone from 'moment-timezone';
+import Toggle from './Toggle';
 
 export default {
-  props: ['game'],
+  components: {
+    Toggle
+  },
+  props: {
+    game: {
+      type: Object,
+      required: true
+    },
+    watchlist: {
+      type: Boolean,
+      default: false
+    }
+  },
   data() {
     return {
       added: false

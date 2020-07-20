@@ -7,7 +7,7 @@
     <template v-else>
       <div v-if="watchlist.length" class="mt-6">
         <div v-for="({ game }, index) in watchlist">
-          <game-list-item :game="game" class="mt-6 first:mt-0" />
+          <game-list-item :watchlist="true" :game="game" class="mt-6 first:mt-0" />
         </div>
       </div>
       <div v-else class="mt-6">
