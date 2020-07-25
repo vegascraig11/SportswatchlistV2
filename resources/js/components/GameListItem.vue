@@ -57,7 +57,7 @@
                   </div>
                 </td>
                 <td :class="awayClasses" class="text-right border-r pr-4">
-                  {{ game.away_team.score || "??" }}
+                  {{ game.away_team[scoreAccessor] === null ? "??" : game.away_team[scoreAccessor]}}
                 </td>
                 <td class="text-center">
                   {{ game.away_team.money_line || "??" }}
@@ -131,7 +131,7 @@
                   </div> -->
                 <!-- </td> -->
                 <td :class="homeClasses" class="text-right border-r pr-4">
-                  {{ game.home_team.score || "??" }}
+                  {{ game.home_team[scoreAccessor] === null ? "??" : game.home_team[scoreAccessor]}}
                 </td>
                 <td class="text-center">
                   {{ game.home_team.money_line || "??" }}
@@ -155,7 +155,7 @@
         </svg>
         <p class="pl-2">{{ venue }}</p>
       </div>
-      <div class="px-4 py-2 flex space-x-4 border-t">
+      <div v-if="watchlist" class="px-4 py-2 flex space-x-4 border-t">
         <button type="button" class="w-full flex justify-center space-x-2 bg-red-600 rounded text-white py-2 hover:bg-red-700">
           <span>Remove from Watchlist</span>
           <svg class="h-4 w-4" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zM8.707 7.293a1 1 0 00-1.414 1.414L8.586 10l-1.293 1.293a1 1 0 101.414 1.414L10 11.414l1.293 1.293a1 1 0 001.414-1.414L11.414 10l1.293-1.293a1 1 0 00-1.414-1.414L10 8.586 8.707 7.293z" clip-rule="evenodd"></path></svg>
@@ -165,7 +165,7 @@
           <svg class="h-4 w-4" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M18 5v8a2 2 0 01-2 2h-5l-5 4v-4H4a2 2 0 01-2-2V5a2 2 0 012-2h12a2 2 0 012 2zM7 8H5v2h2V8zm2 0h2v2H9V8zm6 0h-2v2h2V8z" clip-rule="evenodd"></path></svg>
         </button>
       </div>
-      <div class="px-4 py-2 space-y-2">
+      <div v-if="watchlist" class="px-4 py-2 space-y-2">
         <h2 class="text-sm">Game Notification Settings</h2>
         <div>
           <label for="lastQuarterNotification" class="flex items-center">
@@ -224,6 +224,17 @@ export default {
     this.added = this.inWatchlist
   },
   computed: {
+    scoreAccessor() {
+      const { game } = this;
+
+      switch (game.game_type) {
+        case 'mlb':
+          return 'runs';
+        case 'nba':
+        default:
+          return 'score';
+      }
+    },
     loggedIn() {
       return this.$store.getters.isLoggedIn;
     },
