@@ -8,7 +8,7 @@
               <tr class="whitespace-no-wrap">
                 <th class="w-1/3 pl-4 pr-32 py-2 text-left flex items-strech">
                   <span class="uppercase">{{ game.game_type }} | {{ gameTime }}</span>
-                  <div v-if="!(inWatchlist && added)" class="ml-2 text-white font-semibold relative">
+                  <div v-if="canAdd" class="ml-2 text-white font-semibold relative">
                     <button @click="addToWatchlist" type="button" class="absolute inset-0 flex items-center justify-center bg-mantis-500 hover:bg-mantis-600 py-1 px-2 rounded">
                       <svg class="mr-1 inline-block h-3 w-3" fill="currentColor" viewBox="0 0 20 20"><path d="M10 3a1 1 0 011 1v5h5a1 1 0 110 2h-5v5a1 1 0 11-2 0v-5H4a1 1 0 110-2h5V4a1 1 0 011-1z" clip-rule="evenodd" fill-rule="evenodd"></path></svg>
                       <span class="text-xs">Add to Watchlist</span>
@@ -289,6 +289,9 @@ export default {
       } else {
         return 'Point Spread';
       }
+    },
+    canAdd() {
+      return !(this.inWatchlist && this.added) && moment(this.game.game_time).isAfter(moment());
     }
   },
   methods: {
