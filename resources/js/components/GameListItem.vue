@@ -168,28 +168,28 @@
       <div v-if="watchlist" class="px-4 py-2 space-y-2">
         <h2 class="text-sm">Game Notification Settings</h2>
         <div>
-          <label for="lastQuarterNotification" class="flex items-center">
-            <toggle class="mr-2" key="lastQuarterNotification" />
+          <div class="flex items-center">
+            <toggle v-model="lastQuarterNotification" class="mr-2" />
             <span class="flex-1">Recieve notifications for last quarter of gameplay.</span>
-          </label>
+          </div>
         </div>
         <div>
-          <label for="alertStartTimeNotification" class="flex items-center">
-            <toggle class="mr-2" key="alertStartTimeNotification" />
+          <div class="flex items-center">
+            <toggle v-model="alertStartTimeNotification" class="mr-2" />
             <span class="flex-1">Recieve notifications for alerts of your selected games start time.</span>
-          </label>
+          </div>
         </div>
         <div>
-          <label for="alertEndTimeNotification" class="flex items-center">
-            <toggle class="mr-2" key="alertEndTimeNotification" />
+          <div class="flex items-center">
+            <toggle v-model="alertEndTimeNotification" class="mr-2" />
             <span class="flex-1">Recieve notifications for alerts of your selected games end time.</span>
-          </label>
+          </div>
         </div>
         <div>
-          <label for="keyPlayerChangeNotification" class="flex items-center">
-            <toggle class="mr-2" key="keyPlayerChangeNotification" />
+          <div class="flex items-center">
+            <toggle v-model="keyPlayerChangeNotification" class="mr-2" />
             <span class="flex-1">Recieve notifications when the key player of your selected game changes.</span>
-          </label>
+          </div>
         </div>
       </div>
     </div>
@@ -217,7 +217,11 @@ export default {
   },
   data() {
     return {
-      added: false
+      added: false,
+      lastQuarterNotification: false,
+      alertStartTimeNotification: false,
+      alertEndTimeNotification: false,
+      keyPlayerChangeNotification: false
     }
   },
   created() {
