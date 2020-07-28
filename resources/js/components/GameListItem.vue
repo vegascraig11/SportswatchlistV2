@@ -34,7 +34,8 @@
                     </button>
                   </div>
                 </th>
-                <!-- <th class="px-4">{{ overUnder }}</th> -->
+                <!-- <th class="px-4">{{ overUnder || "" }}</th> -->
+                <th class="px-4"></th>
                 <th class="px-4 text-right">
                   {{ game.status === "F/OT" ? "F/OT" : "Final Score" }}
                 </th>
@@ -71,11 +72,94 @@
                         :src="game.away_team.logo"
                         :alt="game.away_team.full_name"
                       />
-                      <p class="ml-2 whitespace-no-wrap">
-                        {{ game.away_team.full_name }}
-                      </p>
-                      <!-- <p class="invisible">(1-0-0)</p> -->
+                      <div class="ml-2">
+                        <p class="whitespace-no-wrap">
+                          {{ game.away_team.full_name }}
+                        </p>
+                        <p v-if="innings" class="text-gray-600 font-normal">
+                          {{
+                            awayWon
+                              ? this.game.winningPitcher
+                              : this.game.losingPitcher
+                          }}
+                        </p>
+                      </div>
                     </div>
+                  </div>
+                </td>
+                <td rowspan="2">
+                  <div v-if="quarters" class="border">
+                    <table class="w-full">
+                      <thead class="bg-swl-black-dark text-white">
+                        <tr>
+                          <th
+                            v-for="quarter in game.quarters"
+                            :key="`q-${quarter.QuarterID}`"
+                          >
+                            {{ quarter.Name }}
+                          </th>
+                        </tr>
+                      </thead>
+                      <tbody class="text-center">
+                        <tr>
+                          <td
+                            v-for="quarter in game.quarters"
+                            :key="`home-${quarter.QuarterID}`"
+                          >
+                            {{ quarter.HomeScore }}
+                          </td>
+                        </tr>
+                        <tr>
+                          <td
+                            v-for="quarter in game.quarters"
+                            :key="`away-${quarter.QuarterID}`"
+                          >
+                            {{ quarter.AwayScore }}
+                          </td>
+                        </tr>
+                      </tbody>
+                    </table>
+                  </div>
+                  <div v-if="innings" class="border">
+                    <table class="w-full">
+                      <thead class="bg-swl-black-dark text-white">
+                        <tr>
+                          <th class="px-2">
+                            Team
+                          </th>
+                          <th class="px-2">
+                            A
+                          </th>
+                          <th class="px-2">
+                            H
+                          </th>
+                        </tr>
+                      </thead>
+                      <tbody class="text-center">
+                        <tr>
+                          <td>
+                            Inning
+                          </td>
+                          <td>
+                            0
+                          </td>
+                          <td>
+                            0
+                          </td>
+                        </tr>
+                        <tr>
+                          <td>
+                            Score
+                          </td>
+                          <td>
+                            0
+                          </td>
+                          <td>
+                            0
+                          </td>
+                        </tr>
+                      </tbody>
+                    </table>
                   </div>
                 </td>
                 <td :class="awayClasses" class="text-right border-r pr-4">
@@ -118,47 +202,21 @@
                         :src="game.home_team.logo"
                         :alt="game.home_team.full_name"
                       />
-                      <p class="ml-2 whitespace-no-wrap">
-                        {{ game.home_team.full_name }}
-                      </p>
-                      <!-- <p class="invisible">(1-0-0)</p> -->
+                      <div class="ml-2">
+                        <p class="whitespace-no-wrap">
+                          {{ game.home_team.full_name }}
+                        </p>
+                        <p v-if="innings" class="text-gray-600 font-normal">
+                          {{
+                            homeWon
+                              ? this.game.winningPitcher
+                              : this.game.losingPitcher
+                          }}
+                        </p>
+                      </div>
                     </div>
                   </div>
                 </td>
-                <!-- <td rowspan="2"> -->
-                <!-- <div v-if="quarters" class="border">
-                    <table class="w-full">
-                      <thead class="bg-swl-black-dark text-white">
-                        <tr>
-                          <th
-                            v-for="quarter in game.quarters"
-                            :key="`q-${quarter.QuarterID}`"
-                          >
-                            {{ quarter.Name }}
-                          </th>
-                        </tr>
-                      </thead>
-                      <tbody class="text-center">
-                        <tr>
-                          <td
-                            v-for="quarter in game.quarters"
-                            :key="`home-${quarter.QuarterID}`"
-                          >
-                            {{ quarter.HomeScore }}
-                          </td>
-                        </tr>
-                        <tr>
-                          <td
-                            v-for="quarter in game.quarters"
-                            :key="`away-${quarter.QuarterID}`"
-                          >
-                            {{ quarter.AwayScore }}
-                          </td>
-                        </tr>
-                      </tbody>
-                    </table>
-                  </div> -->
-                <!-- </td> -->
                 <td :class="homeClasses" class="text-right border-r pr-4">
                   {{
                     game.home_team[scoreAccessor] === null
@@ -292,6 +350,13 @@ export default {
     this.added = this.inWatchlist;
   },
   computed: {
+    winner() {
+      if (this.game.status !== "Final") return null;
+      return this.game.home_team[this.scoreAccessor] >
+        this.game.away_team[this.scoreAccessor]
+        ? "home"
+        : "away";
+    },
     scoreAccessor() {
       const { game } = this;
 
@@ -376,6 +441,9 @@ export default {
         !(this.inWatchlist && this.added) &&
         moment(this.game.game_time).isAfter(moment())
       );
+    },
+    innings() {
+      return this.game.game_type === "mlb";
     },
   },
   methods: {
