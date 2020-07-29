@@ -37,7 +37,8 @@ class NFLJSONBuilder implements JSONBuilder
             ],
             'over_under' => $all->OverUnder,
             'stadium' => $all->StadiumDetails,
-            'status' => $all->Status
+            'status' => $all->Status,
+            'over_under' => $all->OverUnder
         ];
 	}
 }

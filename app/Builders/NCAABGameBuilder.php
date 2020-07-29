@@ -42,7 +42,8 @@ class NCAABGameBuilder extends GameBuilder
             ],
             'periods' => $game['Periods'],
             'stadium' => $game['Stadium'],
-            'status' => $game['Status']
+            'status' => $game['Status'],
+            'over_under' => $game['OverUnder']
         ];
     }
 }

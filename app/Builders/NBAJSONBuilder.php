@@ -38,7 +38,8 @@ class NBAJSONBuilder implements JSONBuilder
             'over_under' => $all->OverUnder,
             'quarters' => $all->Quarters,
             'stadium' => $game->stadium,
-            'status' => $all->Status
+            'status' => $all->Status,
+            'over_under' => $all->OverUnder
         ];
 	}
 }

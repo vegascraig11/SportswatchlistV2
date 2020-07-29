@@ -35,7 +35,8 @@ class NCAAFJSONBuilder implements JSONBuilder
             ],
             'periods' => $all->Periods,
             'stadium' => $game->stadium,
-            'status' => $all->Status
+            'status' => $all->Status,
+            'over_under' => $all->OverUnder
         ];
 	}
 }

@@ -172,8 +172,10 @@
                 <td class="text-center">
                   {{ game.away_team.money_line || "??" }}
                 </td>
-                <td class="text-center">-110</td>
-                <td class="text-center">7.5 u-101</td>
+                <td class="text-center">
+                  {{ game.away_team.point_spread_money_line || "??" }}
+                </td>
+                <td class="text-center">{{ game.over_under || "??" }}</td>
               </tr>
               <tr>
                 <td>
@@ -227,8 +229,10 @@
                 <td class="text-center">
                   {{ game.home_team.money_line || "??" }}
                 </td>
-                <td class="text-center">-110</td>
-                <td class="text-center">7.5 o-116</td>
+                <td class="text-center">
+                  {{ game.home_team.point_spread_money_line || "??" }}
+                </td>
+                <td class="text-center">{{ game.over_under || "??" }}</td>
               </tr>
             </tbody>
           </table>
