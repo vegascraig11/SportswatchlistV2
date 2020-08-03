@@ -379,7 +379,7 @@ export default {
       return (
         momentTimezone
           .tz(this.game.game_time, "America/New_York")
-          .utc()
+          .local()
           .format("hh:mm A") +
         " " +
         this.zone
@@ -443,7 +443,10 @@ export default {
     canAdd() {
       return (
         !(this.inWatchlist && this.added) &&
-        moment(this.game.game_time).isAfter(moment())
+        momentTimezone
+          .tz(this.game.game_time, "America/New_York")
+          .local()
+          .isAfter(moment())
       );
     },
     innings() {
