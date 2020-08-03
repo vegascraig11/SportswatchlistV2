@@ -31,6 +31,11 @@ class Kernel extends ConsoleKernel
             $mlb = new \App\API\MLB();
             $mlb->daily();
         })->everyMinute();
+
+        $schedule->call(function () {
+            $nba = new \App\API\NBA();
+            $nba->daily();
+        })->everyMinute();
     }
 
     /**
