@@ -33,6 +33,10 @@
                       <span class="text-xs">Add to Watchlist</span>
                     </button>
                   </div>
+                  <div v-if="live" class="flex items-center bg-mantis-500 px-2 rounded ml-2">
+                    <svg class="h-3 w-3 mr-1" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zM9.555 7.168A1 1 0 008 8v4a1 1 0 001.555.832l3-2a1 1 0 000-1.664l-3-2z" clip-rule="evenodd"></path></svg>
+                    Live
+                  </div>
                 </th>
                 <!-- <th class="px-4">{{ overUnder || "" }}</th> -->
                 <th class="px-4"></th>
@@ -354,6 +358,9 @@ export default {
     this.added = this.inWatchlist;
   },
   computed: {
+    live() {
+      return this.game.Status === 'InProgress';
+    },
     winner() {
       if (this.game.status !== "Final") return null;
       return this.game.home_team[this.scoreAccessor] >
