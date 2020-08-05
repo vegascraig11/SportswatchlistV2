@@ -359,7 +359,7 @@ export default {
   },
   computed: {
     live() {
-      return this.game.Status === 'InProgress';
+      return this.game.status === "InProgress";
     },
     winner() {
       if (this.game.status !== "Final") return null;
