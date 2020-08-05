@@ -36,6 +36,7 @@ class NBAJSONBuilder implements JSONBuilder
                 'logo' => $game->awayTeam->logo
             ],
             'over_under' => $all->OverUnder,
+            'quarter' => $all->Quarter,
             'quarters' => $all->Quarters,
             'stadium' => $game->stadium,
             'status' => $all->Status,

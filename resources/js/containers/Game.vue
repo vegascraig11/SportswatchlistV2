@@ -6,13 +6,18 @@
     </div>
     <template v-else>
       <div v-if="games.length" class="mt-6">
-        <game-list-item
+        <div
           v-for="game in games"
-          :game="game"
           :key="game.GameId"
           class="mt-6 first:mt-0 w-full"
         >
-        </game-list-item>
+          <nba-game-list-item
+            v-if="game.game_type === 'nba'"
+            :game="game"
+            :key="game.GameId"
+          />
+          <game-list-item v-else :game="game" />
+        </div>
       </div>
       <div v-else class="mt-6">
         <p>No games found for the day!</p>
@@ -25,30 +30,32 @@
 import moment from "moment";
 import Loading from "./../components/Loading";
 import GameListItem from "./../components/GameListItem";
+import NBAGameListItem from "./../components/NBAGameListItem";
 
 export default {
-  props: ['league'],
+  props: ["league"],
   components: {
     Loading,
-    "game-list-item": GameListItem
+    "game-list-item": GameListItem,
+    "nba-game-list-item": NBAGameListItem,
   },
   data() {
     return {
       loading: false,
-      games: []
+      games: [],
     };
   },
   watch: {
     date() {
       this.getGames();
-    }
+    },
   },
   created() {
     this.getGames();
 
-    window.events.$on('sort', method => {
-      this.sortGames(method)
-    })
+    window.events.$on("sort", method => {
+      this.sortGames(method);
+    });
   },
   computed: {
     date() {
@@ -56,7 +63,7 @@ export default {
     },
     header() {
       return this.league.toUpperCase() + " Game List";
-    }
+    },
   },
   methods: {
     getGames() {
@@ -81,22 +88,26 @@ export default {
       return moment(new Date(this.date)).format("YYYY-MMM-DD");
     },
     sortGames(method) {
-      if (method === 'rot') {
+      if (method === "rot") {
         this.games = this.games.sort((game1, game2) => {
-          if (game1.away_team.rotation_number === null) return 1
-          if (game2.away_team.rotation_number === null) return -1
+          if (game1.away_team.rotation_number === null) return 1;
+          if (game2.away_team.rotation_number === null) return -1;
 
-          return game1.away_team.rotation_number - game2.away_team.rotation_number
-        })
-      } else if (method === 'time') {
+          return (
+            game1.away_team.rotation_number - game2.away_team.rotation_number
+          );
+        });
+      } else if (method === "time") {
         this.games = this.games.sort((game1, game2) => {
-          if (game1.game_time === null) return 1
-          if (game2.game_time === null) return -1
+          if (game1.game_time === null) return 1;
+          if (game2.game_time === null) return -1;
 
-          return moment(game1.game_time).isBefore(moment(game2.game_time)) ? -1 : 1
-        })
+          return moment(game1.game_time).isBefore(moment(game2.game_time))
+            ? -1
+            : 1;
+        });
       }
-    }
-  }
+    },
+  },
 };
 </script>
