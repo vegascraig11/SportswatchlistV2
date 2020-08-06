@@ -56,6 +56,21 @@ export default {
     window.events.$on("sort", method => {
       this.sortGames(method);
     });
+
+    window.Echo.channel("game-updates").listen("GameStatusUpdated", e => {
+      const games = e.games.filter(game => {
+        return game.game_type == this.league;
+      });
+
+      if (!games.length) return;
+
+      const updatedGames = this.games.map(game => {
+        const found = games.find(g => g.game_id === "game.game_id");
+        return found || game;
+      });
+
+      this.games = updatedGames;
+    });
   },
   computed: {
     date() {
