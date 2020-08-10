@@ -33,8 +33,21 @@
                       <span class="text-xs">Add to Watchlist</span>
                     </button>
                   </div>
-                  <div v-if="live" class="flex items-center bg-mantis-500 px-2 rounded ml-2">
-                    <svg class="h-3 w-3 mr-1" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zM9.555 7.168A1 1 0 008 8v4a1 1 0 001.555.832l3-2a1 1 0 000-1.664l-3-2z" clip-rule="evenodd"></path></svg>
+                  <div
+                    v-if="live"
+                    class="flex items-center bg-mantis-500 px-2 rounded ml-2"
+                  >
+                    <svg
+                      class="h-3 w-3 mr-1"
+                      fill="currentColor"
+                      viewBox="0 0 20 20"
+                    >
+                      <path
+                        fill-rule="evenodd"
+                        d="M10 18a8 8 0 100-16 8 8 0 000 16zM9.555 7.168A1 1 0 008 8v4a1 1 0 001.555.832l3-2a1 1 0 000-1.664l-3-2z"
+                        clip-rule="evenodd"
+                      ></path>
+                    </svg>
                     Live
                   </div>
                 </th>
@@ -92,11 +105,12 @@
                   </div>
                 </td>
                 <td rowspan="2">
-                  <div v-if="quarters" class="border">
-                    <table class="w-full">
+                  <div v-if="quarters" class="border rounded overflow-hidden">
+                    <table class="w-full text-center">
                       <thead class="bg-swl-black-dark text-white">
                         <tr>
                           <th
+                            class="px-2"
                             v-for="quarter in game.quarters"
                             :key="`q-${quarter.QuarterID}`"
                           >
@@ -110,7 +124,7 @@
                             v-for="quarter in game.quarters"
                             :key="`home-${quarter.QuarterID}`"
                           >
-                            {{ quarter.HomeScore }}
+                            {{ quarter.HomeScore || "-" }}
                           </td>
                         </tr>
                         <tr>
@@ -118,7 +132,7 @@
                             v-for="quarter in game.quarters"
                             :key="`away-${quarter.QuarterID}`"
                           >
-                            {{ quarter.AwayScore }}
+                            {{ quarter.AwayScore || "-" }}
                           </td>
                         </tr>
                       </tbody>
