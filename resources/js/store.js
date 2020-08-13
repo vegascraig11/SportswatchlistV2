@@ -40,6 +40,13 @@ const store = new Vuex.Store({
       state.watchlist.unshift(gameId);
       window.localStorage.setItem("watchlist", JSON.stringify(state.watchlist));
     },
+    removeFromWatchlist: (state, gameId) => {
+      const index = state.watchlist.indexOf(gameId);
+      if (index !== -1) {
+        state.watchlist.splice(index, 1);
+      }
+      window.localStorage.setItem("watchlist", JSON.stringify(state.watchlist));
+    },
   },
   getters: {
     isLoggedIn: state => state.auth === true,
@@ -92,6 +99,16 @@ const store = new Vuex.Store({
         try {
           ctx.commit("addToWatchlist", gameId);
           resolve(ctx.state.watchlist);
+        } catch (err) {
+          reject(err);
+        }
+      });
+    },
+    removeFromWatchlist: (ctx, gameId) => {
+      return new Promise((resolve, reject) => {
+        try {
+          ctx.commit("removeFromWatchlist", gameId);
+          resolve();
         } catch (err) {
           reject(err);
         }

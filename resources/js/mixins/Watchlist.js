@@ -27,6 +27,29 @@ const WatchlistMixin = {
     addToLocal() {
       return this.$store.dispatch("addToWatchlist", this.game.game_id);
     },
+    removeFromWatchlist() {
+      const promise = this.loggedIn
+        ? this.removeFromDb()
+        : this.removeFromLocal();
+
+      promise
+        .then(response => {
+          this.$store.dispatch("fetchWatchlist");
+          flash({
+            body: "Removed from watchlist successfully!",
+            type: "success",
+          });
+          this.added = false;
+          this.$router.go();
+        })
+        .catch(err => console.log(err));
+    },
+    removeFromDb() {
+      return this.$http.delete("/api/watchlist/" + this.game.id);
+    },
+    removeFromLocal() {
+      return this.$store.dispatch("removeFromWatchlist", this.game.game_id);
+    },
   },
 };
 
