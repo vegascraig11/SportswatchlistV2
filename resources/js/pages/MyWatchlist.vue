@@ -6,8 +6,25 @@
     </div>
     <template v-else>
       <div v-if="watchlist.length" class="mt-6">
-        <div v-for="({ game }, index) in watchlist">
-          <game-list-item :watchlist="true" :game="game" class="mt-6 first:mt-0" />
+        <div v-for="(game, index) in watchlist">
+          <NBAGameListItem
+            v-if="game.game_type === 'nba'"
+            :watchlist="true"
+            :game="game"
+            class="mt-6 first:mt-0"
+          />
+          <MLBGameListItem
+            v-if="game.game_type === 'mlb'"
+            :watchlist="true"
+            :game="game"
+            class="mt-6 first:mt-0"
+          />
+          <NFLGameListItem
+            v-if="game.game_type === 'nfl'"
+            :watchlist="true"
+            :game="game"
+            class="mt-6 first:mt-0"
+          />
         </div>
       </div>
       <div v-else class="mt-6">
@@ -18,26 +35,31 @@
 </template>
 
 <script>
-import Loading from './../components/Loading';
-import GameListItem from './../components/GameListItem';
+import Loading from "./../components/Loading";
+import NBAGameListItem from "./../components/NBAGameListItem";
+import MLBGameListItem from "./../components/MLBGameListItem";
+import NFLGameListItem from "./../components/NFLGameListItem";
 
 export default {
   components: {
     Loading,
-    'game-list-item': GameListItem,
+    NBAGameListItem,
+    NFLGameListItem,
+    MLBGameListItem,
   },
   data() {
     return {
       loading: false,
-      watchlist: []
-    }
+      watchlist: [],
+    };
   },
   created() {
     this.loading = true;
-    this.$http.get('/api/watchlist')
-      .then(response => this.watchlist = response.data)
+    this.$http
+      .get(`/api/games?ids=${JSON.stringify(this.$store.state.watchlist)}`)
+      .then(response => (this.watchlist = response.data))
       .catch(err => console.log(err))
-      .finally(() => this.loading = false);
-  }
-}
+      .finally(() => (this.loading = false));
+  },
+};
 </script>

@@ -11,12 +11,21 @@
           :key="game.GameId"
           class="mt-6 first:mt-0 w-full"
         >
-          <nba-game-list-item
+          <NBAGameListItem
             v-if="game.game_type === 'nba'"
             :game="game"
             :key="game.GameId"
           />
-          <game-list-item v-else :game="game" />
+          <MLBGameListItem
+            v-if="game.game_type === 'mlb'"
+            :game="game"
+            :key="game.GameId"
+          />
+          <NFLGameListItem
+            v-if="game.game_type === 'nfl'"
+            :game="game"
+            :key="game.GameId"
+          />
         </div>
       </div>
       <div v-else class="mt-6">
@@ -29,15 +38,17 @@
 <script>
 import moment from "moment";
 import Loading from "./../components/Loading";
-import GameListItem from "./../components/GameListItem";
 import NBAGameListItem from "./../components/NBAGameListItem";
+import MLBGameListItem from "./../components/MLBGameListItem";
+import NFLGameListItem from "./../components/NFLGameListItem";
 
 export default {
   props: ["league"],
   components: {
     Loading,
-    "game-list-item": GameListItem,
-    "nba-game-list-item": NBAGameListItem,
+    NBAGameListItem,
+    MLBGameListItem,
+    NFLGameListItem,
   },
   data() {
     return {
@@ -63,6 +74,7 @@ export default {
       });
 
       if (!games.length) return;
+      console.log(games);
 
       const updatedGames = this.games.map(game => {
         const found = games.find(g => g.game_id === "game.game_id");

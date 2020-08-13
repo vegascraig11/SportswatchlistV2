@@ -7,9 +7,7 @@
             <thead class="bg-gray-900 text-white text-xs uppercase">
               <tr class="whitespace-no-wrap">
                 <th class="w-1/3 pl-4 pr-32 py-2 text-left flex items-strech">
-                  <span class="uppercase"
-                    >{{ game.game_type }} | {{ gameTime }}</span
-                  >
+                  <span class="uppercase">MLB | {{ gameTime }} </span>
                   <div
                     v-if="canAdd"
                     class="ml-2 text-white font-semibold relative"
@@ -53,11 +51,9 @@
                 </th>
                 <!-- <th class="px-4">{{ overUnder || "" }}</th> -->
                 <th class="px-4"></th>
-                <th class="px-4 text-right">
-                  {{ game.status === "F/OT" ? "F/OT" : "Final Score" }}
-                </th>
+                <th class="px-4 text-right">{{ statusLabel }}</th>
                 <th class="px-4">Money Line</th>
-                <th class="px-4">{{ runLineLabel }}</th>
+                <th class="px-4">Run Line</th>
                 <th class="px-4">Total</th>
               </tr>
             </thead>
@@ -93,7 +89,7 @@
                         <p class="whitespace-no-wrap">
                           {{ game.away_team.full_name }}
                         </p>
-                        <p v-if="innings" class="text-gray-600 font-normal">
+                        <p class="text-gray-600 font-normal">
                           {{
                             awayWon
                               ? this.game.winningPitcher
@@ -105,87 +101,32 @@
                   </div>
                 </td>
                 <td rowspan="2">
-                  <div v-if="quarters" class="border rounded overflow-hidden">
-                    <table class="w-full text-center">
-                      <thead class="bg-swl-black-dark text-white">
-                        <tr>
-                          <th
-                            class="px-2"
-                            v-for="quarter in game.quarters"
-                            :key="`q-${quarter.QuarterID}`"
-                          >
-                            {{ quarter.Name }}
-                          </th>
-                        </tr>
-                      </thead>
-                      <tbody class="text-center">
-                        <tr>
-                          <td
-                            v-for="quarter in game.quarters"
-                            :key="`home-${quarter.QuarterID}`"
-                          >
-                            {{ quarter.HomeScore || "-" }}
-                          </td>
-                        </tr>
-                        <tr>
-                          <td
-                            v-for="quarter in game.quarters"
-                            :key="`away-${quarter.QuarterID}`"
-                          >
-                            {{ quarter.AwayScore || "-" }}
-                          </td>
-                        </tr>
-                      </tbody>
-                    </table>
-                  </div>
-                  <div v-if="innings" class="border">
+                  <div v-if="game.innings.length" class="border">
                     <table class="w-full">
                       <thead class="bg-swl-black-dark text-white">
                         <tr>
-                          <th class="px-2">
-                            Team
-                          </th>
-                          <th class="px-2">
-                            A
-                          </th>
-                          <th class="px-2">
-                            H
-                          </th>
+                          <th class="px-2">Team</th>
+                          <th class="px-2">A</th>
+                          <th class="px-2">H</th>
                         </tr>
                       </thead>
                       <tbody class="text-center">
                         <tr>
-                          <td>
-                            Inning
-                          </td>
-                          <td>
-                            0
-                          </td>
-                          <td>
-                            0
-                          </td>
+                          <td>Inning</td>
+                          <td>0</td>
+                          <td>0</td>
                         </tr>
                         <tr>
-                          <td>
-                            Score
-                          </td>
-                          <td>
-                            0
-                          </td>
-                          <td>
-                            0
-                          </td>
+                          <td>Score</td>
+                          <td>0</td>
+                          <td>0</td>
                         </tr>
                       </tbody>
                     </table>
                   </div>
                 </td>
                 <td :class="awayClasses" class="text-right border-r pr-4">
-                  {{
-                    game.away_team[scoreAccessor] === null
-                      ? "??"
-                      : game.away_team[scoreAccessor]
-                  }}
+                  {{ game.away_team.runs || "??" }}
                 </td>
                 <td class="text-center">
                   {{ game.away_team.money_line || "??" }}
@@ -226,7 +167,7 @@
                         <p class="whitespace-no-wrap">
                           {{ game.home_team.full_name }}
                         </p>
-                        <p v-if="innings" class="text-gray-600 font-normal">
+                        <p class="text-gray-600 font-normal">
                           {{
                             homeWon
                               ? this.game.winningPitcher
@@ -238,11 +179,7 @@
                   </div>
                 </td>
                 <td :class="homeClasses" class="text-right border-r pr-4">
-                  {{
-                    game.home_team[scoreAccessor] === null
-                      ? "??"
-                      : game.home_team[scoreAccessor]
-                  }}
+                  {{ game.home_team.runs || "??" }}
                 </td>
                 <td class="text-center">
                   {{ game.home_team.money_line || "??" }}
@@ -285,6 +222,7 @@
           </svg>
         </button>
         <button
+          @click="toggleGameNotificationsSetting"
           type="button"
           class="w-full flex justify-center space-x-2 bg-mantis-500 rounded text-white py-2 hover:bg-mantis-600"
         >
@@ -298,44 +236,10 @@
           </svg>
         </button>
       </div>
-      <div v-if="watchlist" class="px-4 py-2 space-y-2">
-        <h2 class="text-sm">Game Notification Settings</h2>
-        <div>
-          <div class="flex items-center">
-            <toggle v-model="lastQuarterNotification" class="mr-2" />
-            <span class="flex-1"
-              >Recieve notifications for last quarter of gameplay.</span
-            >
-          </div>
-        </div>
-        <div>
-          <div class="flex items-center">
-            <toggle v-model="alertStartTimeNotification" class="mr-2" />
-            <span class="flex-1"
-              >Recieve notifications for alerts of your selected games start
-              time.</span
-            >
-          </div>
-        </div>
-        <div>
-          <div class="flex items-center">
-            <toggle v-model="alertEndTimeNotification" class="mr-2" />
-            <span class="flex-1"
-              >Recieve notifications for alerts of your selected games end
-              time.</span
-            >
-          </div>
-        </div>
-        <div>
-          <div class="flex items-center">
-            <toggle v-model="keyPlayerChangeNotification" class="mr-2" />
-            <span class="flex-1"
-              >Recieve notifications when the key player of your selected game
-              changes.</span
-            >
-          </div>
-        </div>
-      </div>
+      <GameNotificationSettings
+        v-if="watchlist && settingsOpen"
+        v-model="notificationSettings"
+      />
     </div>
   </div>
 </template>
@@ -343,11 +247,13 @@
 <script>
 import moment from "moment";
 import momentTimezone from "moment-timezone";
-import Toggle from "./Toggle";
+import WatchlistMixin from "../mixins/Watchlist.js";
+import GameNotificationSettings from "./GameNotificationSettings";
 
 export default {
+  mixins: [WatchlistMixin],
   components: {
-    Toggle,
+    GameNotificationSettings,
   },
   props: {
     game: {
@@ -362,16 +268,17 @@ export default {
   data() {
     return {
       added: false,
-      lastQuarterNotification: false,
-      alertStartTimeNotification: false,
-      alertEndTimeNotification: false,
-      keyPlayerChangeNotification: false,
+      settingsOpen: false,
+      notificationSettings: {},
     };
   },
   created() {
     this.added = this.inWatchlist;
   },
   computed: {
+    statusLabel() {
+      return this.game.status === "Final" ? "Final Score" : "Score";
+    },
     live() {
       return this.game.status === "InProgress";
     },
@@ -381,17 +288,6 @@ export default {
         this.game.away_team[this.scoreAccessor]
         ? "home"
         : "away";
-    },
-    scoreAccessor() {
-      const { game } = this;
-
-      switch (game.game_type) {
-        case "mlb":
-          return "runs";
-        case "nba":
-        default:
-          return "score";
-      }
     },
     loggedIn() {
       return this.$store.getters.isLoggedIn;
@@ -414,11 +310,6 @@ export default {
         .tz(this.game.game_time, moment.tz.guess())
         .zoneAbbr();
     },
-    // inWatchlist() {
-    //   return this.$store.getters.watchlistIds.includes(
-    //     this.game.game_id.toString()
-    //   );
-    // },
     overUnder() {
       if (!this.winner) return "";
       const { home_team, away_team, over_under } = this.game;
@@ -454,13 +345,6 @@ export default {
         stadium.State ? stadium.State + "," : ""
       } ${stadium.Country}`;
     },
-    runLineLabel() {
-      if (this.game.game_type === "mlb") {
-        return "Run Line";
-      } else {
-        return "Point Spread";
-      }
-    },
     canAdd() {
       return (
         !(this.inWatchlist && this.added) &&
@@ -470,29 +354,10 @@ export default {
           .isAfter(moment())
       );
     },
-    innings() {
-      return this.game.game_type === "mlb";
-    },
   },
   methods: {
-    addToWatchlist() {
-      if (!this.loggedIn) {
-        this.$router.push(`/login?r=/my-watchlist&add=${this.game.game_id}`);
-      }
-
-      this.$http
-        .post("/api/watchlist", {
-          gameId: this.game.game_id,
-        })
-        .then(response => {
-          this.$store.dispatch("fetchWatchlist");
-          flash({
-            body: "Added to watchlist successfully!",
-            type: "success",
-          });
-          this.added = true;
-        })
-        .catch(err => console.log(err));
+    toggleGameNotificationsSetting() {
+      this.settingsOpen = !this.settingsOpen;
     },
   },
 };

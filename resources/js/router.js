@@ -1,73 +1,67 @@
-import Vue from 'vue';
-import VueRouter from 'vue-router';
+import Vue from "vue";
+import VueRouter from "vue-router";
 
-import Home from './pages/Home';
-import Login from './pages/Login';
-import App from './containers/App';
-import ForOhFor from './pages/404';
-import Admin from './containers/Admin';
-import Dashboard from './pages/Dashboard';
-import Banners from './pages/Banners';
-import Register from './pages/Register';
-import MyWatchlist from './pages/MyWatchlist';
+import Home from "./pages/Home";
+import Login from "./pages/Login";
+import App from "./containers/App";
+import ForOhFor from "./pages/404";
+import Admin from "./containers/Admin";
+import Dashboard from "./pages/Dashboard";
+import Banners from "./pages/Banners";
+import Register from "./pages/Register";
+import MyWatchlist from "./pages/MyWatchlist";
 
 Vue.use(VueRouter);
 
 const router = new VueRouter({
-  mode: 'history',
+  mode: "history",
   routes: [
     {
-      path: '/',
+      path: "/",
       component: Home,
-      name: 'home'
+      name: "home",
     },
     {
-      path: '/login',
+      path: "/login",
       component: Login,
-      name: 'login',
+      name: "login",
       meta: {
-        requiresGuest: true
-      }
+        requiresGuest: true,
+      },
     },
     {
-      path: '/signup',
+      path: "/signup",
       component: Register,
-      name: 'register'
+      name: "register",
     },
     {
-      path: '/my-watchlist',
+      path: "/my-watchlist",
       component: MyWatchlist,
-      name: 'my-watchlist',
-      meta: {
-        requiresAuth: true
-      }
+      name: "my-watchlist",
     },
     {
-      path: '/admin',
+      path: "/admin",
       component: Admin,
-      name: 'admin',
-      // meta: {
-      //   requiresAuth: true
-      // },
+      name: "admin",
       children: [
         {
-          path: '/',
+          path: "/",
           component: Dashboard,
-          name: 'dashborad'
+          name: "dashborad",
         },
         {
-          path: 'banners',
+          path: "banners",
           component: Banners,
-          name: 'banners'
-        }
-      ]
+          name: "banners",
+        },
+      ],
     },
     {
-      path: '*',
+      path: "*",
       component: ForOhFor,
-      name: 'for-oh-for'
-    }
-  ]
+      name: "for-oh-for",
+    },
+  ],
 });
 
 export default router;

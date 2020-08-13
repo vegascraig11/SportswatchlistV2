@@ -96,43 +96,14 @@
                   </div>
                 </td>
                 <td rowspan="2">
-                  <div v-if="quarters" class="border rounded overflow-hidden">
-                    <table class="w-full text-center">
-                      <thead class="bg-swl-black-dark text-white">
-                        <tr>
-                          <th
-                            v-for="quarter in game.quarters"
-                            :key="`q-${quarter.QuarterID}`"
-                            class="px-2"
-                            :class="
-                              game.quarter == quarter.Name
-                                ? 'bg-mantis-500'
-                                : ''
-                            "
-                          >
-                            {{ quarter.Name }}
-                          </th>
-                        </tr>
-                      </thead>
-                      <tbody class="text-center">
-                        <tr>
-                          <td
-                            v-for="quarter in game.quarters"
-                            :key="`home-${quarter.QuarterID}`"
-                          >
-                            {{ quarter.AwayScore || "-" }}
-                          </td>
-                        </tr>
-                        <tr>
-                          <td
-                            v-for="quarter in game.quarters"
-                            :key="`away-${quarter.QuarterID}`"
-                          >
-                            {{ quarter.HomeScore || "-" }}
-                          </td>
-                        </tr>
-                      </tbody>
-                    </table>
+                  <div
+                    v-if="game.quarters.length"
+                    class="border rounded overflow-hidden"
+                  >
+                    <NBAQuarters
+                      :quarters="game.quarters"
+                      :current-quarter="game.quarter"
+                    />
                   </div>
                 </td>
                 <td :class="awayClasses" class="text-right border-r pr-4">
@@ -225,6 +196,7 @@
           </svg>
         </button>
         <button
+          @click="toggleGameNotificationsSetting"
           type="button"
           class="w-full flex justify-center space-x-2 bg-mantis-500 rounded text-white py-2 hover:bg-mantis-600"
         >
@@ -238,44 +210,10 @@
           </svg>
         </button>
       </div>
-      <div v-if="watchlist" class="px-4 py-2 space-y-2">
-        <h2 class="text-sm">Game Notification Settings</h2>
-        <div>
-          <div class="flex items-center">
-            <toggle v-model="lastQuarterNotification" class="mr-2" />
-            <span class="flex-1"
-              >Recieve notifications for last quarter of gameplay.</span
-            >
-          </div>
-        </div>
-        <div>
-          <div class="flex items-center">
-            <toggle v-model="alertStartTimeNotification" class="mr-2" />
-            <span class="flex-1"
-              >Recieve notifications for alerts of your selected games start
-              time.</span
-            >
-          </div>
-        </div>
-        <div>
-          <div class="flex items-center">
-            <toggle v-model="alertEndTimeNotification" class="mr-2" />
-            <span class="flex-1"
-              >Recieve notifications for alerts of your selected games end
-              time.</span
-            >
-          </div>
-        </div>
-        <div>
-          <div class="flex items-center">
-            <toggle v-model="keyPlayerChangeNotification" class="mr-2" />
-            <span class="flex-1"
-              >Recieve notifications when the key player of your selected game
-              changes.</span
-            >
-          </div>
-        </div>
-      </div>
+      <GameNotificationSettings
+        v-if="watchlist && settingsOpen"
+        v-model="notificationSettings"
+      />
     </div>
   </div>
 </template>
@@ -283,11 +221,15 @@
 <script>
 import moment from "moment";
 import momentTimezone from "moment-timezone";
-import Toggle from "./Toggle";
+import WatchlistMixin from "../mixins/Watchlist.js";
+import NBAQuarters from "./NBAQuarters";
+import GameNotificationSettings from "./GameNotificationSettings";
 
 export default {
+  mixins: [WatchlistMixin],
   components: {
-    Toggle,
+    NBAQuarters,
+    GameNotificationSettings,
   },
   props: {
     game: {
@@ -302,10 +244,8 @@ export default {
   data() {
     return {
       added: false,
-      lastQuarterNotification: false,
-      alertStartTimeNotification: false,
-      alertEndTimeNotification: false,
-      keyPlayerChangeNotification: false,
+      settingsOpen: false,
+      notificationSettings: {},
     };
   },
   created() {
@@ -352,11 +292,6 @@ export default {
         .tz(this.game.game_time, moment.tz.guess())
         .zoneAbbr();
     },
-    inWatchlist() {
-      return this.$store.getters.watchlistIds.includes(
-        this.game.game_id.toString()
-      );
-    },
     overUnder() {
       if (!this.winner) return "";
       const { home_team, away_team, over_under } = this.game;
@@ -369,9 +304,6 @@ export default {
     },
     awayWon() {
       return this.winner === "away";
-    },
-    quarters() {
-      return this.game.quarters && this.game.quarters.length > 0;
     },
     homeClasses() {
       let out = this.game.home_team.logo ? "py-2" : "py-4";
@@ -406,20 +338,8 @@ export default {
     },
   },
   methods: {
-    addToWatchlist() {
-      this.$http
-        .post("/api/watchlist", {
-          gameId: this.game.game_id,
-        })
-        .then(response => {
-          this.$store.dispatch("fetchWatchlist");
-          flash({
-            body: "Added to watchlist successfully!",
-            type: "success",
-          });
-          this.added = true;
-        })
-        .catch(err => console.log(err));
+    toggleGameNotificationsSetting() {
+      this.settingsOpen = !this.settingsOpen;
     },
   },
 };
