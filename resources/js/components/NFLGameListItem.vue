@@ -207,6 +207,7 @@
       </div>
       <div v-if="watchlist" class="px-4 py-2 flex space-x-4 border-t">
         <button
+          @click="removeFromWatchlist"
           type="button"
           class="w-full flex justify-center space-x-2 bg-red-600 rounded text-white py-2 hover:bg-red-700"
         >
@@ -219,7 +220,7 @@
             ></path>
           </svg>
         </button>
-        <button
+        <!-- <button
           @click="toggleGameNotificationsSetting"
           type="button"
           class="w-full flex justify-center space-x-2 bg-mantis-500 rounded text-white py-2 hover:bg-mantis-600"
@@ -232,7 +233,7 @@
               clip-rule="evenodd"
             ></path>
           </svg>
-        </button>
+        </button> -->
       </div>
       <GameNotificationSettings
         v-if="watchlist && settingsOpen"

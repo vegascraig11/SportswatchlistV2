@@ -40,12 +40,14 @@ const store = new Vuex.Store({
       state.watchlist.unshift(gameId);
       window.localStorage.setItem("watchlist", JSON.stringify(state.watchlist));
     },
-    removeFromWatchlist: (state, gameId) => {
-      const index = state.watchlist.indexOf(gameId);
+    removeFromWatchlist: (state, index) => {
       if (index !== -1) {
         state.watchlist.splice(index, 1);
+        window.localStorage.setItem(
+          "watchlist",
+          JSON.stringify(state.watchlist)
+        );
       }
-      window.localStorage.setItem("watchlist", JSON.stringify(state.watchlist));
     },
   },
   getters: {
@@ -107,8 +109,9 @@ const store = new Vuex.Store({
     removeFromWatchlist: (ctx, gameId) => {
       return new Promise((resolve, reject) => {
         try {
-          ctx.commit("removeFromWatchlist", gameId);
-          resolve();
+          const index = ctx.state.watchlist.indexOf(gameId);
+          ctx.commit("removeFromWatchlist", index);
+          resolve(index);
         } catch (err) {
           reject(err);
         }

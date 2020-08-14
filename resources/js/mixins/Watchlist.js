@@ -40,7 +40,7 @@ const WatchlistMixin = {
             type: "success",
           });
           this.added = false;
-          this.$router.go();
+          this.$emit("game-removed", response);
         })
         .catch(err => console.log(err));
     },

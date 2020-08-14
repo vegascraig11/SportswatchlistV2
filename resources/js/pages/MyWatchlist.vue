@@ -8,18 +8,21 @@
       <div v-if="watchlist.length" class="mt-6">
         <div v-for="(game, index) in watchlist">
           <NBAGameListItem
+            @game-removed="removeGame"
             v-if="game.game_type === 'nba'"
             :watchlist="true"
             :game="game"
             class="mt-6 first:mt-0"
           />
           <MLBGameListItem
+            @game-removed="removeGame"
             v-if="game.game_type === 'mlb'"
             :watchlist="true"
             :game="game"
             class="mt-6 first:mt-0"
           />
           <NFLGameListItem
+            @game-removed="removeGame"
             v-if="game.game_type === 'nfl'"
             :watchlist="true"
             :game="game"
@@ -60,6 +63,11 @@ export default {
       .then(response => (this.watchlist = response.data))
       .catch(err => console.log(err))
       .finally(() => (this.loading = false));
+  },
+  methods: {
+    removeGame(index) {
+      this.watchlist.splice(index, 1);
+    },
   },
 };
 </script>

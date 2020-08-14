@@ -196,7 +196,7 @@
             ></path>
           </svg>
         </button>
-        <button
+        <!-- <button
           @click="toggleGameNotificationsSetting"
           type="button"
           class="w-full flex justify-center space-x-2 bg-mantis-500 rounded text-white py-2 hover:bg-mantis-600"
@@ -209,7 +209,7 @@
               clip-rule="evenodd"
             ></path>
           </svg>
-        </button>
+        </button> -->
       </div>
       <GameNotificationSettings
         v-if="watchlist && settingsOpen"
