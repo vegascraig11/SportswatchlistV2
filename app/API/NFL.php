@@ -237,8 +237,8 @@ class NFL extends Model
                 ->body();
 
         $gamesForTimeframe = collect(json_decode($response));
-        $gamesOnTheDay = $gamesForTimeframe->filter(function ($game) use ($date) {
-            return Carbon::parse($game->Day) == $date;
+        $gamesOnTheDay = $gamesForTimeframe->filter(function ($game) {
+            return Carbon::parse($game->Day)->format('Y-M-d') == now()->format('Y-M-d'); 
         });
 
         $mappedGames = $gamesOnTheDay->map(function ($game) {
