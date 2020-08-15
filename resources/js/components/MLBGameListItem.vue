@@ -113,13 +113,13 @@
                       <tbody class="text-center">
                         <tr>
                           <td>Inning</td>
-                          <td>0</td>
-                          <td>0</td>
+                          <td>{{ game.inning }}</td>
+                          <td>{{ game.inning }}</td>
                         </tr>
                         <tr>
                           <td>Score</td>
-                          <td>0</td>
-                          <td>0</td>
+                          <td>{{ inningAwayScore }}</td>
+                          <td>{{ inningHomeScore }}</td>
                         </tr>
                       </tbody>
                     </table>
@@ -285,8 +285,7 @@ export default {
     },
     winner() {
       if (this.game.status !== "Final") return null;
-      return this.game.home_team[this.scoreAccessor] >
-        this.game.away_team[this.scoreAccessor]
+      return this.game.home_team.runs > this.game.away_team.runs
         ? "home"
         : "away";
     },
@@ -354,6 +353,20 @@ export default {
           .local()
           .isAfter(moment())
       );
+    },
+    inningHomeScore() {
+      return this.game.innings.length
+        ? this.game.innings.find(
+            inning => inning.InningNumber == this.game.inning
+          ).HomeTeamRuns || 0
+        : 0;
+    },
+    inningAwayScore() {
+      return this.game.innings.length
+        ? this.game.innings.find(
+            inning => inning.InningNumber == this.game.inning
+          ).AwayTeamRuns || 0
+        : 0;
     },
   },
   methods: {

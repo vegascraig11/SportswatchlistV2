@@ -39,6 +39,7 @@ class MLBJSONBuilder implements JSONBuilder
                 'point_spread_money_line' => $all->PointSpreadAwayTeamMoneyLine,
                 'logo' => $game->awayTeam->logo
             ],
+            'inning' => $all->Inning,
             'innings' => $all->Innings,
             'stadium' => $game->stadium,
             'status' => $all->Status,
