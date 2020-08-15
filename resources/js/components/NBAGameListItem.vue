@@ -267,7 +267,7 @@ export default {
       return this.game.status === "InProgress";
     },
     winner() {
-      if (this.game.status !== "Final") return null;
+      if (!["Final", "F/OT"].includes(this.game.status)) return null;
       return this.game.home_team.score > this.game.away_team.score
         ? "home"
         : "away";
