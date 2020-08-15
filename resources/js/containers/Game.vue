@@ -74,11 +74,10 @@ export default {
       });
 
       if (!games.length) return;
-      console.log(games);
 
       const updatedGames = this.games.map(game => {
-        const found = games.find(g => g.game_id === "game.game_id");
-        return found || game;
+        const found = games.find(g => g.game_id === game.game_id);
+        return found ? found : game;
       });
 
       this.games = updatedGames;
