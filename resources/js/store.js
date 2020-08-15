@@ -36,6 +36,7 @@ const store = new Vuex.Store({
         state.selectedLeagues.splice(pos, 1);
       }
     },
+    setLeague: (state, league) => (state.selectedLeagues = [league]),
     addToWatchlist: (state, gameId) => {
       state.watchlist.unshift(gameId);
       window.localStorage.setItem("watchlist", JSON.stringify(state.watchlist));

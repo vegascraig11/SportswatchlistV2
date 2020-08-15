@@ -5,7 +5,10 @@
     <div class="bg-mantis-500 text-white">
       <div class="container mx-auto py-1 md:py-2 px-4 text-center">
         <span class="font-semibold">New to Sports Watchlist?</span>
-        <span>Click here to see why we are your #1 source to get live updates on your favorite sports games!</span>
+        <span
+          >Click here to see why we are your #1 source to get live updates on
+          your favorite sports games!</span
+        >
       </div>
     </div>
     <header>
@@ -25,25 +28,59 @@
               <router-link to="/my-watchlist">My Watchlist</router-link>
               <div v-if="loggedIn" class="ml-4">
                 <p class="inline-block font-semibold">{{ username }}</p>
-                <p class="ml-2 inline-block cursor-pointer" @click="logout">Logout</p>
+                <p class="ml-2 inline-block cursor-pointer" @click="logout">
+                  Logout
+                </p>
               </div>
               <div v-else class="ml-4 pl-4 border-l border-gray-700">
                 <router-link to="/signup">Sign Up</router-link>
-                <router-link to="/login" class="ml-4 px-4 py-2 bg-mantis-500 rounded-sm">Login</router-link>
+                <router-link
+                  to="/login"
+                  class="ml-4 px-4 py-2 bg-mantis-500 rounded-sm"
+                  >Login</router-link
+                >
               </div>
             </nav>
             <button class="lg:hidden group relative p-4">
-              <svg viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg" class="fill-current h-6 w-6"><title>Menu</title><path d="M0 3h20v2H0V3zm0 6h20v2H0V9zm0 6h20v2H0v-2z"></path></svg>
-              <div class="mt-1 text-sm invisible absolute right-0 w-48 py-1 bg-gray-800 border border-gray-800 rounded overflow-hidden group-hover:visible z-50">
-                <router-link class="block py-2 hover:bg-gray-900" to="/my-watchlist">My Watchlist</router-link>
-                <router-link class="block py-2 hover:bg-gray-900" to="/faq">FAQ's</router-link>
+              <svg
+                viewBox="0 0 20 20"
+                xmlns="http://www.w3.org/2000/svg"
+                class="fill-current h-6 w-6"
+              >
+                <title>Menu</title>
+                <path d="M0 3h20v2H0V3zm0 6h20v2H0V9zm0 6h20v2H0v-2z"></path>
+              </svg>
+              <div
+                class="mt-1 text-sm invisible absolute right-0 w-48 py-1 bg-gray-800 border border-gray-800 rounded overflow-hidden group-hover:visible z-50"
+              >
+                <router-link
+                  class="block py-2 hover:bg-gray-900"
+                  to="/my-watchlist"
+                  >My Watchlist</router-link
+                >
+                <router-link class="block py-2 hover:bg-gray-900" to="/faq"
+                  >FAQ's</router-link
+                >
                 <div v-if="loggedIn" class="border-t mt-2">
                   <p class="mb-2 block py-2 font-semibold">{{ username }}</p>
-                  <p class="block py-2 cursor-pointer hover:bg-gray-900" @click="logout">Logout</p>
+                  <p
+                    class="block py-2 cursor-pointer hover:bg-gray-900"
+                    @click="logout"
+                  >
+                    Logout
+                  </p>
                 </div>
                 <div v-else class="px-2 border-t mt-2">
-                  <router-link to="/signup" class="block py-2 mb-2 hover:bg-gray-900">Sign Up</router-link>
-                  <router-link to="/login" class="block py-2 px-4 py-2 bg-mantis-500 hover:bg-green-500 rounded-sm">Login</router-link>
+                  <router-link
+                    to="/signup"
+                    class="block py-2 mb-2 hover:bg-gray-900"
+                    >Sign Up</router-link
+                  >
+                  <router-link
+                    to="/login"
+                    class="block py-2 px-4 py-2 bg-mantis-500 hover:bg-green-500 rounded-sm"
+                    >Login</router-link
+                  >
                 </div>
               </div>
             </button>
@@ -56,12 +93,37 @@
             class="relative w-1/2 md:w-1/4 flex items-center justify-center bg-mantis-500 text-center cursor-pointer"
             @click="openSportDropdown"
           >
-            <div v-if="sportDropdown" class="absolute top-0 left-0 right-0 mt-12 z-50">
+            <div
+              v-if="sportDropdown"
+              class="absolute top-0 left-0 right-0 mt-12 z-50"
+            >
               <ul class="w-full bg-swl-black-light">
-                <li v-for="league in leagues" @click="toggleLeague(league)" :key="`toggle-${league}-button`" class="relative py-2 hover:bg-gray-700">
+                <li
+                  v-for="league in leagues"
+                  @click="toggleLeague(league)"
+                  :key="`toggle-${league}-button`"
+                  class="relative py-2 hover:bg-gray-700"
+                >
                   <span class="uppercase">{{ league }}</span>
-                  <span class="absolute right-0 mr-4" :class="selectedLeagues.includes(league) ? 'text-mantis-500' : 'text-gray-800'">
-                    <svg class="h-4 w-4" fill="currentColor" viewBox="0 0 20 20"><path d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd" fill-rule="evenodd"></path></svg>
+                  <span
+                    class="absolute right-0 mr-4"
+                    :class="
+                      selectedLeagues.includes(league)
+                        ? 'text-mantis-500'
+                        : 'text-gray-800'
+                    "
+                  >
+                    <svg
+                      class="h-4 w-4"
+                      fill="currentColor"
+                      viewBox="0 0 20 20"
+                    >
+                      <path
+                        d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z"
+                        clip-rule="evenodd"
+                        fill-rule="evenodd"
+                      ></path>
+                    </svg>
                   </span>
                 </li>
               </ul>
@@ -85,10 +147,23 @@
             @click="toggleSortDropdown"
             class="relative flex items-center justify-center w-1/2 md:w-24 bg-swl-black-lighter text-center cursor-pointer px-4"
           >
-            <div v-if="sortDropdownOpen" class="absolute top-0 left-0 right-0 mt-12 z-50">
+            <div
+              v-if="sortDropdownOpen"
+              class="absolute top-0 left-0 right-0 mt-12 z-50"
+            >
               <ul class="w-full bg-swl-black-light">
-                <li @click="sort($event, 'rot')" class="relative py-2 hover:bg-gray-700"># ROT</li>
-                <li @click="sort($event, 'time')" class="relative py-2 hover:bg-gray-700">Time</li>
+                <li
+                  @click="sort($event, 'rot')"
+                  class="relative py-2 hover:bg-gray-700"
+                >
+                  # ROT
+                </li>
+                <li
+                  @click="sort($event, 'time')"
+                  class="relative py-2 hover:bg-gray-700"
+                >
+                  Time
+                </li>
               </ul>
             </div>
             <div class="flex items-center">
@@ -120,7 +195,9 @@
             </div>
           </div>
           <div class="flex overflow-x-auto">
-            <div class="flex items-stretch justify-center flex-shrink-0 text-center">
+            <div
+              class="flex items-stretch justify-center flex-shrink-0 text-center"
+            >
               <v-date-picker
                 :attributes="attributes"
                 is-dark
@@ -195,8 +272,12 @@
               </button>
             </div>
           </div>
-          <div class="w-full md:w-auto px-6 md:px-0 py-1 relative flex items-center">
-            <div class="absolute top-0 bottom-0 left-0 flex items-center pl-8 md:pl-2">
+          <div
+            class="w-full md:w-auto px-6 md:px-0 py-1 relative flex items-center"
+          >
+            <div
+              class="absolute top-0 bottom-0 left-0 flex items-center pl-8 md:pl-2"
+            >
               <svg
                 class="w-4 h-4 text-gray-600"
                 aria-hidden="true"
@@ -228,12 +309,15 @@
         <nav
           class="container mx-auto px-4 flex justify-end text-xl font-semibold tracking-wide"
         >
-          <router-link class="ml-4" to="/games/nfl">NFL</router-link>
-          <router-link class="ml-4" to="/games/ncaaf">NCAAF</router-link>
-          <router-link class="ml-4" to="/games/nba">NBA</router-link>
-          <router-link class="ml-4" to="/games/ncaab">NCAAB</router-link>
-          <router-link class="ml-4" to="/games/mlb">MLB</router-link>
-          <router-link class="ml-4" to="/games/nhl">NHL</router-link>
+          <button
+            type="button"
+            v-for="league in leagues"
+            :key="`link-to-${league}`"
+            class="ml-4 uppercase"
+            @click="setLeague(league)"
+          >
+            {{ league }}
+          </button>
         </nav>
       </div>
       <div class="bg-swl-black-lighter text-white py-8">
@@ -275,7 +359,7 @@ import FlashMessage from "./../components/FlashMessage";
 
 export default {
   components: {
-    FlashMessage
+    FlashMessage,
   },
   data() {
     return {
@@ -283,13 +367,13 @@ export default {
       sortDropdownOpen: false,
       attributes: [],
       time: {},
-      week: []
-    }
+      week: [],
+    };
   },
   watch: {
     date(newValue) {
       this.buildWeekRow(newValue);
-    }
+    },
   },
   created() {
     this.time = new Date();
@@ -297,16 +381,16 @@ export default {
     this.buildWeekRow();
 
     this.attributes.push({
-      key: 'today',
+      key: "today",
       highlight: true,
-      dates: new Date()
+      dates: new Date(),
     });
 
     this.updateTime();
   },
   computed: {
     date() {
-      return this.$store.state.date
+      return this.$store.state.date;
     },
     username() {
       return this.$store.state.user.name;
@@ -325,13 +409,13 @@ export default {
     },
     selectedLeagues() {
       return this.$store.state.selectedLeagues;
-    }
+    },
   },
   methods: {
     updateDate(e) {
-      if (!e) return
+      if (!e) return;
 
-      this.$store.commit('setDate', moment(e).toString())
+      this.$store.commit("setDate", moment(e).toString());
     },
     buildWeekRow(start) {
       const week = [];
@@ -344,20 +428,26 @@ export default {
         week.push({
           dateTime: day,
           date: day.format("D"),
-          day: day.format("ddd")
+          day: day.format("ddd"),
         });
       }
 
       this.week = week;
     },
     setDate(index) {
-      this.$store.commit('setDate', this.week[index].dateTime);
+      this.$store.commit("setDate", this.week[index].dateTime);
     },
     previousDay() {
-      this.$store.commit('setDate', moment(this.date).subtract(1, "days").toString());
+      this.$store.commit(
+        "setDate",
+        moment(this.date).subtract(1, "days").toString()
+      );
     },
     nextDay() {
-      this.$store.commit('setDate', moment(this.date).add(1, "days").toString());
+      this.$store.commit(
+        "setDate",
+        moment(this.date).add(1, "days").toString()
+      );
     },
     updateTime() {
       setInterval(() => {
@@ -372,14 +462,18 @@ export default {
 
       this.sportDropdown = true;
 
-      document.querySelector('body').addEventListener('click', this.bodyClickListener);
+      document
+        .querySelector("body")
+        .addEventListener("click", this.bodyClickListener);
     },
     closeSportDropdown(e) {
       e.stopPropagation();
 
       this.sportDropdown = false;
 
-      document.querySelector('body').removeEventListener('click', this.bodyClickListener);
+      document
+        .querySelector("body")
+        .removeEventListener("click", this.bodyClickListener);
     },
     bodyClickListener(e) {
       this.closeSportDropdown(e);
@@ -390,27 +484,35 @@ export default {
       this.sortDropdownOpen = !this.sortDropdownOpen;
     },
     logout() {
-      this.$store.dispatch('logout')
+      this.$store
+        .dispatch("logout")
         .then(() => {
-          this.$router.push('/')
+          this.$router.push("/");
         })
         .catch(err => {
-          console.log('Error logging out', err)
-        })
+          console.log("Error logging out", err);
+        });
     },
     toggleLeague(league) {
-      if (this.$route.name !== 'home') {
-        this.$router.push('/')
+      if (this.$route.name !== "home") {
+        this.$router.push("/");
       }
 
-      this.$store.commit('toggleLeague', league);
+      this.$store.commit("toggleLeague", league);
+    },
+    setLeague(league) {
+      if (this.$route.name !== "home") {
+        this.$router.push("/");
+      }
+
+      this.$store.commit("setLeague", league);
     },
     sort(e, method) {
       e.stopPropagation();
       this.sortDropdownOpen = false;
 
-      window.events.$emit('sort', method)
-    }
-  }
-}
+      window.events.$emit("sort", method);
+    },
+  },
+};
 </script>
