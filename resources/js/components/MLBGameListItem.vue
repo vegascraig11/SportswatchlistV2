@@ -126,7 +126,7 @@
                   </div>
                 </td>
                 <td :class="awayClasses" class="text-right border-r pr-4">
-                  {{ game.away_team.runs || "??" }}
+                  {{ game.away_team.runs || "0" }}
                 </td>
                 <td class="text-center">
                   {{ game.away_team.money_line || "??" }}
@@ -179,7 +179,7 @@
                   </div>
                 </td>
                 <td :class="homeClasses" class="text-right border-r pr-4">
-                  {{ game.home_team.runs || "??" }}
+                  {{ game.home_team.runs || "0" }}
                 </td>
                 <td class="text-center">
                   {{ game.home_team.money_line || "??" }}
