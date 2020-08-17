@@ -110,7 +110,7 @@
                   {{ game.away_team.score || "0" }}
                 </td>
                 <td class="text-center">
-                  {{ game.away_team.money_line || "??" }}
+                  {{ awayTeamMoneyLine }}
                 </td>
                 <td class="text-center">
                   {{ game.away_team.point_spread_money_line || "??" }}
@@ -156,7 +156,7 @@
                   {{ game.home_team.score || "0" }}
                 </td>
                 <td class="text-center">
-                  {{ game.home_team.money_line || "??" }}
+                  {{ homeTeamMoneyLine }}
                 </td>
                 <td class="text-center">
                   {{ game.home_team.point_spread_money_line || "??" }}
@@ -336,6 +336,20 @@ export default {
           .local()
           .isAfter(moment())
       );
+    },
+    homeTeamMoneyLine() {
+      if (this.game.home_team.money_line)
+        return this.game.home_team.money_line >= 0
+          ? `+${this.game.home_team.money_line}`
+          : this.game.home_team.money_line;
+      return "??";
+    },
+    awayTeamMoneyLine() {
+      if (this.game.away_team.money_line)
+        return this.game.away_team.money_line >= 0
+          ? `+${this.game.away_team.money_line}`
+          : this.game.away_team.money_line;
+      return "??";
     },
   },
   methods: {
