@@ -26,6 +26,11 @@
             :game="game"
             :key="game.GameId"
           />
+          <NHLGameListItem
+            v-if="game.game_type === 'nhl'"
+            :game="game"
+            :key="game.GameId"
+          />
         </div>
       </div>
       <div v-else class="mt-6">
@@ -41,6 +46,7 @@ import Loading from "./../components/Loading";
 import NBAGameListItem from "./../components/NBAGameListItem";
 import MLBGameListItem from "./../components/MLBGameListItem";
 import NFLGameListItem from "./../components/NFLGameListItem";
+import NHLGameListItem from "./../components/NHLGameListItem";
 
 export default {
   props: ["league"],
@@ -49,6 +55,7 @@ export default {
     NBAGameListItem,
     MLBGameListItem,
     NFLGameListItem,
+    NHLGameListItem,
   },
   data() {
     return {

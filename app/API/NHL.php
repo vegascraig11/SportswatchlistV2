@@ -2,6 +2,8 @@
 
 namespace App\API;
 
+use App\Game;
+use App\Events\GameStatusUpdated;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Http;
@@ -142,5 +144,54 @@ class NHL extends Model
 				DB::rollback();
 			}
 		});
+    }
+
+    public function daily($day = null)
+    {
+        $day = $day ?? now();
+
+        $day = $day->format('Y-M-d');
+
+        $gamesToday = Http::withHeaders(['Ocp-Apim-Subscription-Key' => $this->apiKey])
+                        ->get("{$this->apiBaseUrl}/scores/json/GamesByDate/{$day}")
+                        ->body();
+
+        $mappedGames = collect(json_decode($gamesToday))->map(function ($game) {
+            $date = now();
+
+            $output = [
+                'GameType' => $this->gameType,
+                'GlobalGameID' => $game->GlobalGameID,
+                'Date' => $game->Day,
+                'GlobalAwayTeamID' => $game->GlobalAwayTeamID,
+                'GlobalHomeTeamID' => $game->GlobalHomeTeamID,
+                'Status' => $game->Status,
+                'StadiumID' => $game->StadiumID,
+                'All' => json_encode($game),
+                'created_at' => $date,
+                'updated_at' => $date,
+            ];
+
+            return $output;
+        });
+
+        $mappedGames->each(function ($game) {
+            DB::table('games')
+                ->updateOrInsert(
+                    ['GlobalGameID' => $game['GlobalGameID']],
+                    $game
+                );
+        });
+
+        $gamesFromDb = Game::whereIn(
+            'GlobalGameID',
+            $mappedGames->map(
+                function ($game) {
+                    return $game['GlobalGameID'];
+                }
+            )->toArray()
+        )->get();
+
+        event(new GameStatusUpdated($gamesFromDb));
     }
 }

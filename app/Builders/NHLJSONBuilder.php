@@ -36,7 +36,10 @@ class NHLJSONBuilder implements JSONBuilder
                 'logo' => $game->awayTeam->logo
             ],
             'stadium' => $game->stadium,
-            'status' => $all->Status
+            'status' => $all->Status,
+            'periods' => $all->Periods,
+            'period' => $all->Period,
+            'over_under' => $all->OverUnder
         ];
 	}
 }
