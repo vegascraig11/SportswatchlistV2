@@ -291,6 +291,7 @@
               </svg>
             </div>
             <input
+              @keyup="search"
               type="text"
               class="w-full pl-8 pr-4 py-2 bg-swl-black-light rounded placeholder-gray-400"
               placeholder="Search"
@@ -304,7 +305,7 @@
         <router-view></router-view>
       </main>
     </section>
-    <footer>
+    <footer class="mt-6">
       <div class="py-8 bg-swl-black-light text-white">
         <nav
           class="container mx-auto px-4 flex justify-end text-xl font-semibold tracking-wide"
@@ -354,6 +355,7 @@
 </template>
 
 <script>
+import _ from "lodash";
 import moment from "moment";
 import FlashMessage from "./../components/FlashMessage";
 
@@ -513,6 +515,15 @@ export default {
 
       window.events.$emit("sort", method);
     },
+    search: _.debounce(function (event) {
+      let query = event.target.value.trim();
+
+      if (query) {
+        window.events.$emit("search", query.toLowerCase());
+      } else {
+        window.events.$emit("clear-search");
+      }
+    }, 500),
   },
 };
 </script>

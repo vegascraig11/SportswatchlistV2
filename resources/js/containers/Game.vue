@@ -1,41 +1,43 @@
 <template>
-  <div class="px-2 sm:px-0 py-6">
-    <h2 class="text-xl font-semibold">{{ header }}</h2>
-    <div v-if="loading" class="flex justify-center py-6">
-      <loading></loading>
-    </div>
-    <template v-else>
-      <div v-if="games.length" class="mt-6">
-        <div
-          v-for="game in games"
-          :key="game.GameId"
-          class="mt-6 first:mt-0 w-full"
-        >
-          <NBAGameListItem
-            v-if="game.game_type === 'nba'"
-            :game="game"
+  <div>
+    <template class="px-2 sm:px-0 py-6">
+      <h2 class="text-xl font-semibold mt-6">{{ header }}</h2>
+      <div v-if="loading" class="flex justify-center py-6">
+        <loading></loading>
+      </div>
+      <template v-else>
+        <div v-if="games.length" class="mt-6">
+          <div
+            v-for="game in results"
             :key="game.GameId"
-          />
-          <MLBGameListItem
-            v-if="game.game_type === 'mlb'"
-            :game="game"
-            :key="game.GameId"
-          />
-          <NFLGameListItem
-            v-if="game.game_type === 'nfl'"
-            :game="game"
-            :key="game.GameId"
-          />
-          <NHLGameListItem
-            v-if="game.game_type === 'nhl'"
-            :game="game"
-            :key="game.GameId"
-          />
+            class="mt-6 first:mt-0 w-full"
+          >
+            <NBAGameListItem
+              v-if="game.game_type === 'nba'"
+              :game="game"
+              :key="game.GameId"
+            />
+            <MLBGameListItem
+              v-if="game.game_type === 'mlb'"
+              :game="game"
+              :key="game.GameId"
+            />
+            <NFLGameListItem
+              v-if="game.game_type === 'nfl'"
+              :game="game"
+              :key="game.GameId"
+            />
+            <NHLGameListItem
+              v-if="game.game_type === 'nhl'"
+              :game="game"
+              :key="game.GameId"
+            />
+          </div>
         </div>
-      </div>
-      <div v-else class="mt-6">
-        <p>No games found for the day!</p>
-      </div>
+        <div v-else class="mt-6">
+          <p>No games found for the day!</p>
+        </div>
+      </template>
     </template>
   </div>
 </template>
@@ -61,6 +63,7 @@ export default {
     return {
       loading: false,
       games: [],
+      results: [],
     };
   },
   watch: {
@@ -89,13 +92,26 @@ export default {
 
       this.games = updatedGames;
     });
+
+    window.events.$on("search", e => {
+      this.results = this.games.filter(game => {
+        return (
+          game.away_team.full_name.toLowerCase().includes(e) ||
+          game.away_team.name.toLowerCase().includes(e) ||
+          game.home_team.full_name.toLowerCase().includes(e) ||
+          game.home_team.name.toLowerCase().includes(e)
+        );
+      });
+    });
+
+    window.events.$on("clear-search", () => (this.results = this.games));
   },
   computed: {
     date() {
       return this.$store.state.date;
     },
     header() {
-      return this.league.toUpperCase() + " Game List";
+      return this.league.toUpperCase() + " Games";
     },
   },
   methods: {
@@ -107,6 +123,7 @@ export default {
         .get(`/api/${this.league}/gamesByDate/${formattedDate}`)
         .then(response => {
           this.games = Array.isArray(response.data) ? response.data : [];
+          this.results = this.games;
         })
         .catch(() => {
           // error loading games
