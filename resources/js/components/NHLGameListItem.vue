@@ -54,7 +54,7 @@
                 <th class="px-4 text-right">
                   {{ statusLabel }}
                 </th>
-                <th class="px-4">Money Line</th>
+                <th class="px-4">Puck Line</th>
                 <th class="px-4">{{ runLineLabel }}</th>
                 <th class="px-4">Total</th>
               </tr>
@@ -110,12 +110,15 @@
                   {{ game.away_team.score || "0" }}
                 </td>
                 <td class="text-center">
-                  {{ awayTeamMoneyLine }}
+                  <p>{{ awayPointSpread }}</p>
+                  <p>{{ awayTeamMoneyLine }}</p>
                 </td>
                 <td class="text-center">
-                  {{ game.away_team.point_spread_money_line || "??" }}
+                  {{ awayPointSpreadMoneyLine }}
                 </td>
-                <td class="text-center">{{ game.over_under || "??" }}</td>
+                <td class="text-center">
+                  <p>{{ game.over_under ? "(o) " + game.over_under : "??" }}</p>
+                </td>
               </tr>
               <tr>
                 <td>
@@ -156,12 +159,15 @@
                   {{ game.home_team.score || "0" }}
                 </td>
                 <td class="text-center">
-                  {{ homeTeamMoneyLine }}
+                  <p>{{ homePointSpread }}</p>
+                  <p>{{ homeTeamMoneyLine }}</p>
                 </td>
                 <td class="text-center">
-                  {{ game.home_team.point_spread_money_line || "??" }}
+                  {{ homePointSpreadMoneyLine }}
                 </td>
-                <td class="text-center">{{ game.over_under || "??" }}</td>
+                <td class="text-center">
+                  <p>{{ game.over_under ? "(u) " + game.over_under : "??" }}</p>
+                </td>
               </tr>
             </tbody>
           </table>
@@ -350,6 +356,26 @@ export default {
           ? `+${this.game.away_team.money_line}`
           : this.game.away_team.money_line;
       return "??";
+    },
+    homePointSpread() {
+      if (!this.game.point_spread) return null;
+      return this.game.point_spread;
+    },
+    awayPointSpread() {
+      if (!this.game.point_spread) return null;
+      return -1 * this.game.point_spread;
+    },
+    homePointSpreadMoneyLine() {
+      if (!this.game.home_team.point_spread_money_line) return "??";
+      return this.game.home_team.point_spread_money_line > 0
+        ? "+" + this.game.home_team.point_spread_money_line
+        : this.game.home_team.point_spread_money_line;
+    },
+    awayPointSpreadMoneyLine() {
+      if (!this.game.away_team.point_spread_money_line) return "??";
+      return this.game.away_team.point_spread_money_line > 0
+        ? "+" + this.game.away_team.point_spread_money_line
+        : this.game.away_team.point_spread_money_line;
     },
   },
   methods: {

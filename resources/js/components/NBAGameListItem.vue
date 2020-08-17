@@ -113,9 +113,12 @@
                   {{ awayTeamMoneyLine }}
                 </td>
                 <td class="text-center">
-                  {{ game.away_team.point_spread_money_line || "??" }}
+                  <p>{{ awayPointSpread }}</p>
+                  <p>{{ game.away_team.point_spread_money_line || "??" }}</p>
                 </td>
-                <td class="text-center">{{ game.over_under || "??" }}</td>
+                <td class="text-center">
+                  <p>{{ game.over_under ? "(o) " + game.over_under : "??" }}</p>
+                </td>
               </tr>
               <tr>
                 <td>
@@ -159,9 +162,12 @@
                   {{ homeTeamMoneyLine }}
                 </td>
                 <td class="text-center">
-                  {{ game.home_team.point_spread_money_line || "??" }}
+                  <p>{{ homePointSpread }}</p>
+                  <p>{{ game.home_team.point_spread_money_line || "??" }}</p>
                 </td>
-                <td class="text-center">{{ game.over_under || "??" }}</td>
+                <td class="text-center">
+                  <p>{{ game.over_under ? "(u) " + game.over_under : "??" }}</p>
+                </td>
               </tr>
             </tbody>
           </table>
@@ -350,6 +356,14 @@ export default {
           ? `+${this.game.away_team.money_line}`
           : this.game.away_team.money_line;
       return "??";
+    },
+    homePointSpread() {
+      if (!this.game.point_spread) return null;
+      return this.game.point_spread;
+    },
+    awayPointSpread() {
+      if (!this.game.point_spread) return null;
+      return -1 * this.game.point_spread;
     },
   },
   methods: {

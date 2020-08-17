@@ -45,7 +45,8 @@ class MLBJSONBuilder implements JSONBuilder
             'status' => $all->Status,
             'winningPitcher' => $all->WinningPitcher,
             'losingPitcher' => $all->LosingPitcher,
-            'over_under' => $all->OverUnder
+            'over_under' => $all->OverUnder,
+            'point_spread' => $all->PointSpread
         ];
 	}
 }
