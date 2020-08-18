@@ -3,6 +3,12 @@ const WatchlistMixin = {
     inWatchlist() {
       return this.$store.state.watchlist.includes(this.game.game_id);
     },
+    canAdd() {
+      return (
+        !(this.inWatchlist && this.added) &&
+        !["Final", "F/OT", "Canceled", "Postponed"].includes(this.game.status)
+      );
+    },
   },
   methods: {
     addToWatchlist() {

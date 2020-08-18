@@ -10,14 +10,11 @@
                   <span class="uppercase">
                     {{ game.game_type }} | {{ gameTime }}
                   </span>
-                  <div
-                    v-if="canAdd"
-                    class="ml-2 text-white font-semibold relative"
-                  >
+                  <div v-if="canAdd" class="ml-2 text-white font-semibold">
                     <button
                       @click="addToWatchlist"
                       type="button"
-                      class="absolute inset-0 flex items-center justify-center bg-mantis-500 hover:bg-mantis-600 py-1 px-2 rounded"
+                      class="inset-0 flex items-center justify-center bg-mantis-500 hover:bg-mantis-600 px-2 rounded"
                     >
                       <svg
                         class="mr-1 inline-block h-3 w-3"
@@ -361,15 +358,6 @@ export default {
       } else {
         return "Point Spread";
       }
-    },
-    canAdd() {
-      return (
-        !(this.inWatchlist && this.added) &&
-        momentTimezone
-          .tz(this.game.game_time, "America/New_York")
-          .local()
-          .isAfter(moment())
-      );
     },
     homeTeamMoneyLine() {
       if (this.game.home_team.money_line)
