@@ -347,11 +347,14 @@ export default {
     },
     homePointSpread() {
       if (!this.game.point_spread) return null;
-      return this.game.point_spread;
+      return this.game.point_spread >= 0
+        ? `+${this.game.point_spread}`
+        : this.game.point_spread;
     },
     awayPointSpread() {
       if (!this.game.point_spread) return null;
-      return -1 * this.game.point_spread;
+      const spread = -1 * this.game.point_spread;
+      return spread >= 0 ? `+${spread}` : spread;
     },
   },
   methods: {
