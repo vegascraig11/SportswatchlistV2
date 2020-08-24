@@ -47,6 +47,18 @@
                     </svg>
                     Live
                   </div>
+                  <div
+                    v-if="postponed"
+                    class="flex items-center bg-mantis-500 px-2 rounded ml-2"
+                  >
+                    Postponed
+                  </div>
+                  <div
+                    v-if="canceled"
+                    class="flex items-center bg-mantis-500 px-2 rounded ml-2"
+                  >
+                    Canceled
+                  </div>
                 </th>
                 <!-- <th class="px-4">{{ overUnder || "" }}</th> -->
                 <th class="px-4"></th>
@@ -277,6 +289,12 @@ export default {
     },
     live() {
       return this.game.status === "InProgress";
+    },
+    postponed() {
+      return this.game.status === "Postponed";
+    },
+    canceled() {
+      return this.game.status === "Canceled";
     },
     winner() {
       if (this.game.status !== "Final") return null;

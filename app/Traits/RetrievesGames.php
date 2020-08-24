@@ -15,7 +15,6 @@ trait RetrievesGames
 
         $games = Game::where('GameType', $this->gameType)
                         ->whereDate('Date', Carbon::parse($date)->toDateString())
-                        ->whereNotIn('Status', ['Postponed', 'Canceled'])
                         ->with(['homeTeam', 'awayTeam'])
                         ->get();
 
