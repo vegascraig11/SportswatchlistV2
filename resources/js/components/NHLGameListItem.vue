@@ -3,12 +3,22 @@
     <div class="bg-white shadow-md rounded overflow-hidden">
       <div class="overflow-x-auto">
         <div class="inline-block min-w-full overflow-hidden">
-          <table class="min-w-full table-fixed">
-            <thead class="bg-gray-900 text-white text-xs uppercase">
+          <table class="w-full sm:table-fixed">
+            <thead class="bg-gray-900 text-white text-xxs sm:text-xs uppercase">
               <tr class="whitespace-no-wrap">
-                <th class="w-1/3 pl-4 pr-32 py-2 text-left flex items-strech">
-                  <span>{{ game.game_type }} | {{ gameTime }}</span>
-                  <div v-if="canAdd" class="ml-2 text-white font-semibold">
+                <th
+                  class="sm:w-1/3 pl-4 sm:pr-32 py-2 text-left flex items-strech"
+                >
+                  <span class="text-xs"
+                    >{{ game.game_type }} |
+                    <span v-if="!(postponed || canceled)">{{
+                      gameTime
+                    }}</span></span
+                  >
+                  <div
+                    v-if="canAdd"
+                    class="hidden sm:block ml-2 text-white font-semibold"
+                  >
                     <button
                       @click="addToWatchlist"
                       type="button"
@@ -30,7 +40,7 @@
                   </div>
                   <div
                     v-if="live"
-                    class="flex items-center bg-mantis-500 px-2 rounded ml-2"
+                    class="hidden sm:flex items-center bg-mantis-500 px-2 rounded ml-2"
                   >
                     <svg
                       class="h-3 w-3 mr-1"
@@ -59,22 +69,25 @@
                   </div>
                 </th>
                 <!-- <th class="px-4">{{ overUnder || "" }}</th> -->
-                <th class="px-4"></th>
-                <th class="px-4 text-right">
+                <th class="sm:px-4 hidden sm:table-cell"></th>
+                <th class="sm:px-4 text-right">
                   {{ statusLabel }}
                 </th>
-                <th class="px-4">Puck Line</th>
-                <th class="px-4">{{ runLineLabel }}</th>
-                <th class="px-4">Total</th>
+                <th class="sm:px-4">Puck Line</th>
+                <th class="sm:px-4">{{ runLineLabel }}</th>
+                <th class="sm:px-4">Total</th>
               </tr>
             </thead>
             <tbody>
               <tr>
                 <td>
-                  <div :class="awayClasses" class="pl-4 w-full flex relative">
+                  <div
+                    :class="awayClasses"
+                    class="sm:pl-4 w-full flex relative"
+                  >
                     <span
                       v-if="awayWon"
-                      class="absolute top-0 bottom-0 left-0 flex items-center -mx-2"
+                      class="hidden sm:absolute top-0 bottom-0 left-0 flex items-center -mx-2"
                     >
                       <svg
                         class="h-5 w-5 text-green-500"
@@ -88,23 +101,28 @@
                         />
                       </svg>
                     </span>
-                    <div class="flex items-center">
+                    <div class="flex items-center w-full">
                       <p>{{ game.away_team.rotation_number }}</p>
                       <img
-                        class="ml-4 h-12 w-12"
+                        class="ml-1 sm:ml-4 h-8 w-8 sm:h-12 sm:w-12"
                         v-if="game.away_team.logo"
                         :src="game.away_team.logo"
                         :alt="game.away_team.full_name"
                       />
-                      <div class="ml-2">
-                        <p class="whitespace-no-wrap">
+                      <div
+                        class="ml-2 flex flex-1 justify-between space-x-2 sm:space-x-0"
+                      >
+                        <p class="hidden sm:block whitespace-no-wrap">
                           {{ game.away_team.full_name }}
+                        </p>
+                        <p class="sm:hidden whitespace-no-wrap">
+                          {{ game.away_team.name }}
                         </p>
                       </div>
                     </div>
                   </div>
                 </td>
-                <td rowspan="2">
+                <td class="hidden sm:table-cell" rowspan="2">
                   <div
                     v-if="game.periods.length"
                     class="border rounded overflow-hidden"
@@ -131,10 +149,13 @@
               </tr>
               <tr>
                 <td>
-                  <div :class="homeClasses" class="pl-4 w-full flex relative">
+                  <div
+                    :class="homeClasses"
+                    class="sm:pl-4 w-full flex relative"
+                  >
                     <span
                       v-if="homeWon"
-                      class="absolute top-0 bottom-0 left-0 flex items-center -mx-2"
+                      class="hidden sm:absolute top-0 bottom-0 left-0 flex items-center -mx-2"
                     >
                       <svg
                         class="h-5 w-5 text-green-500"
@@ -151,14 +172,19 @@
                     <div class="flex items-center">
                       <p>{{ game.home_team.rotation_number }}</p>
                       <img
-                        class="ml-4 h-12 w-12"
+                        class="ml-1 sm:ml-4 h-8 w-8 sm:h-12 sm:w-12"
                         v-if="game.home_team.logo"
                         :src="game.home_team.logo"
                         :alt="game.home_team.full_name"
                       />
-                      <div class="ml-2">
-                        <p class="whitespace-no-wrap">
+                      <div
+                        class="ml-2 flex flex-1 justify-between space-x-2 sm:space-x-0"
+                      >
+                        <p class="hidden sm:block whitespace-no-wrap">
                           {{ game.home_team.full_name }}
+                        </p>
+                        <p class="sm:hidden whitespace-no-wrap">
+                          {{ game.home_team.name }}
                         </p>
                       </div>
                     </div>
@@ -195,6 +221,29 @@
           />
         </svg>
         <p class="pl-2">{{ venue }}</p>
+      </div>
+      <div
+        v-if="canAdd"
+        class="sm:hidden py-1 px-2 text-white font-semibold border-t"
+      >
+        <button
+          @click="addToWatchlist"
+          type="button"
+          class="flex w-full items-center justify-center bg-mantis-500 hover:bg-mantis-600 py-2 rounded"
+        >
+          <svg
+            class="mr-1 inline-block h-3 w-3"
+            fill="currentColor"
+            viewBox="0 0 20 20"
+          >
+            <path
+              d="M10 3a1 1 0 011 1v5h5a1 1 0 110 2h-5v5a1 1 0 11-2 0v-5H4a1 1 0 110-2h5V4a1 1 0 011-1z"
+              clip-rule="evenodd"
+              fill-rule="evenodd"
+            ></path>
+          </svg>
+          <span class="text-xs">Add to Watchlist</span>
+        </button>
       </div>
       <div v-if="watchlist" class="px-4 py-2 flex space-x-4 border-t">
         <button
