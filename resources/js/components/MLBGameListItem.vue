@@ -168,7 +168,7 @@
                 <td>
                   <div
                     :class="homeClasses"
-                    class="ms:pl-4 w-full flex relative"
+                    class="sm:pl-4 w-full flex relative"
                   >
                     <span
                       v-if="homeWon"
