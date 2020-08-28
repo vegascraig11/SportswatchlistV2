@@ -1,6 +1,6 @@
 <template>
   <div class="flex">
-    <div class="w-full">
+    <div class="w-full px-2 sm:px-0">
       <game-container
         v-for="league in selectedLeagues"
         :key="`${league}-container`"
