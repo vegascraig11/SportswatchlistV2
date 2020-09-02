@@ -35,10 +35,10 @@
                   </div>
                   <div
                     v-if="live"
-                    class="hidden sm:flex items-center bg-mantis-500 px-2 rounded ml-2"
+                    class="flex items-center bg-mantis-500 px-2 rounded ml-2"
                   >
                     <svg
-                      class="h-3 w-3 mr-1"
+                      class="h-3 w-3"
                       fill="currentColor"
                       viewBox="0 0 20 20"
                     >
@@ -48,7 +48,7 @@
                         clip-rule="evenodd"
                       ></path>
                     </svg>
-                    <span class="hidden sm:inline">Live</span>
+                    <span class="hidden sm:inline ml-1">Live</span>
                   </div>
                   <div
                     v-if="postponed"
@@ -255,7 +255,7 @@
             ></path>
           </svg>
         </button>
-        <!-- <button
+        <button
           @click="toggleGameNotificationsSetting"
           type="button"
           class="w-full flex justify-center space-x-2 bg-mantis-500 rounded text-white py-2 hover:bg-mantis-600"
@@ -268,7 +268,7 @@
               clip-rule="evenodd"
             ></path>
           </svg>
-        </button> -->
+        </button>
       </div>
       <GameNotificationSettings
         v-if="watchlist && settingsOpen"

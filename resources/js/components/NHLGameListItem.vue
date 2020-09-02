@@ -40,10 +40,10 @@
                   </div>
                   <div
                     v-if="live"
-                    class="hidden sm:flex items-center bg-mantis-500 px-2 rounded ml-2"
+                    class="flex items-center bg-mantis-500 px-2 rounded ml-2"
                   >
                     <svg
-                      class="h-3 w-3 mr-1"
+                      class="h-3 w-3"
                       fill="currentColor"
                       viewBox="0 0 20 20"
                     >
@@ -53,7 +53,7 @@
                         clip-rule="evenodd"
                       ></path>
                     </svg>
-                    Live
+                    <span class="hidden sm:inline ml-1">Live</span>
                   </div>
                   <div
                     v-if="postponed"
