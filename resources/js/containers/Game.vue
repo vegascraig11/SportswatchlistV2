@@ -32,6 +32,16 @@
               :game="game"
               :key="game.GameId"
             />
+            <NCAABGameListItem
+              v-if="game.game_type === 'ncaab'"
+              :game="game"
+              :key="game.GameId"
+            />
+            <NCAAFGameListItem
+              v-if="game.game_type === 'ncaaf'"
+              :game="game"
+              :key="game.GameId"
+            />
           </div>
         </div>
         <div v-else class="mt-6">
@@ -49,6 +59,8 @@ import NBAGameListItem from "./../components/NBAGameListItem";
 import MLBGameListItem from "./../components/MLBGameListItem";
 import NFLGameListItem from "./../components/NFLGameListItem";
 import NHLGameListItem from "./../components/NHLGameListItem";
+import NCAABGameListItem from "./../components/NCAABGameListItem";
+import NCAAFGameListItem from "./../components/NCAAFGameListItem";
 
 export default {
   props: ["league"],
@@ -58,6 +70,8 @@ export default {
     MLBGameListItem,
     NFLGameListItem,
     NHLGameListItem,
+    NCAABGameListItem,
+    NCAAFGameListItem,
   },
   data() {
     return {
