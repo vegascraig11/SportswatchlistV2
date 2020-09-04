@@ -3,13 +3,13 @@
     <div class="bg-white shadow-md rounded overflow-hidden">
       <div class="overflow-x-auto">
         <div class="inline-block min-w-full overflow-hidden">
-          <table class="w-full sm:table-fixed">
+          <table class="w-full">
             <thead class="bg-gray-900 text-white text-xxs sm:text-xs uppercase">
               <tr class="whitespace-no-wrap">
                 <th
                   class="sm:w-1/3 pl-4 sm:pr-32 py-2 text-left flex items-strech"
                 >
-                  <span class="text-xs">NBA | {{ gameTime }}</span>
+                  <span>NBA | {{ gameTime }}</span>
                   <div
                     v-if="canAdd"
                     class="hidden sm:block ml-2 text-white font-semibold"
