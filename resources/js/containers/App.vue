@@ -306,15 +306,15 @@
       </main>
     </section>
     <footer class="mt-6">
-      <div class="py-8 bg-swl-black-light text-white">
+      <div class="py-4 sm:py-8 bg-swl-black-light text-white">
         <nav
-          class="container mx-auto px-4 flex justify-end text-xl font-semibold tracking-wide"
+          class="container mx-auto px-4 flex justify-end text-base sm:text-xl font-semibold tracking-wide"
         >
           <button
             type="button"
             v-for="league in leagues"
             :key="`link-to-${league}`"
-            class="ml-4 uppercase"
+            class="ml-2 sm:ml-4 uppercase"
             @click="setLeague(league)"
           >
             {{ league }}
