@@ -7,7 +7,7 @@
         :league="league"
       ></game-container>
     </div>
-    <aside class="hidden lg:block w-full max-w-xs pl-4 py-6">
+    <aside class="hidden lg:block w-full max-w-xs flex-shrink-0 pl-4 py-6">
       <div class="flex flex-col items-center">
         <div class="flex items-center">
           <svg
