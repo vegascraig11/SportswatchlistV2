@@ -3,7 +3,7 @@
     <div class="bg-white shadow-md rounded overflow-hidden">
       <div class="overflow-x-auto">
         <div class="inline-block min-w-full overflow-hidden">
-          <table class="w-full sm:table-fixed">
+          <table class="w-full">
             <thead class="bg-gray-900 text-white text-xxs sm:text-xs uppercase">
               <tr class="whitespace-no-wrap">
                 <th
