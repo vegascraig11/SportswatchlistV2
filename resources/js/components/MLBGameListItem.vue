@@ -106,7 +106,7 @@
                         :alt="game.away_team.full_name"
                       />
                       <div
-                        class="ml-2 flex flex-1 justify-between space-x-2 sm:space-x-0"
+                        class="ml-2 flex-1 justify-between space-x-2 sm:space-x-0"
                       >
                         <p class="hidden sm:block whitespace-no-wrap">
                           {{ game.away_team.full_name }}
@@ -195,7 +195,7 @@
                         :alt="game.home_team.full_name"
                       />
                       <div
-                        class="ml-2 flex flex-1 justify-between space-x-2 sm:space-x-0"
+                        class="ml-2 flex-1 justify-between space-x-2 sm:space-x-0"
                       >
                         <p class="hidden sm:block whitespace-no-wrap">
                           {{ game.home_team.full_name }}
