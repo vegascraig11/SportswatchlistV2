@@ -297,10 +297,6 @@ export default {
     GameNotificationSettings,
   },
   props: {
-    game: {
-      type: Object,
-      required: true,
-    },
     watchlist: {
       type: Boolean,
       default: false,

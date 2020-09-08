@@ -1,4 +1,26 @@
 const WatchlistMixin = {
+  props: {
+    initialGameData: {
+      type: Object,
+      required: true,
+    },
+  },
+  data() {
+    return {
+      game: this.initialGameData,
+    };
+  },
+  created() {
+    window.Echo.channel(`game-updates-${this.game.game_id}`).listen(
+      "GameStatusUpdated",
+      e => {
+        this.game = e.game;
+        console.log(
+          `game ${e.game.game_id} updated -- status ${e.game.status}`
+        );
+      }
+    );
+  },
   computed: {
     inWatchlist() {
       return this.$store.state.watchlist.includes(this.game.game_id);

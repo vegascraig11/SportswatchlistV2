@@ -9,6 +9,7 @@ use App\API\NcaafApiService;
 use App\API\NflApiService;
 use App\API\NhlApiService;
 use App\Events\GameStarted;
+use App\Events\GameStatusUpdated;
 use App\Game;
 use Carbon\Carbon;
 use Illuminate\Support\Facades\DB;
@@ -66,12 +67,10 @@ class RealtimeSyncService
             return null;
         }
 
-        $games = $service->getGamesByDate(Carbon::parse('2020-JAN-23'))
+        $games = $service->getGamesByDate(now()->setTimezone('America/New_York'))
                     ->filter(function ($game) { 
-                        return $game->Status == "InProgress"; 
+                        return now()->setTimezone('America/New_York')->diffInMinutes(Carbon::parse($game->Updated, 'America/New_York')) <= 2;
                     });
-
-        $this->notifyStart($games);
 
         if ($games->count() == 0) {
             return null;
@@ -91,6 +90,12 @@ class RealtimeSyncService
                     );
             });
             DB::commit();
+            $games = Game::whereIn('GlobalGameID', $mapped->map(function ($game) {
+                return $game['GlobalGameID'];
+            })->toArray());
+
+            $this->notifyStart($games);
+            $this->notifyUpdate($games);
         } catch (\Throwable $exception) {
             report($exception);
             DB::rollback();
@@ -107,9 +112,15 @@ class RealtimeSyncService
                 return;
             }
 
-            $game = Game::where('GlobalGameID', $game->GlobalGameID)->first();
             event(new GameStarted($game->toArray()));
             Redis::set("{$game->GlobalGameID}-notify", true);
+        });
+    }
+
+    public function notifyUpdate($games)
+    {
+        $games->each(function ($game) {
+            event(new GameStatusUpdated($game));
         });
     }
 }

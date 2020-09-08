@@ -319,10 +319,6 @@ export default {
     GameNotificationSettings,
   },
   props: {
-    game: {
-      type: Object,
-      required: true,
-    },
     watchlist: {
       type: Boolean,
       default: false,
@@ -330,6 +326,7 @@ export default {
   },
   data() {
     return {
+      game: this.initialGameData,
       added: false,
       settingsOpen: false,
       notificationSettings: {},

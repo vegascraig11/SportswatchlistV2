@@ -14,16 +14,16 @@ class GameStatusUpdated implements ShouldBroadcast
 {
     use Dispatchable, InteractsWithSockets, SerializesModels;
 
-    public $games;
+    public $game;
 
     /**
      * Create a new event instance.
      *
      * @return void
      */
-    public function __construct($games)
+    public function __construct($game)
     {
-        $this->games = $games;
+        $this->game = $game;
     }
 
     /**
@@ -33,6 +33,6 @@ class GameStatusUpdated implements ShouldBroadcast
      */
     public function broadcastOn()
     {
-        return new Channel('game-updates');
+        return new Channel('game-updates-'.$this->game->GlobalGameID);
     }
 }
