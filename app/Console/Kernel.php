@@ -2,6 +2,7 @@
 
 namespace App\Console;
 
+use App\API\RealtimeSyncService;
 use Illuminate\Console\Scheduling\Schedule;
 use Illuminate\Foundation\Console\Kernel as ConsoleKernel;
 
@@ -26,23 +27,30 @@ class Kernel extends ConsoleKernel
     {
         // $schedule->command('inspire')
         //          ->hourly();
+        $service = new RealtimeSyncService();
 
-        $schedule->call(function () {
-            $mlb = new \App\API\MLB();
-            $mlb->daily();
-            $mlb->daily(now()->subDays(1));
+        $schedule->call(function () use ($service) {
+            $service->nba();
         })->everyMinute();
 
-        $schedule->call(function () {
-            $nba = new \App\API\NBA();
-            $nba->daily();
-            $nba->daily(now()->subDays(1));
+        $schedule->call(function () use ($service) {
+            $service->nfl();
         })->everyMinute();
 
-        $schedule->call(function () {
-            $nhl = new \App\API\NHL();
-            $nhl->daily();
-            $nhl->daily(now()->subDays(1));
+        $schedule->call(function () use ($service) {
+            $service->nhl();
+        })->everyMinute();
+
+        $schedule->call(function () use ($service) {
+            $service->mlb();
+        })->everyMinute();
+
+        $schedule->call(function () use ($service) {
+            $service->ncaaf();
+        })->everyMinute();
+
+        $schedule->call(function () use ($service) {
+            $service->ncaab();
         })->everyMinute();
     }
 
