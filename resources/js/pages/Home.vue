@@ -42,6 +42,20 @@
         </div>
       </div>
     </aside>
+    <div class="fixed top-0 right-0 mr-10 mt-10 shadow-lg overflow-hidden">
+      <transition-group name="list" tag="p">
+        <div
+          class="relative bg-white rounded overflow-hidden shadow-lg mt-4 first:mt-0"
+          v-for="message in messages"
+          :key="message"
+        >
+          <div class="absolute left-0 top-0 bottom-0 w-2 bg-green-500"></div>
+          <div class="border border-gray-100 pl-8 pr-6 py-2">
+            <span>{{ message }}</span>
+          </div>
+        </div>
+      </transition-group>
+    </div>
   </div>
 </template>
 
@@ -58,10 +72,18 @@ export default {
       time: "",
       attributes: [],
       banners: [],
+      messages: [],
     };
   },
   created() {
     this.time = new Date();
+
+    window.Echo.channel("game-start").listen("GameStarted", e => {
+      this.messages.push(e.message);
+      setTimeout(() => {
+        this.messages.splice(this.messages.indexOf(e.message), 1);
+      }, 5000);
+    });
 
     this.attributes.push({
       key: "today",
@@ -100,3 +122,15 @@ export default {
   },
 };
 </script>
+
+<style>
+.list-enter-active,
+.list-leave-active {
+  transition: all 1s;
+}
+.list-enter,
+.list-leave-to {
+  opacity: 0;
+  transform: translateX(30px);
+}
+</style>
