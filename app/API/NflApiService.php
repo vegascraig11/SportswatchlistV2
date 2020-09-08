@@ -109,7 +109,7 @@ class NflApiService extends SportsDataApiService
                 return Carbon::parse($game['Date'])->format('Y-M-d') == $date->format('Y-M-d');
             })->map(function ($game) { return $game['GlobalGameID']; })->toArray();
 
-            if ($gameIds->count() == 0) {
+            if (count($gameIds) == 0) {
                 return collect();
             }
 
