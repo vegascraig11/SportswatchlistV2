@@ -11,21 +11,42 @@
             @game-removed="removeGame"
             v-if="game.game_type === 'nba'"
             :watchlist="true"
-            :game="game"
+            :initialGameData="game"
             class="mt-6 first:mt-0"
           />
           <MLBGameListItem
             @game-removed="removeGame"
             v-if="game.game_type === 'mlb'"
             :watchlist="true"
-            :game="game"
+            :initialGameData="game"
             class="mt-6 first:mt-0"
           />
           <NFLGameListItem
             @game-removed="removeGame"
             v-if="game.game_type === 'nfl'"
             :watchlist="true"
-            :game="game"
+            :initialGameData="game"
+            class="mt-6 first:mt-0"
+          />
+          <NHLGameListItem
+            @game-removed="removeGame"
+            v-if="game.game_type === 'nhl'"
+            :watchlist="true"
+            :initialGameData="game"
+            class="mt-6 first:mt-0"
+          />
+          <NCAABGameListItem
+            @game-removed="removeGame"
+            v-if="game.game_type === 'ncaab'"
+            :watchlist="true"
+            :initialGameData="game"
+            class="mt-6 first:mt-0"
+          />
+          <NCAAFGameListItem
+            @game-removed="removeGame"
+            v-if="game.game_type === 'ncaaf'"
+            :watchlist="true"
+            :initialGameData="game"
             class="mt-6 first:mt-0"
           />
         </div>
@@ -42,13 +63,19 @@ import Loading from "./../components/Loading";
 import NBAGameListItem from "./../components/NBAGameListItem";
 import MLBGameListItem from "./../components/MLBGameListItem";
 import NFLGameListItem from "./../components/NFLGameListItem";
+import NHLGameListItem from "./../components/NHLGameListItem";
+import NCAAFGameListItem from "./../components/NCAAFGameListItem";
+import NCAABGameListItem from "./../components/NCAABGameListItem";
 
 export default {
   components: {
     Loading,
     NBAGameListItem,
+    NHLGameListItem,
     NFLGameListItem,
     MLBGameListItem,
+    NCAABGameListItem,
+    NCAAFGameListItem,
   },
   data() {
     return {
