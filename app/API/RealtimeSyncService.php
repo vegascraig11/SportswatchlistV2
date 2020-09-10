@@ -62,10 +62,13 @@ class RealtimeSyncService
     public function liveStats($service)
     {
         $inProgress = $service->areGamesInProgress();
+        $recentlyLive = $service->wasRecentlyLive();
 
-        if (!$inProgress) {
+        if (!($inProgress || $recentlyLive)) {
             return null;
         }
+
+        \Illuminate\Support\Facades\Log::debug('Updating...');
 
         $games = $service->getGamesByDate(now()->setTimezone('America/New_York'))
                     ->filter(function ($game) { 

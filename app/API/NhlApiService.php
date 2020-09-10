@@ -7,6 +7,7 @@ use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Collection as EloquentCollection;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Http;
+use Illuminate\Support\Facades\Redis;
 
 class NhlApiService extends SportsDataApiService
 {
@@ -162,11 +163,26 @@ class NhlApiService extends SportsDataApiService
     {
         try {
             $response = $this->http->get("{$this->apiBaseUrl}/scores/json/AreAnyGamesInProgress");
-            return $response->body();
+            if ($response->body() == "true") {
+                Redis::set('nhl_last_live_at', now()->toISOString());
+                return true;
+            }
+            return false;
         } catch (\Throwable $exception) {
             report($exception);
             return false;
         }
+    }
+
+    public function wasRecentlyLive()
+    {
+        $lastLiveAt = Redis::get("nhl_last_live_at");
+
+        if (!$lastLiveAt) {
+            return false;
+        }
+
+        return now()->diffInMinutes(Carbon::parse($lastLiveAt)) < 5;
     }
 
     /**
@@ -185,6 +201,8 @@ class NhlApiService extends SportsDataApiService
             return $this->mapGame($game);
         });
 
+        DB::beginTransaction();
+        
         try {
             DB::table('games')->insert($mappedGames->toArray());
             DB::commit();
