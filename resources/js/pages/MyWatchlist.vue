@@ -92,7 +92,8 @@ export default {
       .finally(() => (this.loading = false));
   },
   methods: {
-    removeGame(index) {
+    removeGame(gameId) {
+      const index = this.watchlist.map(game => game.game_id).indexOf(gameId);
       this.watchlist.splice(index, 1);
     },
   },

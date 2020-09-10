@@ -112,7 +112,7 @@ const store = new Vuex.Store({
         try {
           const index = ctx.state.watchlist.indexOf(gameId);
           ctx.commit("removeFromWatchlist", index);
-          resolve(index);
+          resolve(gameId);
         } catch (err) {
           reject(err);
         }
