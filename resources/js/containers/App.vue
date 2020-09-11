@@ -90,7 +90,7 @@
       <div class="bg-swl-black-dark">
         <div class="flex flex-wrap items-stretch text-white">
           <div
-            class="relative w-1/2 md:w-1/4 flex items-center justify-center bg-mantis-500 text-center cursor-pointer"
+            class="relative w-1/2 md:w-1/4 flex items-center justify-center bg-mantis-500 text-center cursor-pointer py-3 sm:py-0"
             @click="openSportDropdown"
           >
             <div
@@ -245,7 +245,7 @@
                       <button
                         v-for="(day, index) in week"
                         :key="`row-${day.date}`"
-                        class="flex flex-col mx-1 leading-tight font-semibold"
+                        class="flex flex-col items-center mx-1 leading-tight font-semibold"
                         :class="index === 3 ? 'text-white' : ''"
                         type="button"
                         @click="setDate(index)"
