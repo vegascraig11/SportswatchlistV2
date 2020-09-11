@@ -4,6 +4,7 @@ namespace App\Console\Commands;
 
 use App\API\MLB;
 use App\API\NBA;
+use App\API\NCAAB;
 use App\API\NCAAF;
 use App\API\NFL;
 use App\API\NHL;
@@ -45,20 +46,28 @@ class PopulateData extends Command
     {
         DB::table('stadiums')->truncate();
         DB::table('teams')->truncate();
-        DB::table('games')->truncate();
+        // DB::table('games')->truncate();
 
         $nfl = new NFL();
         $nba = new NBA();
         $mlb = new MLB();
         $nhl = new NHL();
         $ncaaf = new NCAAF();
+        $ncaab = new NCAAB();
         
         try {
-            $nfl->populateAll();
-            $nba->populateAll();
-            $mlb->populateAll();
-            $nhl->populateAll();
-            $ncaaf->populateAll();
+            $nfl->populateTeams();
+            $nba->populateTeams();
+            $mlb->populateTeams();
+            $nhl->populateTeams();
+            $ncaaf->populateTeams();
+            $ncaab->populateTeams();
+            $nfl->populateStadiums();
+            $nba->populateStadiums();
+            $mlb->populateStadiums();
+            $nhl->populateStadiums();
+            $ncaaf->populateStadiums();
+            $ncaab->populateStadiums();
 
             return true;
         } catch (Exception $e) {
