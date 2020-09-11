@@ -105,6 +105,14 @@ class NflApiService extends SportsDataApiService
                 return $this->mapGame($game);
             });
 
+            if ($mappedGames->count() == 0) {
+                return collect();
+            }
+
+            DB::beginTransaction();
+            DB::table('games')->insertOrIgnore($mappedGames->toArray());
+            DB::commit();
+
             // Get the games for the specified date!
             $gameIds = $mappedGames->filter(function ($game) use ($date) {
                 return Carbon::parse($game['Date'])->format('Y-M-d') == $date->format('Y-M-d');
@@ -113,10 +121,6 @@ class NflApiService extends SportsDataApiService
             if (count($gameIds) == 0) {
                 return collect();
             }
-
-            DB::beginTransaction();
-            DB::table('games')->insertOrIgnore($mappedGames->toArray());
-            DB::commit();
 
             $games = Game::whereIn('GlobalGameID', $gameIds)->get();
 
@@ -255,23 +259,7 @@ class NflApiService extends SportsDataApiService
             return new EloquentCollection();
         }
 
-        $mappedGames = $apiGames->map(function ($game) {
-            return $this->mapGame($game);
-        });
-
-        DB::beginTransaction();
-        
-        try {
-            DB::table('games')->insert($mappedGames->toArray());
-            DB::commit();
-
-            return Game::whereIn('GlobalGameID', $mappedGames->map(
-                function ($game) { return $game['GlobalGameID']; }
-            )->toArray())->get();
-        } catch (Exception $e) {
-            DB::rollback();
-            return new EloquentCollection();
-        }
+        return $apiGames;
     }
 
     /**
