@@ -100,35 +100,14 @@ class NflApiService extends SportsDataApiService
                 ->get("{$this->apiBaseUrl}/scores/json/ScoresByWeek/{$timeframe['ApiSeason']}/{$timeframe['ApiWeek']}")
                 ->body();
             
-            // Write the games to the database
-            $mappedGames = collect(json_decode($response))->map(function ($game) {
-                return $this->mapGame($game);
+            $games = collect(json_decode($response))->filter(function ($game) use ($date) {
+                return Carbon::parse($game->Date)->format('Y-M-d') == $date->format('Y-M-d');
             });
-
-            if ($mappedGames->count() == 0) {
-                return collect();
-            }
-
-            DB::beginTransaction();
-            DB::table('games')->insertOrIgnore($mappedGames->toArray());
-            DB::commit();
-
-            // Get the games for the specified date!
-            $gameIds = $mappedGames->filter(function ($game) use ($date) {
-                return Carbon::parse($game['Date'])->format('Y-M-d') == $date->format('Y-M-d');
-            })->map(function ($game) { return $game['GlobalGameID']; })->toArray();
-
-            if (count($gameIds) == 0) {
-                return collect();
-            }
-
-            $games = Game::whereIn('GlobalGameID', $gameIds)->get();
 
             return $games;
         } catch (\Throwable $exception) {
             report($exception);
             DB::rollback();
-            dd($exception);
             return collect();
         }
     }

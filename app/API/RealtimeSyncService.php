@@ -71,8 +71,11 @@ class RealtimeSyncService
         \Illuminate\Support\Facades\Log::debug('Updating...');
 
         $games = $service->getGamesByDate(now()->setTimezone('America/New_York'))
-                    ->filter(function ($game) { 
-                        return now()->setTimezone('America/New_York')->diffInMinutes(Carbon::parse($game->Updated, 'America/New_York')) <= 2;
+                    ->filter(function ($game) {
+                        if (isset($game->Updated)) {
+                            return now()->setTimezone('America/New_York')->diffInMinutes(Carbon::parse($game->Updated, 'America/New_York')) <= 2;
+                        }
+                        return now()->setTimezone('America/New_York')->diffInMinutes(Carbon::parse($game->LastUpdated, 'America/New_York')) <= 2;
                     });
 
         if ($games->count() == 0) {
