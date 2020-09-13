@@ -238,7 +238,23 @@ class NflApiService extends SportsDataApiService
             return new EloquentCollection();
         }
 
-        return $apiGames;
+        $mappedGames = $apiGames->map(function ($game) {
+            return $this->mapGame($game);
+        });
+
+        DB::beginTransaction();
+
+        try {
+            DB::table('games')->insert($mappedGames->toArray());
+            DB::commit();
+
+            return Game::whereIn('GlobalGameID', $mappedGames->map(
+                function ($game) { return $game['GlobalGameID']; }
+            )->toArray())->get();
+        } catch (Exception $e) {
+            DB::rollback();
+            return new EloquentCollection();
+        }
     }
 
     /**
