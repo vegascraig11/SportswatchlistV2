@@ -13,6 +13,7 @@
             :watchlist="true"
             :initialGameData="game"
             class="mt-6 first:mt-0"
+            :key="`wg-${game.game_id}`"
           />
           <MLBGameListItem
             @game-removed="removeGame"
@@ -20,6 +21,7 @@
             :watchlist="true"
             :initialGameData="game"
             class="mt-6 first:mt-0"
+            :key="`wg-${game.game_id}`"
           />
           <NFLGameListItem
             @game-removed="removeGame"
@@ -27,6 +29,7 @@
             :watchlist="true"
             :initialGameData="game"
             class="mt-6 first:mt-0"
+            :key="`wg-${game.game_id}`"
           />
           <NHLGameListItem
             @game-removed="removeGame"
@@ -34,6 +37,7 @@
             :watchlist="true"
             :initialGameData="game"
             class="mt-6 first:mt-0"
+            :key="`wg-${game.game_id}`"
           />
           <NCAABGameListItem
             @game-removed="removeGame"
@@ -41,6 +45,7 @@
             :watchlist="true"
             :initialGameData="game"
             class="mt-6 first:mt-0"
+            :key="`wg-${game.game_id}`"
           />
           <NCAAFGameListItem
             @game-removed="removeGame"
@@ -48,6 +53,7 @@
             :watchlist="true"
             :initialGameData="game"
             class="mt-6 first:mt-0"
+            :key="`wg-${game.game_id}`"
           />
         </div>
       </div>
@@ -84,17 +90,23 @@ export default {
     };
   },
   created() {
-    this.loading = true;
-    this.$http
-      .get(`/api/games?ids=${JSON.stringify(this.$store.state.watchlist)}`)
-      .then(response => (this.watchlist = response.data))
-      .catch(err => console.log(err))
-      .finally(() => (this.loading = false));
+    this.getGames();
   },
   methods: {
     removeGame(gameId) {
-      const index = this.watchlist.map(game => game.game_id).indexOf(gameId);
+      const index = this.watchlist
+        .map(game => game.game_id.toString())
+        .indexOf(gameId);
+
       this.watchlist.splice(index, 1);
+    },
+    getGames() {
+      this.loading = true;
+      this.$http
+        .get(`/api/games?ids=${JSON.stringify(this.$store.state.watchlist)}`)
+        .then(response => (this.watchlist = response.data))
+        .catch(err => console.log(err))
+        .finally(() => (this.loading = false));
     },
   },
 };

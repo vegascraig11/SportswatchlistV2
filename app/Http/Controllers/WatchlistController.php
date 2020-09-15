@@ -2,6 +2,8 @@
 
 namespace App\Http\Controllers;
 
+use App\Game;
+use App\Watchlist;
 use Illuminate\Http\Request;
 
 class WatchlistController extends Controller
@@ -20,9 +22,9 @@ class WatchlistController extends Controller
         return response()->json($watchlist, 201);
     }
 
-    public function destroy(Watchlist $game)
+    public function destroy(Watchlist $watchlist)
     {
-        $game->delete();
+        $watchlist->delete();
 
         return response()->json([], 204);
     }

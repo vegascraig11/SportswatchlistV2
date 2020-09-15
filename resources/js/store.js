@@ -11,6 +11,7 @@ const store = new Vuex.Store({
     user: {},
     registerMessage: "",
     watchlist: [],
+    allWatchlist: [],
     leagues: ["nfl", "ncaaf", "nba", "ncaab", "mlb", "nhl"],
     selectedLeagues: [],
   },
@@ -24,6 +25,7 @@ const store = new Vuex.Store({
     setUser: (state, user) => (state.user = user),
     registerMessage: (state, message) => (state.registerMessage = message),
     setWatchlist: (state, watchlist) => (state.watchlist = watchlist),
+    setAllWatchlist: (state, watchlist) => (state.allWatchlist = watchlist),
     toggleLeague: (state, league) => {
       const pos = state.selectedLeagues.indexOf(league);
       if (pos === -1) {
@@ -76,7 +78,13 @@ const store = new Vuex.Store({
       if (ctx.getters.isLoggedIn) {
         axios
           .get("/api/watchlist")
-          .then(response => ctx.commit("setWatchlist", response.data))
+          .then(response => {
+            ctx.commit(
+              "setWatchlist",
+              response.data.map(game => game.game_id)
+            );
+            ctx.commit("setAllWatchlist", response.data);
+          })
           .catch(err => console.log("Error fetching watchlist for user", err));
       }
     },

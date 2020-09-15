@@ -22,7 +22,11 @@ axios
 
       const watchlist = await axios.get("/api/watchlist");
       if (watchlist.status === 200) {
-        store.commit("setWatchlist", watchlist.data);
+        store.commit(
+          "setWatchlist",
+          watchlist.data.map(game => game.game_id)
+        );
+        store.commit("setAllWatchlist", watchlist.data);
       }
     }
   })

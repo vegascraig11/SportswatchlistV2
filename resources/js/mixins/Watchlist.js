@@ -23,7 +23,7 @@ const WatchlistMixin = {
   },
   computed: {
     inWatchlist() {
-      return this.$store.state.watchlist.includes(this.game.game_id);
+      return this.$store.state.watchlist.includes(this.game.game_id.toString());
     },
     canAdd() {
       return (
@@ -73,7 +73,15 @@ const WatchlistMixin = {
         .catch(err => console.log(err));
     },
     removeFromDb() {
-      return this.$http.delete("/api/watchlist/" + this.game.id);
+      const fromWatchlist = this.$store.state.allWatchlist.find(
+        game => game.game_id.toString() === this.game.game_id.toString()
+      );
+      return new Promise((resolve, reject) => {
+        this.$http
+          .delete("/api/watchlist/" + fromWatchlist.id)
+          .then(() => resolve(this.game.game_id.toString()))
+          .catch(reject);
+      });
     },
     removeFromLocal() {
       return this.$store.dispatch("removeFromWatchlist", this.game.game_id);
