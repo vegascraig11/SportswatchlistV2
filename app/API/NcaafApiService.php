@@ -14,11 +14,17 @@ class NcaafApiService extends SportsDataApiService
     private $http;
     private $apiKey;
     private $apiBaseUrl = 'https://api.sportsdata.io/v3/cfb';
+    private $league = 'ncaaf';
 
     public function __construct()
     {
         $this->apiKey = config('services.apiKeys.ncaaf');
         $this->http = Http::withHeaders(['Ocp-Apim-Subscription-Key' => $this->apiKey]);
+    }
+
+    public function getLeague()
+    {
+        return $this->league;
     }
 
     /**

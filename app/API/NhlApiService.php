@@ -14,11 +14,18 @@ class NhlApiService extends SportsDataApiService
     private $http;
     private $apiKey;
     private $apiBaseUrl = 'https://api.sportsdata.io/v3/nhl';
+    private $league = 'nhl';
 
     public function __construct()
     {
         $this->apiKey = config('services.apiKeys.nhl');
         $this->http = Http::withHeaders(['Ocp-Apim-Subscription-Key' => $this->apiKey]);
+    }
+
+
+    public function getLeague()
+    {
+        return $this->league;
     }
 
     /**

@@ -63,19 +63,47 @@ class RealtimeSyncService
     {
         $inProgress = $service->areGamesInProgress();
         $recentlyLive = $service->wasRecentlyLive();
+        $inProgressInDb = Game::where('GameType', $service->getLeague())->where('Status', 'InProgress')->get();
 
-        if (!($inProgress || $recentlyLive)) {
+        if (!($inProgress || $recentlyLive || $inProgressInDb->count() > 0)) {
             return null;
+        }
+
+        if (!$inProgress && !$recentlyLive && $inProgressInDb->count() > 0) {
+            \Illuminate\Support\Facades\Log::debug('Updating InProgress games from the database...');
+            $grouped = $inProgressInDb->groupBy('GameType');
+            $grouped->each(function ($league) use ($service) {
+                $dates = $league->map(function ($game) {
+                    return $game->Date;
+                })->unique();
+
+                $dates->each(function ($date) use ($service) {
+                    return $this->updateStats($service, $date);
+                });
+            });
+
+            return;
         }
 
         \Illuminate\Support\Facades\Log::debug('Updating...');
 
-        $games = $service->getGamesByDate(now()->setTimezone('America/New_York'))
-                    ->filter(function ($game) {
+        return $this->updateStats($service);
+    }
+
+    public function updateStats($service, $date = null)
+    {
+        if (is_null($date)) {
+            $date = now()->setTimezone('America/New_York');
+        } else {
+            $date = Carbon::parse($date, 'America/New_York');
+        }
+
+        $games = $service->getGamesByDate($date)
+                    ->filter(function ($game) use ($date) {
                         if (isset($game->Updated)) {
-                            return now()->setTimezone('America/New_York')->diffInMinutes(Carbon::parse($game->Updated, 'America/New_York')) <= 2;
+                            return $date->diffInMinutes(Carbon::parse($game->Updated, 'America/New_York')) <= 2;
                         }
-                        return now()->setTimezone('America/New_York')->diffInMinutes(Carbon::parse($game->LastUpdated, 'America/New_York')) <= 2;
+                        return $date->diffInMinutes(Carbon::parse($game->LastUpdated, 'America/New_York')) <= 2;
                     });
 
         if ($games->count() == 0) {

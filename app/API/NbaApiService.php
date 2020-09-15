@@ -14,11 +14,17 @@ class NbaApiService extends SportsDataApiService
     private $http;
     private $apiKey;
     private $apiBaseUrl = 'https://api.sportsdata.io/v3/nba';
+    private $league = 'nba';
 
     public function __construct()
     {
         $this->apiKey = config('services.apiKeys.nba');
         $this->http = Http::withHeaders(['Ocp-Apim-Subscription-Key' => $this->apiKey]);
+    }
+
+    public function getLeague()
+    {
+        return $this->league;
     }
 
     /**
