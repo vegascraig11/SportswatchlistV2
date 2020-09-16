@@ -64,8 +64,15 @@ class RealtimeSyncService
         $inProgress = $service->areGamesInProgress();
         $recentlyLive = $service->wasRecentlyLive();
         $inProgressInDb = Game::where('GameType', $service->getLeague())->where('Status', 'InProgress')->get();
+        $scheduledInDb = Game::where('GameType', $service->getLeague())
+            ->where('Status', 'Scheduled')
+            ->whereDate('Date', '<', now()->toDateString())
+            ->get();
 
-        if (!($inProgress || $recentlyLive || $inProgressInDb->count() > 0)) {
+        \Illuminate\Support\Facades\Log::debug('Games with Scheduled status = ' . $scheduledInDb->count());
+
+
+        if (!($inProgress || $recentlyLive || $inProgressInDb->count() > 0 || $scheduledInDb->count() > 0)) {
             return null;
         }
 
@@ -78,7 +85,25 @@ class RealtimeSyncService
                 })->unique();
 
                 $dates->each(function ($date) use ($service) {
-                    return $this->updateStats($service, $date);
+                    \Illuminate\Support\Facades\Log::debug("Updating {$service->getLeague()} games on date " . Carbon::parse($date)->toISOString());
+                    return $this->updateStats($service, $date, true);
+                });
+            });
+
+            return;
+        }
+
+        if (!$inProgress && !$recentlyLive && $inProgressInDb->count() == 0 && $scheduledInDb->count() > 0) {
+            \Illuminate\Support\Facades\Log::debug('Updating Scheduled games from the database...');
+            $grouped = $scheduledInDb->groupBy('GameType');
+            $grouped->each(function ($league) use ($service) {
+                $dates = $league->map(function ($game) {
+                    return $game->Date;
+                })->unique();
+
+                $dates->each(function ($date) use ($service) {
+                    \Illuminate\Support\Facades\Log::debug("Updating {$service->getLeague()} games on date " . Carbon::parse($date)->toISOString());
+                    return $this->updateStats($service, $date, true);
                 });
             });
 
@@ -90,7 +115,7 @@ class RealtimeSyncService
         return $this->updateStats($service);
     }
 
-    public function updateStats($service, $date = null)
+    public function updateStats($service, $date = null, $force = false)
     {
         if (is_null($date)) {
             $date = now()->setTimezone('America/New_York');
@@ -98,13 +123,16 @@ class RealtimeSyncService
             $date = Carbon::parse($date, 'America/New_York');
         }
 
-        $games = $service->getGamesByDate($date)
-                    ->filter(function ($game) use ($date) {
-                        if (isset($game->Updated)) {
-                            return $date->diffInMinutes(Carbon::parse($game->Updated, 'America/New_York')) <= 2;
-                        }
-                        return $date->diffInMinutes(Carbon::parse($game->LastUpdated, 'America/New_York')) <= 2;
-                    });
+        $games = $service->getGamesByDate($date);
+
+        if (!$force) {
+            $games = $games->filter(function ($game) use ($date) {
+                if (isset($game->Updated)) {
+                    return $date->diffInMinutes(Carbon::parse($game->Updated, 'America/New_York')) <= 2;
+                }
+                return $date->diffInMinutes(Carbon::parse($game->LastUpdated, 'America/New_York')) <= 2;
+            });
+        }
 
         if ($games->count() == 0) {
             return null;
