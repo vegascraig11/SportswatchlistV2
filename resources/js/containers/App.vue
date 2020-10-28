@@ -1,6 +1,6 @@
 <template>
   <div
-    class="min-h-screen h-screen flex flex-col text-gray-900 bg-gray-100 font-inter text-xs antialiased"
+    class="min-h-screen flex flex-col text-gray-900 bg-gray-100 font-inter text-xs antialiased"
   >
     <div class="bg-mantis-500 text-white">
       <div class="container mx-auto py-1 md:py-2 px-4 text-center">

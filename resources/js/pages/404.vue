@@ -1,6 +1,6 @@
 <template>
     <div class="h-full">
-        <div class="mt-12 leading-tight">
+        <div class="py-12 leading-tight">
             <h2 class="text-gray-800 text-5xl font-bold">404</h2>
             <p class="text-xl text-gray-600">
                 {{ message }}... Nothing to see here!
