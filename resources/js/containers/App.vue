@@ -1,6 +1,6 @@
 <template>
   <div
-    class="min-h-screen flex flex-col text-gray-900 bg-gray-100 font-inter text-xs antialiased"
+    class="min-h-screen h-screen flex flex-col text-gray-900 bg-gray-100 font-inter text-xs antialiased"
   >
     <div class="bg-mantis-500 text-white">
       <div class="container mx-auto py-1 md:py-2 px-4 text-center">
@@ -300,12 +300,12 @@
         </div>
       </div>
     </header>
-    <section class="flex-1">
-      <main class="w-full max-w-6xl mx-auto sm:px-4">
+    <section class="flex-1 py-6">
+      <main class="w-full h-full max-w-6xl mx-auto sm:px-4">
         <router-view></router-view>
       </main>
     </section>
-    <footer class="mt-6">
+    <footer>
       <div class="py-4 sm:py-8 bg-swl-black-light text-white">
         <nav
           class="container mx-auto px-4 flex justify-end text-base sm:text-xl font-semibold tracking-wide"

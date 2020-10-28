@@ -25,7 +25,14 @@ class BannerController extends Controller
 
     public function store()
     {
-        // validation
+        if (!auth()->user()->isAdmin()) {
+            abort(401);
+        }
+
+        request()->validate([
+            'banner' => 'required',
+            'url' => 'required',
+        ]);
 
         $banner = request()->file('banner');
 
@@ -43,6 +50,10 @@ class BannerController extends Controller
 
     public function destroy(Banner $banner)
     {
+        if (!auth()->user()->isAdmin()) {
+            abort(401);
+        }
+
         $banner->delete();
 
         return response()->json([], 204);

@@ -37,8 +37,25 @@ class User extends Authenticatable
         'email_verified_at' => 'datetime',
     ];
 
+    protected $appends = ['is_admin'];
+
     public function watchlist()
     {
         return $this->hasMany(Watchlist::class);
+    }
+
+    public function roles()
+    {
+        return $this->belongsToMany(Role::class);
+    }
+
+    public function isAdmin()
+    {
+        return $this->roles()->where('name', 'admin')->exists();
+    }
+
+    public function getIsAdminAttribute()
+    {
+        return $this->isAdmin();
     }
 }

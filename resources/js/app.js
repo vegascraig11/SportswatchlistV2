@@ -48,6 +48,10 @@ axios
         next({ path: `/my-watchlist` });
       }
 
+      if (to.meta.requiresAdmin && !store.getters.isAdmin) {
+        next({ path: `/login?r=${to.path}` });
+      }
+
       next();
     });
 

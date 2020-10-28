@@ -55,6 +55,7 @@ const store = new Vuex.Store({
   },
   getters: {
     isLoggedIn: state => state.auth === true,
+    isAdmin: state => state.auth === true && state.user.is_admin,
   },
   actions: {
     login: (ctx, user) => {

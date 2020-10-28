@@ -42,17 +42,22 @@ const router = new VueRouter({
     {
       path: "/admin",
       component: Admin,
-      name: "admin",
       children: [
         {
           path: "/",
           component: Dashboard,
           name: "dashborad",
+          meta: {
+            requiresAdmin: true,
+          },
         },
         {
           path: "banners",
           component: Banners,
           name: "banners",
+          meta: {
+            requiresAdmin: true,
+          },
         },
       ],
     },
