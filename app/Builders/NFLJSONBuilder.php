@@ -3,6 +3,7 @@
 namespace App\Builders;
 
 use App\Game;
+use Illuminate\Support\Str;
 
 class NFLJSONBuilder implements JSONBuilder
 {
@@ -38,7 +39,42 @@ class NFLJSONBuilder implements JSONBuilder
             'over_under' => $all->OverUnder,
             'stadium' => $all->StadiumDetails,
             'status' => $all->Status,
-            'point_spread' => $all->PointSpread
+            'point_spread' => $all->PointSpread,
+            'quarters' => [
+                [
+                    'Name' => '1',
+                    'QuarterID' => Str::random(4),
+                    'AwayScore' => $all->AwayScoreQuarter1,
+                    'HomeScore' => $all->HomeScoreQuarter1,
+                ],
+                [
+                    'Name' => '2',
+                    'QuarterID' => Str::random(4),
+                    'AwayScore' => $all->AwayScoreQuarter2,
+                    'HomeScore' => $all->HomeScoreQuarter2,
+                ],
+                [
+                    'Name' => '3',
+                    'QuarterID' => Str::random(4),
+                    'AwayScore' => $all->AwayScoreQuarter3,
+                    'HomeScore' => $all->HomeScoreQuarter3,
+                ],
+                [
+                    'Name' => '4',
+                    'QuarterID' => Str::random(4),
+                    'AwayScore' => $all->AwayScoreQuarter4,
+                    'HomeScore' => $all->HomeScoreQuarter4,
+                ],
+                [
+                    'Name' => 'OT',
+                    'QuarterID' => Str::random(4),
+                    'AwayScore' => $all->AwayScoreOvertime,
+                    'HomeScore' => $all->HomeScoreOvertime,
+                ],
+            ],
+            'has_started' => $all->HasStarted,
+            'possession' => $all->Possession,
+            'down_and_distance' => $all->DownAndDistance,
         ];
 	}
 }
