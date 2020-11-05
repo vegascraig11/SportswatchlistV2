@@ -240,8 +240,79 @@
           <span class="text-xs">Add to Watchlist</span>
         </button>
       </div>
-      <div v-if="watchlist" class="px-4 py-2 flex space-x-4 border-t">
+      <transition name="slide-down">
+        <div v-if="inGameInfoPanelOpen" class="border-t">
+          <div class="grid grid-cols-7 p-6 gap-6">
+            <div class="col-span-2">
+              <div class="flex justify-between items-center">
+                <img
+                  class="h-16 w-16"
+                  v-if="game.away_team.logo"
+                  :src="game.away_team.logo"
+                  :alt="game.away_team.full_name"
+                />
+                <div>
+                  <p class="text-4xl">{{ game.away_team.score || "0" }}</p>
+                </div>
+              </div>
+            </div>
+            <div class="col-span-3 flex justify-center items-center">
+              <table class="w-full text-center border">
+                <thead class="bg-swl-black-dark text-white">
+                  <tr>
+                    <th
+                      v-for="quarter in game.quarters"
+                      :key="`q-${quarter.QuarterID}`"
+                      class="px-2"
+                      :class="
+                        game.currentQuarter == quarter.Name
+                          ? 'bg-mantis-500'
+                          : ''
+                      "
+                    >
+                      {{ quarter.Name }}
+                    </th>
+                  </tr>
+                </thead>
+                <tbody class="text-center">
+                  <tr>
+                    <td
+                      v-for="quarter in game.quarters"
+                      :key="`home-${quarter.QuarterID}`"
+                    >
+                      {{ quarter.AwayScore || "-" }}
+                    </td>
+                  </tr>
+                  <tr>
+                    <td
+                      v-for="quarter in game.quarters"
+                      :key="`away-${quarter.QuarterID}`"
+                    >
+                      {{ quarter.HomeScore || "-" }}
+                    </td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+            <div class="col-span-2">
+              <div class="flex justify-between items-center">
+                <div>
+                  <p class="text-4xl">{{ game.home_team.score || "0" }}</p>
+                </div>
+                <img
+                  class="h-16 w-16"
+                  v-if="game.home_team.logo"
+                  :src="game.home_team.logo"
+                  :alt="game.home_team.full_name"
+                />
+              </div>
+            </div>
+          </div>
+        </div>
+      </transition>
+      <div class="flex border-t">
         <button
+          v-if="watchlist"
           @click="removeFromWatchlist"
           type="button"
           class="w-full flex justify-center space-x-2 bg-red-600 rounded text-white py-2 hover:bg-red-700"
@@ -254,6 +325,29 @@
               clip-rule="evenodd"
             ></path>
           </svg>
+        </button>
+        <button
+          @click="toggleInGameInfoPanel"
+          type="button"
+          class="w-full flex justify-center space-x-2 bg-gray-800 text-white py-2 hover:bg-gray-900 transition duration-300 ease-in-out"
+        >
+          <svg
+            class="h-4 w-4 transform transition duration-300 ease-in-out"
+            :class="{
+              'rotate-0': !inGameInfoPanelOpen,
+              'rotate-180': inGameInfoPanelOpen,
+            }"
+            xmlns="http://www.w3.org/2000/svg"
+            viewBox="0 0 20 20"
+            fill="currentColor"
+          >
+            <path
+              fill-rule="evenodd"
+              d="M16.707 10.293a1 1 0 010 1.414l-6 6a1 1 0 01-1.414 0l-6-6a1 1 0 111.414-1.414L9 14.586V3a1 1 0 012 0v11.586l4.293-4.293a1 1 0 011.414 0z"
+              clip-rule="evenodd"
+            />
+          </svg>
+          <span>Live InGame Info</span>
         </button>
         <!-- <button
           @click="toggleGameNotificationsSetting"
@@ -302,6 +396,7 @@ export default {
       added: false,
       settingsOpen: false,
       notificationSettings: {},
+      inGameInfoPanelOpen: false,
     };
   },
   created() {
@@ -421,6 +516,9 @@ export default {
   methods: {
     toggleGameNotificationsSetting() {
       this.settingsOpen = !this.settingsOpen;
+    },
+    toggleInGameInfoPanel() {
+      this.inGameInfoPanelOpen = !this.inGameInfoPanelOpen;
     },
   },
 };
