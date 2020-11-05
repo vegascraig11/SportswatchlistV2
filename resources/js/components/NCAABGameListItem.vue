@@ -217,14 +217,82 @@
         </svg>
         <p class="pl-2">{{ venue }}</p>
       </div>
-      <div
-        v-if="canAdd"
-        class="sm:hidden py-1 px-2 text-white font-semibold border-t"
-      >
+      <transition name="slide-down">
+        <div v-if="inGameInfoPanelOpen" class="border-t">
+          <div class="grid grid-cols-7 p-6 gap-6">
+            <div class="col-span-2">
+              <div class="flex justify-between items-center">
+                <img
+                  class="h-16 w-16"
+                  v-if="game.away_team.logo"
+                  :src="game.away_team.logo"
+                  :alt="game.away_team.full_name"
+                />
+                <div>
+                  <p class="text-4xl">{{ game.away_team.score || "0" }}</p>
+                </div>
+              </div>
+            </div>
+            <div class="col-span-3 flex justify-center items-center">
+              <table class="w-full text-center border">
+                <thead class="bg-swl-black-dark text-white">
+                  <tr>
+                    <th
+                      v-for="quarter in game.quarters"
+                      :key="`q-${quarter.QuarterID}`"
+                      class="px-2"
+                      :class="
+                        game.currentQuarter == quarter.Name
+                          ? 'bg-mantis-500'
+                          : ''
+                      "
+                    >
+                      {{ quarter.Name }}
+                    </th>
+                  </tr>
+                </thead>
+                <tbody class="text-center">
+                  <tr>
+                    <td
+                      v-for="quarter in game.quarters"
+                      :key="`home-${quarter.QuarterID}`"
+                    >
+                      {{ quarter.AwayScore || "-" }}
+                    </td>
+                  </tr>
+                  <tr>
+                    <td
+                      v-for="quarter in game.quarters"
+                      :key="`away-${quarter.QuarterID}`"
+                    >
+                      {{ quarter.HomeScore || "-" }}
+                    </td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+            <div class="col-span-2">
+              <div class="flex justify-between items-center">
+                <div>
+                  <p class="text-4xl">{{ game.home_team.score || "0" }}</p>
+                </div>
+                <img
+                  class="h-16 w-16"
+                  v-if="game.home_team.logo"
+                  :src="game.home_team.logo"
+                  :alt="game.home_team.full_name"
+                />
+              </div>
+            </div>
+          </div>
+        </div>
+      </transition>
+      <div class="flex border-t">
         <button
+          v-if="canAdd"
           @click="addToWatchlist"
           type="button"
-          class="flex w-full items-center justify-center bg-mantis-500 hover:bg-mantis-600 py-2 rounded"
+          class="sm:hiddenflex w-full items-center justify-center bg-mantis-500 hover:bg-mantis-600 py-2 rounded"
         >
           <svg
             class="mr-1 inline-block h-3 w-3"
@@ -239,9 +307,8 @@
           </svg>
           <span class="text-xs">Add to Watchlist</span>
         </button>
-      </div>
-      <div v-if="watchlist" class="px-4 py-2 flex space-x-4 border-t">
         <button
+          v-if="watchlist"
           @click="removeFromWatchlist"
           type="button"
           class="w-full flex justify-center space-x-2 bg-red-600 rounded text-white py-2 hover:bg-red-700"
@@ -302,6 +369,7 @@ export default {
       added: false,
       settingsOpen: false,
       notificationSettings: {},
+      inGameInfoPanelOpen: false,
     };
   },
   created() {
@@ -421,6 +489,9 @@ export default {
   methods: {
     toggleGameNotificationsSetting() {
       this.settingsOpen = !this.settingsOpen;
+    },
+    toggleInGameInfoPanel() {
+      this.inGameInfoPanelOpen = !this.inGameInfoPanelOpen;
     },
   },
 };

@@ -217,29 +217,6 @@
         </svg>
         <p class="pl-2">{{ venue }}</p>
       </div>
-      <div
-        v-if="canAdd"
-        class="sm:hidden py-1 px-2 text-white font-semibold border-t"
-      >
-        <button
-          @click="addToWatchlist"
-          type="button"
-          class="flex w-full items-center justify-center bg-mantis-500 hover:bg-mantis-600 py-2 rounded"
-        >
-          <svg
-            class="mr-1 inline-block h-3 w-3"
-            fill="currentColor"
-            viewBox="0 0 20 20"
-          >
-            <path
-              d="M10 3a1 1 0 011 1v5h5a1 1 0 110 2h-5v5a1 1 0 11-2 0v-5H4a1 1 0 110-2h5V4a1 1 0 011-1z"
-              clip-rule="evenodd"
-              fill-rule="evenodd"
-            ></path>
-          </svg>
-          <span class="text-xs">Add to Watchlist</span>
-        </button>
-      </div>
       <transition name="slide-down">
         <div v-if="inGameInfoPanelOpen" class="border-t">
           <div class="grid grid-cols-7 p-6 gap-6">
@@ -311,6 +288,25 @@
         </div>
       </transition>
       <div class="flex border-t">
+        <button
+          v-if="canAdd"
+          @click="addToWatchlist"
+          type="button"
+          class="sm:hidden flex w-full items-center justify-center bg-mantis-500 hover:bg-mantis-600 py-2 rounded"
+        >
+          <svg
+            class="mr-1 inline-block h-3 w-3"
+            fill="currentColor"
+            viewBox="0 0 20 20"
+          >
+            <path
+              d="M10 3a1 1 0 011 1v5h5a1 1 0 110 2h-5v5a1 1 0 11-2 0v-5H4a1 1 0 110-2h5V4a1 1 0 011-1z"
+              clip-rule="evenodd"
+              fill-rule="evenodd"
+            ></path>
+          </svg>
+          <span class="text-xs">Add to Watchlist</span>
+        </button>
         <button
           v-if="watchlist"
           @click="removeFromWatchlist"
