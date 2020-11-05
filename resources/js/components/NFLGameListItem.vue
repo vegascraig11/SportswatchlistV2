@@ -413,7 +413,7 @@ export default {
       added: false,
       settingsOpen: false,
       notificationSettings: {},
-      inGameInfoPanelOpen: true,
+      inGameInfoPanelOpen: false,
     };
   },
   created() {
