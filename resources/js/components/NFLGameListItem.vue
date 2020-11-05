@@ -240,73 +240,8 @@
         </svg>
         <p class="pl-2">{{ venue }}</p>
       </div>
-      <div
-        class="flex items-center justify-between text-white font-semibold border-t"
-      >
-        <button
-          v-if="canAdd"
-          @click="addToWatchlist"
-          type="button"
-          class="sm:hidden flex w-full items-center justify-center bg-mantis-500 hover:bg-mantis-600 py-2 rounded-bl"
-        >
-          <svg
-            class="mr-1 inline-block h-3 w-3"
-            fill="currentColor"
-            viewBox="0 0 20 20"
-          >
-            <path
-              d="M10 3a1 1 0 011 1v5h5a1 1 0 110 2h-5v5a1 1 0 11-2 0v-5H4a1 1 0 110-2h5V4a1 1 0 011-1z"
-              clip-rule="evenodd"
-              fill-rule="evenodd"
-            ></path>
-          </svg>
-          <span class="text-xs">Add to Watchlist</span>
-        </button>
-        <button
-          v-if="watchlist"
-          @click="removeFromWatchlist"
-          type="button"
-          class="w-full flex justify-center space-x-2 bg-red-600 rounded-br text-white py-2 hover:bg-red-700"
-        >
-          <span>Remove from Watchlist</span>
-          <svg class="h-4 w-4" fill="currentColor" viewBox="0 0 20 20">
-            <path
-              fill-rule="evenodd"
-              d="M10 18a8 8 0 100-16 8 8 0 000 16zM8.707 7.293a1 1 0 00-1.414 1.414L8.586 10l-1.293 1.293a1 1 0 101.414 1.414L10 11.414l1.293 1.293a1 1 0 001.414-1.414L11.414 10l1.293-1.293a1 1 0 00-1.414-1.414L10 8.586 8.707 7.293z"
-              clip-rule="evenodd"
-            ></path>
-          </svg>
-        </button>
-        <button
-          @click="toggleInGameInfoPanel"
-          type="button"
-          class="w-full flex justify-center space-x-2 bg-gray-800 text-white py-2 hover:bg-gray-900 transition duration-300 ease-in-out"
-        >
-          <svg
-            class="h-4 w-4 transform transition duration-300 ease-in-out"
-            :class="{
-              'rotate-0': !inGameInfoPanelOpen,
-              'rotate-180': inGameInfoPanelOpen,
-            }"
-            xmlns="http://www.w3.org/2000/svg"
-            viewBox="0 0 20 20"
-            fill="currentColor"
-          >
-            <path
-              fill-rule="evenodd"
-              d="M16.707 10.293a1 1 0 010 1.414l-6 6a1 1 0 01-1.414 0l-6-6a1 1 0 111.414-1.414L9 14.586V3a1 1 0 012 0v11.586l4.293-4.293a1 1 0 011.414 0z"
-              clip-rule="evenodd"
-            />
-          </svg>
-          <span>Live InGame Info</span>
-        </button>
-      </div>
-      <GameNotificationSettings
-        v-if="watchlist && settingsOpen"
-        v-model="notificationSettings"
-      />
       <transition name="slide-down">
-        <div v-if="inGameInfoPanelOpen">
+        <div v-if="inGameInfoPanelOpen" class="border-t">
           <div class="grid grid-cols-7 p-6">
             <div class="col-span-2">
               <div class="flex justify-between items-center">
@@ -387,6 +322,71 @@
           </div>
         </div>
       </transition>
+      <div
+        class="flex items-center justify-between text-white font-semibold border-t"
+      >
+        <button
+          v-if="canAdd"
+          @click="addToWatchlist"
+          type="button"
+          class="sm:hidden flex w-full items-center justify-center bg-mantis-500 hover:bg-mantis-600 py-2 rounded-bl"
+        >
+          <svg
+            class="mr-1 inline-block h-3 w-3"
+            fill="currentColor"
+            viewBox="0 0 20 20"
+          >
+            <path
+              d="M10 3a1 1 0 011 1v5h5a1 1 0 110 2h-5v5a1 1 0 11-2 0v-5H4a1 1 0 110-2h5V4a1 1 0 011-1z"
+              clip-rule="evenodd"
+              fill-rule="evenodd"
+            ></path>
+          </svg>
+          <span class="text-xs">Add to Watchlist</span>
+        </button>
+        <button
+          v-if="watchlist"
+          @click="removeFromWatchlist"
+          type="button"
+          class="w-full flex justify-center space-x-2 bg-red-600 rounded-br text-white py-2 hover:bg-red-700"
+        >
+          <span>Remove from Watchlist</span>
+          <svg class="h-4 w-4" fill="currentColor" viewBox="0 0 20 20">
+            <path
+              fill-rule="evenodd"
+              d="M10 18a8 8 0 100-16 8 8 0 000 16zM8.707 7.293a1 1 0 00-1.414 1.414L8.586 10l-1.293 1.293a1 1 0 101.414 1.414L10 11.414l1.293 1.293a1 1 0 001.414-1.414L11.414 10l1.293-1.293a1 1 0 00-1.414-1.414L10 8.586 8.707 7.293z"
+              clip-rule="evenodd"
+            ></path>
+          </svg>
+        </button>
+        <button
+          @click="toggleInGameInfoPanel"
+          type="button"
+          class="w-full flex justify-center space-x-2 bg-gray-800 text-white py-2 hover:bg-gray-900 transition duration-300 ease-in-out"
+        >
+          <svg
+            class="h-4 w-4 transform transition duration-300 ease-in-out"
+            :class="{
+              'rotate-0': !inGameInfoPanelOpen,
+              'rotate-180': inGameInfoPanelOpen,
+            }"
+            xmlns="http://www.w3.org/2000/svg"
+            viewBox="0 0 20 20"
+            fill="currentColor"
+          >
+            <path
+              fill-rule="evenodd"
+              d="M16.707 10.293a1 1 0 010 1.414l-6 6a1 1 0 01-1.414 0l-6-6a1 1 0 111.414-1.414L9 14.586V3a1 1 0 012 0v11.586l4.293-4.293a1 1 0 011.414 0z"
+              clip-rule="evenodd"
+            />
+          </svg>
+          <span>Live InGame Info</span>
+        </button>
+      </div>
+      <GameNotificationSettings
+        v-if="watchlist && settingsOpen"
+        v-model="notificationSettings"
+      />
     </div>
   </div>
 </template>

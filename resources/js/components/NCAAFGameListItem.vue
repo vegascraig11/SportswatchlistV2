@@ -236,14 +236,96 @@
         </svg>
         <p class="pl-2">{{ venue }}</p>
       </div>
+      <transition name="slide-down">
+        <div v-if="inGameInfoPanelOpen" class="border-t">
+          <div class="grid grid-cols-7 p-6">
+            <div class="col-span-2">
+              <div class="flex justify-between items-center">
+                <img
+                  class="h-16 w-16"
+                  v-if="game.away_team.logo"
+                  :src="game.away_team.logo"
+                  :alt="game.away_team.full_name"
+                />
+                <div>
+                  <p class="text-4xl">{{ game.away_team.score || "0" }}</p>
+                </div>
+              </div>
+            </div>
+            <div class="col-span-3 flex justify-center items-center">
+              <div v-if="quarters" class="border rounded overflow-hidden">
+                <table class="w-full text-center">
+                  <thead class="bg-swl-black-dark text-white">
+                    <tr>
+                      <th
+                        class="px-2"
+                        v-for="quarter in game.quarters"
+                        :key="`q-${quarter.QuarterID}`"
+                      >
+                        {{ quarter.Name }}
+                      </th>
+                    </tr>
+                  </thead>
+                  <tbody class="text-center">
+                    <tr>
+                      <td
+                        v-for="quarter in game.quarters"
+                        :key="`home-${quarter.QuarterID}`"
+                      >
+                        {{ quarter.HomeScore || emptyScore }}
+                      </td>
+                    </tr>
+                    <tr>
+                      <td
+                        v-for="quarter in game.quarters"
+                        :key="`away-${quarter.QuarterID}`"
+                      >
+                        {{ quarter.AwayScore || emptyScore }}
+                      </td>
+                    </tr>
+                  </tbody>
+                </table>
+              </div>
+            </div>
+            <div class="col-span-2">
+              <div class="flex justify-between items-center">
+                <div>
+                  <p class="text-4xl">{{ game.home_team.score || "0" }}</p>
+                </div>
+                <img
+                  class="h-16 w-16"
+                  v-if="game.home_team.logo"
+                  :src="game.home_team.logo"
+                  :alt="game.home_team.full_name"
+                />
+              </div>
+            </div>
+          </div>
+          <div
+            class="bg-gray-200 grid grid-cols-3 text-center py-2 font-semibold"
+          >
+            <p>
+              <span class="text-gray-600">POSS:</span>
+              <!-- <span>{{ game.possession }}</span> -->
+              <span>So Cal</span>
+            </p>
+            <p>
+              <span class="text-gray-600">DOWN:</span>
+              <span>1<sup>st</sup> AND 10yrds</span>
+              <!-- <span>{{ game.down_and_distance }}</span> -->
+            </p>
+            <p><span class="text-gray-600">BALL ON:</span> So Cal 45</p>
+          </div>
+        </div>
+      </transition>
       <div
-        v-if="canAdd"
-        class="sm:hidden py-1 px-2 text-white font-semibold border-t"
+        class="flex items-center justify-between text-white font-semibold border-t"
       >
         <button
+          v-if="canAdd"
           @click="addToWatchlist"
           type="button"
-          class="flex w-full items-center justify-center bg-mantis-500 hover:bg-mantis-600 py-2 rounded"
+          class="sm:hidden flex w-full items-center justify-center bg-mantis-500 hover:bg-mantis-600 py-2"
         >
           <svg
             class="mr-1 inline-block h-3 w-3"
@@ -258,9 +340,31 @@
           </svg>
           <span class="text-xs">Add to Watchlist</span>
         </button>
-      </div>
-      <div v-if="watchlist" class="px-4 py-2 flex space-x-4 border-t">
         <button
+          @click="toggleInGameInfoPanel"
+          type="button"
+          class="w-full flex justify-center space-x-2 bg-gray-800 text-white py-2 hover:bg-gray-900 transition duration-300 ease-in-out"
+        >
+          <svg
+            class="h-4 w-4 transform transition duration-300 ease-in-out"
+            :class="{
+              'rotate-0': !inGameInfoPanelOpen,
+              'rotate-180': inGameInfoPanelOpen,
+            }"
+            xmlns="http://www.w3.org/2000/svg"
+            viewBox="0 0 20 20"
+            fill="currentColor"
+          >
+            <path
+              fill-rule="evenodd"
+              d="M16.707 10.293a1 1 0 010 1.414l-6 6a1 1 0 01-1.414 0l-6-6a1 1 0 111.414-1.414L9 14.586V3a1 1 0 012 0v11.586l4.293-4.293a1 1 0 011.414 0z"
+              clip-rule="evenodd"
+            />
+          </svg>
+          <span>Live InGame Info</span>
+        </button>
+        <button
+          v-if="watchlist"
           @click="removeFromWatchlist"
           type="button"
           class="w-full flex justify-center space-x-2 bg-red-600 rounded text-white py-2 hover:bg-red-700"
@@ -319,6 +423,7 @@ export default {
       added: false,
       settingsOpen: false,
       notificationSettings: {},
+      inGameInfoPanelOpen: false,
     };
   },
   created() {
@@ -437,6 +542,21 @@ export default {
     toggleGameNotificationsSetting() {
       this.settingsOpen = !this.settingsOpen;
     },
+    toggleInGameInfoPanel() {
+      this.inGameInfoPanelOpen = !this.inGameInfoPanelOpen;
+    },
   },
 };
 </script>
+
+<style>
+.slide-down-enter-active,
+.slide-down-leave-active {
+  transition: all 500ms ease-in-out;
+  max-height: 500px;
+}
+.slide-down-enter,
+.slide-down-leave-to {
+  max-height: 0px;
+}
+</style>
