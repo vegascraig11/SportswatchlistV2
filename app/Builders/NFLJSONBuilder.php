@@ -40,6 +40,9 @@ class NFLJSONBuilder implements JSONBuilder
             'stadium' => $all->StadiumDetails,
             'status' => $all->Status,
             'point_spread' => $all->PointSpread,
+            'quarter' => $all->Quarter,
+            'quarter_description' => $all->QuarterDescription,
+            'time_remaining' => $all->TimeRemaining,
             'quarters' => [
                 [
                     'Name' => '1',
