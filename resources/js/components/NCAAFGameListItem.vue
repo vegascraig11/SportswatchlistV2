@@ -317,7 +317,7 @@
             </div>
           </div>
           <div
-            class="bg-gray-200 grid grid-cols-4 text-center py-2 font-semibold"
+            class="bg-gray-200 grid grid-cols-3 text-center py-2 font-semibold"
           >
             <p>
               <span class="text-gray-600">POSS:</span>
@@ -325,13 +325,12 @@
             </p>
             <p>
               <span class="text-gray-600">DOWN:</span>
-              <span>{{ game.down }}</span>
+              <span>{{ game.down }} and {{ game.distance }}</span>
             </p>
             <p>
-              <span class="text-gray-600">DISTANCE:</span>
-              <span>{{ game.distance }}</span>
+              <span class="text-gray-600">BALL ON:</span>
+              <span>{{ game.ball_on }}</span>
             </p>
-            <p><span class="text-gray-600">BALL ON:</span> -</p>
           </div>
         </div>
       </transition>

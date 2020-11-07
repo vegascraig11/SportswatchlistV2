@@ -343,7 +343,7 @@
             </p>
             <p>
               <span class="text-gray-600">BALL ON:</span>
-              <span>-</span>
+              <span>{{ game.ball_on }}</span>
             </p>
           </div>
         </div>
