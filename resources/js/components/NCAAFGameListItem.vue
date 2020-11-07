@@ -105,15 +105,17 @@
                         :src="game.away_team.logo"
                         :alt="game.away_team.full_name"
                       />
-                      <div
-                        class="ml-2 flex flex-1 justify-between space-x-2 sm:space-x-0"
-                      >
+                      <div class="ml-2 flex flex-1 items-center space-x-2">
                         <p class="hidden sm:block whitespace-no-wrap">
                           {{ game.away_team.full_name }}
                         </p>
                         <p class="sm:hidden whitespace-no-wrap">
                           {{ game.away_team.name }}
                         </p>
+                        <div
+                          v-if="game.possession === game.away_team.name"
+                          class="w-3 h-3 bg-green-500 rounded-full"
+                        ></div>
                       </div>
                     </div>
                   </div>
@@ -126,7 +128,7 @@
                           <th
                             class="px-2"
                             v-for="quarter in game.quarters"
-                            :key="`q-${quarter.QuarterID}`"
+                            :key="`q-${quarter.PeriodID}`"
                           >
                             {{ quarter.Name }}
                           </th>
@@ -136,7 +138,7 @@
                         <tr>
                           <td
                             v-for="quarter in game.quarters"
-                            :key="`home-${quarter.QuarterID}`"
+                            :key="`home-${quarter.PeriodID}`"
                           >
                             {{ quarter.HomeScore || "-" }}
                           </td>
@@ -144,7 +146,7 @@
                         <tr>
                           <td
                             v-for="quarter in game.quarters"
-                            :key="`away-${quarter.QuarterID}`"
+                            :key="`away-${quarter.PeriodID}`"
                           >
                             {{ quarter.AwayScore || "-" }}
                           </td>
@@ -194,15 +196,17 @@
                         :src="game.home_team.logo"
                         :alt="game.home_team.full_name"
                       />
-                      <div
-                        class="ml-2 flex flex-1 justify-between space-x-2 sm:space-x-0"
-                      >
+                      <div class="ml-2 flex flex-1 items-center space-x-2">
                         <p class="hidden sm:block whitespace-no-wrap">
                           {{ game.home_team.full_name }}
                         </p>
                         <p class="sm:hidden whitespace-no-wrap">
                           {{ game.home_team.name }}
                         </p>
+                        <div
+                          v-if="game.possession === game.home_team.name"
+                          class="w-3 h-3 bg-green-500 rounded-full"
+                        ></div>
                       </div>
                     </div>
                   </div>
@@ -239,61 +243,72 @@
       <transition name="slide-down">
         <div v-if="inGameInfoPanelOpen" class="border-t">
           <div class="grid grid-cols-7 p-6">
-            <div class="col-span-2">
-              <div class="flex justify-between items-center">
+            <div class="col-span-2 flex items-center">
+              <div class="w-full flex justify-end items-center">
                 <img
                   class="h-16 w-16"
                   v-if="game.away_team.logo"
                   :src="game.away_team.logo"
                   :alt="game.away_team.full_name"
                 />
-                <div>
+                <div class="ml-4">
                   <p class="text-4xl">{{ game.away_team.score || "0" }}</p>
                 </div>
               </div>
             </div>
-            <div class="col-span-3 flex justify-center items-center">
-              <div v-if="quarters" class="border rounded overflow-hidden">
-                <table class="w-full text-center">
-                  <thead class="bg-swl-black-dark text-white">
-                    <tr>
-                      <th
-                        class="px-2"
-                        v-for="quarter in game.quarters"
-                        :key="`q-${quarter.QuarterID}`"
-                      >
-                        {{ quarter.Name }}
-                      </th>
-                    </tr>
-                  </thead>
-                  <tbody class="text-center">
-                    <tr>
-                      <td
-                        v-for="quarter in game.quarters"
-                        :key="`home-${quarter.QuarterID}`"
-                      >
-                        {{ quarter.HomeScore || emptyScore }}
-                      </td>
-                    </tr>
-                    <tr>
-                      <td
-                        v-for="quarter in game.quarters"
-                        :key="`away-${quarter.QuarterID}`"
-                      >
-                        {{ quarter.AwayScore || emptyScore }}
-                      </td>
-                    </tr>
-                  </tbody>
-                </table>
+            <div class="col-span-3">
+              <p class="text-center font-semibold text-gray-700">
+                {{ stringTime }}
+              </p>
+              <div class="mt-2 flex items-center justify-center">
+                <div v-if="game.periods" class="border rounded overflow-hidden">
+                  <table class="w-full text-center">
+                    <thead class="bg-swl-black-dark text-white">
+                      <tr>
+                        <th>&nbsp;</th>
+                        <th
+                          class="px-2"
+                          v-for="period in game.periods"
+                          :key="`q-${period.PeriodID}`"
+                          :class="{
+                            'bg-mantis-500': game.period === period.Name,
+                          }"
+                        >
+                          {{ period.Name }}
+                        </th>
+                      </tr>
+                    </thead>
+                    <tbody class="text-center">
+                      <tr>
+                        <td class="px-2">{{ game.away_team.name }}</td>
+                        <td
+                          v-for="period in game.periods"
+                          :key="`away-${period.PeriodID}`"
+                        >
+                          {{ period.AwayScore || emptyScore }}
+                        </td>
+                      </tr>
+                      <tr>
+                        <td class="px-2">{{ game.home_team.name }}</td>
+                        <td
+                          v-for="period in game.periods"
+                          :key="`home-${period.PeriodID}`"
+                        >
+                          {{ period.HomeScore || emptyScore }}
+                        </td>
+                      </tr>
+                    </tbody>
+                  </table>
+                </div>
               </div>
             </div>
-            <div class="col-span-2">
-              <div class="flex justify-between items-center">
+            <div class="col-span-2 flex items-center">
+              <div class="flex items-center">
                 <div>
                   <p class="text-4xl">{{ game.home_team.score || "0" }}</p>
                 </div>
                 <img
-                  class="h-16 w-16"
+                  class="h-16 w-16 ml-4"
                   v-if="game.home_team.logo"
                   :src="game.home_team.logo"
                   :alt="game.home_team.full_name"
@@ -302,19 +317,21 @@
             </div>
           </div>
           <div
-            class="bg-gray-200 grid grid-cols-3 text-center py-2 font-semibold"
+            class="bg-gray-200 grid grid-cols-4 text-center py-2 font-semibold"
           >
             <p>
               <span class="text-gray-600">POSS:</span>
-              <!-- <span>{{ game.possession }}</span> -->
-              <span>So Cal</span>
+              <span>{{ possession.fullName }}</span>
             </p>
             <p>
               <span class="text-gray-600">DOWN:</span>
-              <span>1<sup>st</sup> AND 10yrds</span>
-              <!-- <span>{{ game.down_and_distance }}</span> -->
+              <span>{{ game.down }}</span>
             </p>
-            <p><span class="text-gray-600">BALL ON:</span> So Cal 45</p>
+            <p>
+              <span class="text-gray-600">DISTANCE:</span>
+              <span>{{ game.distance }}</span>
+            </p>
+            <p><span class="text-gray-600">BALL ON:</span> -</p>
           </div>
         </div>
       </transition>
@@ -430,6 +447,9 @@ export default {
     this.added = this.inWatchlist;
   },
   computed: {
+    emptyScore() {
+      return this.game.has_started ? "0" : "0";
+    },
     statusLabel() {
       return this.game.status === "Final" ? "Final Score" : "Score";
     },
@@ -481,6 +501,16 @@ export default {
         .tz(this.game.game_time, moment.tz.guess())
         .zoneAbbr();
     },
+    stringTime() {
+      return (
+        momentTimezone
+          .tz(this.game.game_time, "America/New_York")
+          .local()
+          .format("LLL") +
+        " " +
+        this.zone
+      );
+    },
     overUnder() {
       if (!this.winner) return "";
       const { home_team, away_team, over_under } = this.game;
@@ -508,7 +538,7 @@ export default {
       return out;
     },
     venue() {
-      const { stadium } = this.game;
+      let stadium = this.game.stadium || this.game.stadium_from_game;
 
       if (!stadium) return "USA";
 
@@ -536,6 +566,24 @@ export default {
           ? `+${this.game.away_team.money_line}`
           : this.game.away_team.money_line;
       return "??";
+    },
+    possession() {
+      if (this.game.possession === this.game.home_team.name) {
+        return {
+          name: this.game.home_team.name,
+          fullName: this.game.home_team.full_name,
+        };
+      }
+      if (this.game.possession === this.game.away_team.name) {
+        return {
+          name: this.game.away_team.name,
+          fullName: this.game.away_team.full_name,
+        };
+      }
+      return {
+        name: "",
+        fullName: "",
+      };
     },
   },
   methods: {

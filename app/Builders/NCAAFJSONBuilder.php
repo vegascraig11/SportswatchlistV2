@@ -33,10 +33,15 @@ class NCAAFJSONBuilder implements JSONBuilder
                 'money_line' => $all->AwayTeamMoneyLine,
                 'logo' => json_decode($game->awayTeam->All)->TeamLogoUrl
             ],
+            'period' => $all->Period,
             'periods' => $all->Periods,
-            'stadium' => $game->stadium,
+            'stadium_from_game' => $all->Stadium,
+            'stadium' => $game->Stadium,
             'status' => $all->Status,
-            'over_under' => $all->OverUnder
+            'over_under' => $all->OverUnder,
+            'possession' => $all->Possession,
+            'down' => $all->Down,
+            'distance' => $all->Distance,
         ];
 	}
 }
