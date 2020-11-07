@@ -271,6 +271,7 @@
                   <table class="w-full text-center">
                     <thead class="bg-swl-black-dark text-white">
                       <tr>
+                        <th>&nbsp;</th>
                         <th
                           class="px-2"
                           v-for="quarter in game.quarters"
@@ -285,14 +286,7 @@
                     </thead>
                     <tbody class="text-center">
                       <tr>
-                        <td
-                          v-for="quarter in game.quarters"
-                          :key="`home-${quarter.QuarterID}`"
-                        >
-                          {{ quarter.HomeScore || emptyScore }}
-                        </td>
-                      </tr>
-                      <tr>
+                        <td class="px-2">{{ game.away_team.name }}</td>
                         <td
                           v-for="quarter in game.quarters"
                           :key="`away-${quarter.QuarterID}`"
@@ -300,13 +294,26 @@
                           {{ quarter.AwayScore || emptyScore }}
                         </td>
                       </tr>
+                      <tr>
+                        <td class="px-2">{{ game.home_team.name }}</td>
+                        <td
+                          v-for="quarter in game.quarters"
+                          :key="`home-${quarter.QuarterID}`"
+                        >
+                          {{ quarter.HomeScore || emptyScore }}
+                        </td>
+                      </tr>
                     </tbody>
                   </table>
                 </div>
               </div>
               <p class="text-center mt-2 font-semibold text-gray-700">
-                {{ game.quarter_description }} Quarter -
-                {{ game.time_remaining }} Remaining
+                {{ game.quarter_description }} Quarter
+                {{
+                  game.quarter_description !== "Final"
+                    ? `- ${game.time_remaining} Remaining`
+                    : ""
+                }}
               </p>
             </div>
             <div class="col-span-2 flex items-center">
