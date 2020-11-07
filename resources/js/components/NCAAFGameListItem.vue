@@ -358,6 +358,7 @@
           <span class="text-xs">Add to Watchlist</span>
         </button>
         <button
+          v-if="live"
           @click="toggleInGameInfoPanel"
           type="button"
           class="w-full flex justify-center space-x-2 bg-gray-800 text-white py-2 hover:bg-gray-900 transition duration-300 ease-in-out"
