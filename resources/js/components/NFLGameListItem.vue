@@ -138,17 +138,17 @@
                         <tr>
                           <td
                             v-for="quarter in game.quarters"
-                            :key="`home-${quarter.QuarterID}`"
+                            :key="`away-${quarter.QuarterID}`"
                           >
-                            {{ quarter.HomeScore || "-" }}
+                            {{ quarter.AwayScore || emptyScore }}
                           </td>
                         </tr>
                         <tr>
                           <td
                             v-for="quarter in game.quarters"
-                            :key="`away-${quarter.QuarterID}`"
+                            :key="`home-${quarter.QuarterID}`"
                           >
-                            {{ quarter.AwayScore || "-" }}
+                            {{ quarter.HomeScore || emptyScore }}
                           </td>
                         </tr>
                       </tbody>
