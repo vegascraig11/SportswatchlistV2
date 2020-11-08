@@ -325,7 +325,10 @@
             </p>
             <p>
               <span class="text-gray-600">DOWN:</span>
-              <span>{{ game.down }} and {{ game.distance }}</span>
+              <span
+                >{{ ordinalSuffixOf(game.down) }} and
+                {{ game.distance }}yrds</span
+              >
             </p>
             <p>
               <span class="text-gray-600">BALL ON:</span>
