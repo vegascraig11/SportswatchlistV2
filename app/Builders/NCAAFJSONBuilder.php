@@ -42,6 +42,9 @@ class NCAAFJSONBuilder implements JSONBuilder
             'possession' => $all->Possession,
             'down' => $all->Down,
             'distance' => $all->Distance,
+            'yard_line' => $all->YardLine,
+            'yard_line_territory' => $all->YardLineTerritory,
+            'time_remaining' => $all->TimeRemainingMinutes . ':' . $all->TimeRemainingSeconds,
         ];
 	}
 }

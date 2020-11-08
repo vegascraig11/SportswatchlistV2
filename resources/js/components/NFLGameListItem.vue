@@ -343,7 +343,7 @@
             </p>
             <p>
               <span class="text-gray-600">BALL ON:</span>
-              <span>{{ game.ball_on }}</span>
+              <span>{{ ballOn }}</span>
             </p>
           </div>
         </div>
@@ -446,6 +446,9 @@ export default {
     this.added = this.inWatchlist;
   },
   computed: {
+    ballOn() {
+      return this.game.yard_line_territory + " " + this.game.yard_line;
+    },
     emptyScore() {
       return this.game.has_started ? "0" : "-";
     },

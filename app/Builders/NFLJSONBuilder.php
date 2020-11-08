@@ -78,6 +78,8 @@ class NFLJSONBuilder implements JSONBuilder
             'has_started' => $all->HasStarted,
             'possession' => $all->Possession,
             'down_and_distance' => $all->DownAndDistance,
+            'yard_line' => $all->YardLine,
+            'yard_line_territory' => $all->YardLineTerritory,
         ];
 	}
 }

@@ -301,6 +301,9 @@
                   </table>
                 </div>
               </div>
+              <p class="text-center mt-2 font-semibold text-gray-700">
+                {{ game.time_remaining }} Remaining
+              </p>
             </div>
             <div class="col-span-2 flex items-center">
               <div class="flex items-center">
@@ -332,7 +335,7 @@
             </p>
             <p>
               <span class="text-gray-600">BALL ON:</span>
-              <span>{{ game.ball_on }}</span>
+              <span>{{ ballOn }}</span>
             </p>
           </div>
         </div>
@@ -450,6 +453,9 @@ export default {
     this.added = this.inWatchlist;
   },
   computed: {
+    ballOn() {
+      return this.game.yard_line_territory + " " + this.game.yard_line;
+    },
     emptyScore() {
       return this.game.has_started ? "0" : "0";
     },
