@@ -220,21 +220,25 @@
       <transition name="slide-down">
         <div v-if="inGameInfoPanelOpen" class="border-t">
           <div class="grid grid-cols-7 p-6 gap-6">
-            <div class="col-span-2">
-              <div class="flex justify-between items-center">
+            <div class="col-span-2 flex items-center">
+              <div class="w-full flex justify-end items-center">
                 <img
-                  class="h-16 w-16"
+                  class="h-10 w-10 sm:h-16 sm:w-16"
                   v-if="game.away_team.logo"
                   :src="game.away_team.logo"
                   :alt="game.away_team.full_name"
                 />
                 <div>
-                  <p class="text-4xl">{{ game.away_team.score || "0" }}</p>
+                  <p class="text-2xl sm:text-4xl">
+                    {{ game.away_team.score || "0" }}
+                  </p>
                 </div>
               </div>
             </div>
-            <div class="col-span-3 flex justify-center items-center">
-              <table class="w-full text-center border">
+            <div
+              class="col-span-3 flex justify-center items-center rounded overflow-hidden border"
+            >
+              <table class="w-full text-center">
                 <thead class="bg-swl-black-dark text-white">
                   <tr>
                     <th
@@ -271,13 +275,15 @@
                 </tbody>
               </table>
             </div>
-            <div class="col-span-2">
-              <div class="flex justify-between items-center">
+            <div class="col-span-2 flex items-center">
+              <div class="flex items-center">
                 <div>
-                  <p class="text-4xl">{{ game.home_team.score || "0" }}</p>
+                  <p class="text-2xl sm:text-4xl">
+                    {{ game.home_team.score || "0" }}
+                  </p>
                 </div>
                 <img
-                  class="h-16 w-16"
+                  class="h-10 w-10 sm:h-16 sm:w-16"
                   v-if="game.home_team.logo"
                   :src="game.home_team.logo"
                   :alt="game.home_team.full_name"
