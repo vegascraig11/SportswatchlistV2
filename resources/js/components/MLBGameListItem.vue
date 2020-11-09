@@ -324,6 +324,12 @@
                   </tbody>
                 </table>
               </div>
+              <p
+                v-if="canceled"
+                class="text-center px-6 mt-2 font-semibold text-gray-700"
+              >
+                Canceled
+              </p>
             </div>
             <div class="sm:col-span-2">
               <div
