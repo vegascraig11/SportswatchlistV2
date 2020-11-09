@@ -312,8 +312,13 @@
                 </div>
               </div>
               <p class="text-center mt-2 font-semibold text-gray-700">
-                {{ game.quarter_description }} Quarter
                 {{
+                  game.quarter_description
+                    ? `${game.quarter_description} Quarter`
+                    : ""
+                }}
+                {{
+                  game.quarter_description &&
                   game.quarter_description !== "Final"
                     ? `- ${game.time_remaining} Remaining`
                     : ""
