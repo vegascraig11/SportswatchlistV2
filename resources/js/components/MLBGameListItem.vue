@@ -271,12 +271,10 @@
       </div>
       <transition name="slide-down">
         <div v-if="inGameInfoPanelOpen" class="border-t">
-          <div
-            class="flex space-x-4 sm:space-x-0 justify-center sm:grid sm:grid-cols-7 py-6 px-2 sm:p-6"
-          >
-            <div class="sm:col-span-2">
+          <div class="flex space-x-4 justify-center py-6 px-2 sm:p-6">
+            <div class="">
               <div
-                class="flex flex-col sm:flex-row justify-between items-center"
+                class="flex flex-col space-x-2 sm:flex-row justify-between items-center"
               >
                 <img
                   class="h-10 w-10 sm:h-16 sm:w-16"
@@ -291,15 +289,18 @@
                 </div>
               </div>
             </div>
-            <div class="sm:col-span-3 flex justify-center items-center">
+            <div class="flex justify-center items-center">
               <div v-if="game.innings.length" class="border">
                 <table class="w-full">
                   <thead class="bg-swl-black-dark text-white">
                     <tr>
-                      <th class="px-2">&nbsp;</th>
-                      <th class="px-2" v-for="inning in game.innings">
+                      <th class="px-1 sm:px-2">&nbsp;</th>
+                      <th class="px-1 sm:px-2" v-for="inning in game.innings">
                         {{ inning.InningNumber }}
                       </th>
+                      <th class="px-1 sm:px-2">R</th>
+                      <th class="px-1 sm:px-2">H</th>
+                      <th class="px-1 sm:px-2">E</th>
                     </tr>
                   </thead>
                   <tbody class="text-center">
@@ -311,6 +312,9 @@
                       >
                         {{ inning.AwayTeamRuns || "0" }}
                       </td>
+                      <td class="bg-gray-200">{{ game.away_team.runs }}</td>
+                      <td class="bg-gray-200">{{ game.away_team.hits }}</td>
+                      <td class="bg-gray-200">{{ game.away_team.errors }}</td>
                     </tr>
                     <tr>
                       <td class="px-2">{{ game.home_team.name }}</td>
@@ -320,6 +324,9 @@
                       >
                         {{ inning.HomeTeamRuns || "0" }}
                       </td>
+                      <td class="bg-gray-200">{{ game.home_team.runs }}</td>
+                      <td class="bg-gray-200">{{ game.home_team.hits }}</td>
+                      <td class="bg-gray-200">{{ game.home_team.errors }}</td>
                     </tr>
                   </tbody>
                 </table>
@@ -331,21 +338,21 @@
                 Canceled
               </p>
             </div>
-            <div class="sm:col-span-2">
+            <div class="">
               <div
-                class="flex flex-col sm:flex-row justify-between items-center"
+                class="flex flex-col flex-col-reverse space-x-2 sm:flex-row justify-between items-center"
               >
+                <div>
+                  <p class="text-2xl sm:text-4xl">
+                    {{ game.home_team.runs || "0" }}
+                  </p>
+                </div>
                 <img
                   class="h-10 w-10 sm:h-16 sm:w-16"
                   v-if="game.home_team.logo"
                   :src="game.home_team.logo"
                   :alt="game.home_team.full_name"
                 />
-                <div>
-                  <p class="text-2xl sm:text-4xl">
-                    {{ game.home_team.runs || "0" }}
-                  </p>
-                </div>
               </div>
             </div>
           </div>
