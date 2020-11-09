@@ -248,21 +248,25 @@
       </div>
       <transition name="slide-down">
         <div v-if="inGameInfoPanelOpen" class="border-t">
-          <div class="grid grid-cols-7 p-6">
-            <div class="col-span-2 flex items-center">
-              <div class="w-full flex justify-end items-center">
+          <div
+            class="flex justify-between space-x-2 sm:space-x-0 sm:grid sm:grid-cols-7 p-2 sm:p-6"
+          >
+            <div class="sm:col-span-2 flex items-center">
+              <div class="sm:w-full flex justify-end items-center">
                 <img
-                  class="h-16 w-16"
+                  class="h-10 w-10 sm:h-16 sm:w-16"
                   v-if="game.away_team.logo"
                   :src="game.away_team.logo"
                   :alt="game.away_team.full_name"
                 />
-                <div class="ml-4">
-                  <p class="text-4xl">{{ game.away_team.score || "0" }}</p>
+                <div class="ml-2 sm:ml-4">
+                  <p class="text-2xl sm:text-4xl">
+                    {{ game.away_team.score || "0" }}
+                  </p>
                 </div>
               </div>
             </div>
-            <div class="col-span-3">
+            <div class="sm:col-span-3">
               <p class="text-center font-semibold text-gray-700">
                 {{ stringTime }}
               </p>
@@ -316,13 +320,15 @@
                 }}
               </p>
             </div>
-            <div class="col-span-2 flex items-center">
+            <div class="sm:col-span-2 flex items-center">
               <div class="w-full flex items-center">
                 <div>
-                  <p class="text-4xl">{{ game.home_team.score || "0" }}</p>
+                  <p class="text-2xl sm:text-4xl">
+                    {{ game.home_team.score || "0" }}
+                  </p>
                 </div>
                 <img
-                  class="h-16 w-16 ml-4"
+                  class="h-10 w-10 sm:h-16 sm:w-16 ml-2 sm:ml-4"
                   v-if="game.home_team.logo"
                   :src="game.home_team.logo"
                   :alt="game.home_team.full_name"
@@ -447,7 +453,9 @@ export default {
   },
   computed: {
     ballOn() {
-      return this.game.yard_line_territory + " " + this.game.yard_line;
+      return `${this.game.yard_line_territory || ""} ${
+        this.game.yard_line || ""
+      }`;
     },
     emptyScore() {
       return this.game.has_started ? "0" : "-";
