@@ -332,6 +332,53 @@
               </div>
             </div>
           </div>
+          <div class="relative h-4 bg-green-200">
+            <!-- Start:  0.0% -->
+            <!--   Mid: 48% -->
+            <!--   End: 96% -->
+            <div
+              class="absolute inset-0 pointer-events-none flex justify-between text-green-500 font-semibold px-2"
+            >
+              <div>0</div>
+              <div>10</div>
+              <div>20</div>
+              <div>30</div>
+              <div>40</div>
+              <div>50</div>
+              <div>40</div>
+              <div>30</div>
+              <div>20</div>
+              <div>10</div>
+              <div>0</div>
+            </div>
+            <div
+              class="absolute top-0 left-0 -mt-1 w-full"
+              :style="{ transform: `translateX(48%)` }"
+            >
+              <svg
+                class="w-8 opacity-75"
+                style="transform: rotateZ(-30deg)"
+                xmlns="http://www.w3.org/2000/svg"
+                version="1.0"
+                viewBox="0 0 510 400"
+              >
+                <path
+                  d="M688.571 482.362a277.143 150 0 11-554.285 0 277.143 150 0 11554.285 0z"
+                  transform="matrix(.86595 .49996 -.54818 .94948 163.673 -463.585)"
+                  fill="maroon"
+                  stroke="#ff0"
+                />
+                <path
+                  fill="#fff"
+                  d="M161.615 90.34l13.71 7.915-42.891 74.288-13.71-7.915zM191.092 107.77l13.71 7.916-42.891 74.288-13.71-7.915zM221.196 124.813l13.71 7.915-42.891 74.288-13.71-7.915zM250.673 142.243l13.71 7.915-42.89 74.288-13.71-7.915zM280.714 158.448l13.71 7.915-42.891 74.289-13.71-7.915zM340.296 192.92l13.709 7.915-42.89 74.289-13.71-7.915zM369.772 210.351l13.71 7.915-42.89 74.289-13.71-7.915zM309.974 175.526l13.709 7.915-42.89 74.288-13.71-7.915z"
+                />
+                <path
+                  fill="#fff"
+                  d="M152.658 124.184l203.837 117.685-9.324 16.15-203.837-117.686z"
+                />
+              </svg>
+            </div>
+          </div>
           <div
             class="bg-gray-200 grid grid-cols-3 text-center py-2 font-semibold"
           >

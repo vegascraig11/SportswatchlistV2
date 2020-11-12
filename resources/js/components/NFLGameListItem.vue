@@ -342,9 +342,9 @@
             </div>
           </div>
           <div class="relative h-4 bg-green-200">
-            <!-- Start:  0.0% -->
-            <!--   Mid: 46.5% -->
-            <!--   End: 93.5% -->
+            <!-- Start: 0.0% -->
+            <!--   Mid: 48% -->
+            <!--   End: 96% -->
             <div
               class="absolute inset-0 pointer-events-none flex justify-between text-green-500 font-semibold px-2"
             >
@@ -361,11 +361,11 @@
               <div>0</div>
             </div>
             <div
-              class="absolute top-0 left-0 -mt-3 ml-1 w-full"
-              :style="{ transform: `translateX(46.5%)` }"
+              class="absolute top-0 left-0 -mt-1 w-full"
+              :style="{ transform: `translateX(48%)` }"
             >
               <svg
-                class="w-12 opacity-75"
+                class="w-8 opacity-75"
                 style="transform: rotateZ(-30deg)"
                 xmlns="http://www.w3.org/2000/svg"
                 version="1.0"
