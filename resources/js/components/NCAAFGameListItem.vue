@@ -242,8 +242,8 @@
       </div>
       <transition name="slide-down">
         <div v-if="inGameInfoPanelOpen" class="border-t">
-          <div class="grid grid-cols-7 p-6">
-            <div class="col-span-2 flex items-center">
+          <div class="flex justify-center sm:space-x-4 p-6">
+            <div class="flex items-center">
               <div class="w-full flex justify-end items-center">
                 <img
                   class="h-10 w-10 sm:h-16 sm:w-16"
@@ -258,7 +258,7 @@
                 </div>
               </div>
             </div>
-            <div class="col-span-3">
+            <div class="">
               <p class="text-center font-semibold text-gray-700">
                 {{ stringTime }}
               </p>
@@ -316,7 +316,7 @@
                 Canceled
               </p>
             </div>
-            <div class="col-span-2 flex items-center">
+            <div class="flex items-center">
               <div class="flex items-center">
                 <div>
                   <p class="text-2xl sm:text-4xl">
