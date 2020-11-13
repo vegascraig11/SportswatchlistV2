@@ -353,10 +353,16 @@
             </div>
             <div
               class="absolute top-0 left-0 -mt-1 w-full"
-              :style="{ transform: `translateX(48%)` }"
+              :style="{ transform: `translateX(${ballLocation}%)` }"
+            >
+              <p class="absolute inset-0 -mt-4 ml-2">{{ game.yard_line }}</p>
+            </div>
+            <div
+              class="absolute top-0 left-0 -mt-1 w-full"
+              :style="{ transform: `translateX(${ballLocation}%)` }"
             >
               <svg
-                class="w-8 opacity-75"
+                class="relative w-8 opacity-75"
                 style="transform: rotateZ(-30deg)"
                 xmlns="http://www.w3.org/2000/svg"
                 version="1.0"
@@ -512,6 +518,16 @@ export default {
     this.added = this.inWatchlist;
   },
   computed: {
+    ballLocation() {
+      const dir =
+        this.game.yard_line_territory === this.game.home_team.name ? "+" : "-";
+      const amount = Number(dir + this.game.yard_line);
+      if (amount < 0) {
+        return -1 * amount;
+      } else {
+        return amount + 48;
+      }
+    },
     ballOn() {
       return `${this.game.yard_line_territory || ""} ${
         this.game.yard_line || ""

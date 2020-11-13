@@ -362,7 +362,13 @@
             </div>
             <div
               class="absolute top-0 left-0 -mt-1 w-full"
-              :style="{ transform: `translateX(48%)` }"
+              :style="{ transform: `translateX(${ballLocation}%)` }"
+            >
+              <p class="absolute inset-0 -mt-4 ml-2">{{ game.yard_line }}</p>
+            </div>
+            <div
+              class="absolute top-0 left-0 -mt-1 w-full"
+              :style="{ transform: `translateX(${ballLocation}%)` }"
             >
               <svg
                 class="w-8 opacity-75"
@@ -507,8 +513,12 @@ export default {
     ballLocation() {
       const dir =
         this.game.yard_line_territory === this.game.home_team.name ? "+" : "-";
-      const amount = dir + this.game.yard_line;
-      return Number(amount);
+      const amount = Number(dir + this.game.yard_line);
+      if (amount < 0) {
+        return -1 * amount;
+      } else {
+        return amount + 48;
+      }
     },
     ballOn() {
       return `${this.game.yard_line_territory || ""} ${
