@@ -249,7 +249,7 @@
       <transition name="slide-down">
         <div v-if="inGameInfoPanelOpen" class="border-t">
           <div
-            class="flex justify-between space-x-2 sm:space-x-0 sm:grid sm:grid-cols-7 p-2 sm:p-6"
+            class="flex justify-between space-x-2 sm:space-x-0 sm:grid sm:grid-cols-7 p-6"
           >
             <div class="sm:col-span-2 flex items-center">
               <div class="sm:w-full flex justify-end items-center">
@@ -361,13 +361,13 @@
               <div>0</div>
             </div>
             <div
-              class="absolute top-0 left-0 -mt-1 w-full"
+              class="absolute top-0 left-0 -mt-1 w-full -mx-2 sm:mx-0"
               :style="{ transform: `translateX(${ballLocation}%)` }"
             >
               <p class="absolute inset-0 -mt-4 ml-2">{{ game.yard_line }}</p>
             </div>
             <div
-              class="absolute top-0 left-0 -mt-1 w-full"
+              class="absolute top-0 left-0 -mt-1 w-full -mx-2 sm:mx-0"
               :style="{ transform: `translateX(${ballLocation}%)` }"
             >
               <svg
@@ -514,6 +514,11 @@ export default {
       const dir =
         this.game.yard_line_territory === this.game.home_team.name ? "+" : "-";
       const amount = Number(dir + this.game.yard_line);
+
+      if (isNaN(amount)) {
+        return 48;
+      }
+
       if (amount < 0) {
         return -1 * amount;
       } else {
