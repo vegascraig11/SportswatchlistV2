@@ -310,7 +310,17 @@
                 v-if="!canceled"
                 class="text-center mt-2 font-semibold text-gray-700"
               >
-                {{ game.time_remaining }} Remaining
+                {{
+                  game.time_remaining != ":"
+                    ? `${game.time_remaining} Remaining`
+                    : ""
+                }}
+              </p>
+              <p
+                v-if="game.status === 'Final'"
+                class="text-center mt-2 font-semibold text-gray-700"
+              >
+                Final
               </p>
               <p v-else class="text-center mt-2 font-semibold text-gray-700">
                 Canceled
