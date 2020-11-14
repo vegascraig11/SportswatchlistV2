@@ -37,7 +37,7 @@ Route::middleware('auth:sanctum')->get('watchlist/raw', 'WatchlistController@raw
 Route::middleware('auth:sanctum')->post('watchlist', 'WatchlistController@store');
 Route::middleware('auth:sanctum')->delete('watchlist/{watchlist}', 'WatchlistController@destroy');
 
-Route::middleware('auth:sanctum')->get('banners', 'BannerController@index');
+Route::get('banners', 'BannerController@index');
 Route::middleware('auth:sanctum')->post('banners', 'BannerController@store');
 Route::middleware('auth:sanctum')->delete('banners/{banner}', 'BannerController@destroy');
 
