@@ -364,7 +364,7 @@
               class="absolute top-0 left-0 -mt-1 w-full -mx-2 sm:mx-0"
               :style="{ transform: `translateX(${ballLocation}%)` }"
             >
-              <p class="absolute inset-0 -mt-4 ml-2">{{ game.yard_line }}</p>
+              <p class="absolute inset-0 -mt-4">{{ game.yard_line }}</p>
             </div>
             <div
               class="w-full absolute inset-0"

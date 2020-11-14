@@ -322,7 +322,10 @@
               >
                 Final
               </p>
-              <p v-else class="text-center mt-2 font-semibold text-gray-700">
+              <p
+                v-if="game.status === 'Canceled'"
+                class="text-center mt-2 font-semibold text-gray-700"
+              >
                 Canceled
               </p>
             </div>
@@ -365,34 +368,17 @@
               class="absolute top-0 left-0 -mt-1 w-full -mx-2 sm:mx-0"
               :style="{ transform: `translateX(${ballLocation}%)` }"
             >
-              <p class="absolute inset-0 -mt-4 ml-2">{{ game.yard_line }}</p>
+              <p class="absolute inset-0 -mt-4">{{ game.yard_line }}</p>
             </div>
             <div
-              class="absolute top-0 left-0 -mt-1 w-full -mx-2 sm:mx-0"
+              class="w-full absolute inset-0"
               :style="{ transform: `translateX(${ballLocation}%)` }"
             >
-              <svg
-                class="relative w-8 opacity-75"
-                style="transform: rotateZ(-30deg)"
-                xmlns="http://www.w3.org/2000/svg"
-                version="1.0"
-                viewBox="0 0 510 400"
-              >
-                <path
-                  d="M688.571 482.362a277.143 150 0 11-554.285 0 277.143 150 0 11554.285 0z"
-                  transform="matrix(.86595 .49996 -.54818 .94948 163.673 -463.585)"
-                  fill="maroon"
-                  stroke="#ff0"
-                />
-                <path
-                  fill="#fff"
-                  d="M161.615 90.34l13.71 7.915-42.891 74.288-13.71-7.915zM191.092 107.77l13.71 7.916-42.891 74.288-13.71-7.915zM221.196 124.813l13.71 7.915-42.891 74.288-13.71-7.915zM250.673 142.243l13.71 7.915-42.89 74.288-13.71-7.915zM280.714 158.448l13.71 7.915-42.891 74.289-13.71-7.915zM340.296 192.92l13.709 7.915-42.89 74.289-13.71-7.915zM369.772 210.351l13.71 7.915-42.89 74.289-13.71-7.915zM309.974 175.526l13.709 7.915-42.89 74.288-13.71-7.915z"
-                />
-                <path
-                  fill="#fff"
-                  d="M152.658 124.184l203.837 117.685-9.324 16.15-203.837-117.686z"
-                />
-              </svg>
+              <div class="relative">
+                <div
+                  class="absolute top-0 -mx-2 sm:mx-0 bg-yellow-800 h-4 w-4 rounded-full"
+                ></div>
+              </div>
             </div>
           </div>
           <div
@@ -534,13 +520,13 @@ export default {
       const amount = Number(dir + this.game.yard_line);
 
       if (isNaN(amount)) {
-        return 48;
+        return 49;
       }
 
       if (amount < 0) {
         return -1 * amount;
       } else {
-        return amount + 48;
+        return amount + 49;
       }
     },
     ballOn() {
