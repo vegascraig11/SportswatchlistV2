@@ -364,7 +364,9 @@
               class="absolute top-0 left-0 -mt-1 w-full -mx-2 sm:mx-0"
               :style="{ transform: `translateX(${ballLocation}%)` }"
             >
-              <p class="absolute inset-0 -mt-4">{{ game.yard_line }}</p>
+              <p class="w-4 flex justify-center absolute inset-0 -mt-4">
+                <span>{{ game.yard_line }}</span>
+              </p>
             </div>
             <div
               class="w-full absolute inset-0"
@@ -505,7 +507,7 @@ export default {
       if (amount < 0) {
         return -1 * amount;
       } else {
-        return amount + 49;
+        return 49 + (49 - amount);
       }
     },
     ballOn() {
