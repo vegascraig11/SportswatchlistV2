@@ -3,6 +3,7 @@
 namespace App\Console;
 
 use App\API\RealtimeSyncService;
+use App\Jobs\SyncGames;
 use Illuminate\Console\Scheduling\Schedule;
 use Illuminate\Foundation\Console\Kernel as ConsoleKernel;
 
@@ -30,27 +31,12 @@ class Kernel extends ConsoleKernel
         $service = new RealtimeSyncService();
 
         $schedule->call(function () use ($service) {
-            $service->nba();
-        })->everyMinute();
-
-        $schedule->call(function () use ($service) {
-            $service->nfl();
-        })->everyMinute();
-
-        $schedule->call(function () use ($service) {
-            $service->nhl();
-        })->everyMinute();
-
-        $schedule->call(function () use ($service) {
-            $service->mlb();
-        })->everyMinute();
-
-        $schedule->call(function () use ($service) {
-            $service->ncaaf();
-        })->everyMinute();
-
-        $schedule->call(function () use ($service) {
-            $service->ncaab();
+            SyncGames::dispatch('nba');
+            SyncGames::dispatch('nfl');
+            SyncGames::dispatch('nhl');
+            SyncGames::dispatch('mlb');
+            SyncGames::dispatch('ncaaf');
+            SyncGames::dispatch('ncaab');
         })->everyMinute();
     }
 
