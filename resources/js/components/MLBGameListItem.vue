@@ -66,8 +66,6 @@
                     Canceled
                   </div>
                 </th>
-                <!-- <th class="px-4">{{ overUnder || "" }}</th> -->
-                <th class="sm:px-4 hidden sm:table-cell"></th>
                 <th class="sm:px-4 text-right">{{ statusLabel }}</th>
                 <th class="sm:px-4">Money Line</th>
                 <th class="sm:px-4">Run Line</th>
@@ -123,31 +121,6 @@
                         </p>
                       </div>
                     </div>
-                  </div>
-                </td>
-                <td class="hidden sm:table-cell" rowspan="2">
-                  <div v-if="game.innings.length" class="border">
-                    <table class="w-full">
-                      <thead class="bg-swl-black-dark text-white">
-                        <tr>
-                          <th class="px-2">Team</th>
-                          <th class="px-2">A</th>
-                          <th class="px-2">H</th>
-                        </tr>
-                      </thead>
-                      <tbody class="text-center">
-                        <tr>
-                          <td>Inning</td>
-                          <td>{{ game.inning }}</td>
-                          <td>{{ game.inning }}</td>
-                        </tr>
-                        <tr>
-                          <td>Score</td>
-                          <td>{{ inningAwayScore }}</td>
-                          <td>{{ inningHomeScore }}</td>
-                        </tr>
-                      </tbody>
-                    </table>
                   </div>
                 </td>
                 <td :class="awayClasses" class="text-right border-r pr-4">

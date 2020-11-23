@@ -63,8 +63,6 @@
                     Canceled
                   </div>
                 </th>
-                <!-- <th class="px-4">{{ overUnder || "" }}</th> -->
-                <th class="sm:px-4 hidden sm:table-cell"></th>
                 <th class="sm:px-4 text-right">
                   {{ statusLabel }}
                 </th>
@@ -115,17 +113,6 @@
                         </p>
                       </div>
                     </div>
-                  </div>
-                </td>
-                <td class="hidden sm:table-cell" rowspan="2">
-                  <div
-                    v-if="game.quarters.length"
-                    class="border rounded overflow-hidden"
-                  >
-                    <NBAQuarters
-                      :quarters="game.quarters"
-                      :current-quarter="game.quarter"
-                    />
                   </div>
                 </td>
                 <td :class="awayClasses" class="text-right border-r pr-4">

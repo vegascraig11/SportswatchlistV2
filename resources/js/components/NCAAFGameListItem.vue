@@ -66,8 +66,6 @@
                     Canceled
                   </div>
                 </th>
-                <!-- <th class="px-4">{{ overUnder || "" }}</th> -->
-                <th class="sm:px-4 hidden sm:table-cell"></th>
                 <th class="sm:px-4 text-right">{{ statusLabel }}</th>
                 <th class="sm:px-4">Money Line</th>
                 <th class="sm:px-4">{{ runLineLabel }}</th>
@@ -118,41 +116,6 @@
                         ></div>
                       </div>
                     </div>
-                  </div>
-                </td>
-                <td class="hidden sm:table-cell" rowspan="2">
-                  <div v-if="quarters" class="border rounded overflow-hidden">
-                    <table class="w-full text-center">
-                      <thead class="bg-swl-black-dark text-white">
-                        <tr>
-                          <th
-                            class="px-2"
-                            v-for="quarter in game.quarters"
-                            :key="`q-${quarter.PeriodID}`"
-                          >
-                            {{ quarter.Name }}
-                          </th>
-                        </tr>
-                      </thead>
-                      <tbody class="text-center">
-                        <tr>
-                          <td
-                            v-for="quarter in game.quarters"
-                            :key="`home-${quarter.PeriodID}`"
-                          >
-                            {{ quarter.HomeScore || "-" }}
-                          </td>
-                        </tr>
-                        <tr>
-                          <td
-                            v-for="quarter in game.quarters"
-                            :key="`away-${quarter.PeriodID}`"
-                          >
-                            {{ quarter.AwayScore || "-" }}
-                          </td>
-                        </tr>
-                      </tbody>
-                    </table>
                   </div>
                 </td>
                 <td :class="awayClasses" class="text-right border-r pr-4">
