@@ -6,7 +6,6 @@ import Login from "./pages/Login";
 import App from "./containers/App";
 import ForOhFor from "./pages/404";
 import Admin from "./containers/Admin";
-import Dashboard from "./pages/Dashboard";
 import Banners from "./pages/Banners";
 import Register from "./pages/Register";
 import MyWatchlist from "./pages/MyWatchlist";
@@ -45,11 +44,7 @@ const router = new VueRouter({
       children: [
         {
           path: "/",
-          component: Dashboard,
-          name: "dashborad",
-          meta: {
-            requiresAdmin: true,
-          },
+          redirect: "/admin/banners",
         },
         {
           path: "banners",
