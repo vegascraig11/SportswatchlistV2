@@ -7,8 +7,7 @@ module.exports = {
         xxs: "0.6rem",
       },
       fontFamily: {
-        sans: ["Arial", ...defaultTheme.fontFamily.sans],
-        inter: ["Inter", ...defaultTheme.fontFamily.sans],
+        sans: ["Lexend Deca", ...defaultTheme.fontFamily.sans],
       },
       colors: {
         mantis: {
