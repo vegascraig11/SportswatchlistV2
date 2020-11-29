@@ -6,14 +6,14 @@
         <div>
           <router-link
             to="/admin/banners"
-            class="block p-2 font-semibold text-white bg-mantis-500 rounded hover:bg-mantis-400 transition ease-in duration-150"
+            class="admin-links block p-2 font-semibold text-gray-900 bg-gray-200 rounded hover:bg-gray-400 transition ease-in duration-150"
             >Banners</router-link
           >
         </div>
         <div>
           <router-link
             to="/admin/users"
-            class="block p-2 font-semibold text-gray-900 bg-gray-200 rounded hover:bg-gray-400 transition ease-in duration-150"
+            class="admin-links block p-2 font-semibold text-gray-900 bg-gray-200 rounded hover:bg-gray-400 transition ease-in duration-150"
             >Users</router-link
           >
         </div>

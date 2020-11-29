@@ -39,4 +39,7 @@ module.exports = {
     "./resources/js/components/**/*.vue",
     "./resources/js/containers/**/*.vue",
   ],
+  experimental: {
+    applyComplexClasses: true,
+  },
 };
