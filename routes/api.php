@@ -43,6 +43,8 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::delete('banners/{banner}', 'BannerController@destroy');
 
     Route::get('/users', 'UsersController@index');
+
+    Route::post('/export', 'ExportController@index');
 });
 
 

@@ -21,6 +21,13 @@
           class="block h-4 w-4 border-2 border-gray-900 rounded-full spin"
           style="border-bottom-color: transparent"
         ></span>
+        <a
+          v-if="showDownloadButton"
+          href="/export/download"
+          target="_blank"
+          class="text-gray-600 hover:text-gray-900 hover:underline transition ease-in duration-150"
+          >Download</a
+        >
       </div>
     </div>
     <div class="divide-y">
@@ -64,9 +71,15 @@ export default {
     },
     loading: false,
     exporting: false,
+    showDownloadButton: false,
   }),
   created() {
     this.getUsers();
+
+    window.Echo.channel("export").listen("ExportedToCSV", () => {
+      this.exporting = false;
+      this.showDownloadButton = true;
+    });
   },
   computed: {
     users() {
@@ -92,7 +105,11 @@ export default {
     getFormattedDate(date) {
       return moment(date).format("LLL");
     },
-    exportToCSV() {},
+    exportToCSV() {
+      this.exporting = true;
+
+      this.$http.post("/api/export").catch(err => console.log(err));
+    },
   },
 };
 </script>
