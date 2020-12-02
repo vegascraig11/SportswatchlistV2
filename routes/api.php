@@ -45,6 +45,9 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::get('/users', 'UsersController@index');
 
     Route::post('/export', 'ExportController@index');
+
+    Route::get('/keys', 'AdminController@keys');
+    Route::post('/keys', 'AdminController@updateKeys');
 });
 
 

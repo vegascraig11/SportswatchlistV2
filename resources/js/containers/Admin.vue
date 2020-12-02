@@ -17,6 +17,13 @@
             >Users</router-link
           >
         </div>
+        <div>
+          <router-link
+            to="/admin/keys"
+            class="admin-links block p-2 font-semibold text-gray-900 bg-gray-200 rounded hover:bg-gray-400 transition ease-in duration-150"
+            >Keys</router-link
+          >
+        </div>
       </div>
       <div class="col-span-3 border-l pl-4">
         <router-view></router-view>

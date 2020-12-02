@@ -3,6 +3,7 @@ import VueRouter from "vue-router";
 
 import Home from "./pages/Home";
 import Login from "./pages/Login";
+import Keys from "./pages/Keys";
 import Users from "./pages/Users";
 import App from "./containers/App";
 import ForOhFor from "./pages/404";
@@ -59,6 +60,14 @@ const router = new VueRouter({
           path: "users",
           component: Users,
           name: "users",
+          meta: {
+            requiresAdmin: true,
+          },
+        },
+        {
+          path: "keys",
+          component: Keys,
+          name: "keys",
           meta: {
             requiresAdmin: true,
           },
