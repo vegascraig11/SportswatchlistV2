@@ -18,6 +18,8 @@ class Team extends Model
 
     public function getLogoAttribute()
     {
-    	return json_decode($this->All)->WikipediaLogoUrl;
+        $obj = json_decode($this->All);
+
+    	return isset($obj->WikipediaLogoUrl) ? $obj->WikipediaLogoUrl : $obj->TeamLogoUrl;
     }
 }

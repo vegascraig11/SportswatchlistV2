@@ -225,34 +225,30 @@
                 <thead class="bg-swl-black-dark text-white">
                   <tr>
                     <th
-                      v-for="quarter in game.quarters"
-                      :key="`q-${quarter.QuarterID}`"
+                      v-for="period in game.periods"
+                      :key="`q-${period.PeriodID}`"
                       class="px-2"
-                      :class="
-                        game.currentQuarter == quarter.Name
-                          ? 'bg-mantis-500'
-                          : ''
-                      "
+                      :class="game.period == period.Name ? 'bg-mantis-500' : ''"
                     >
-                      {{ quarter.Name }}
+                      {{ period.Name }}
                     </th>
                   </tr>
                 </thead>
                 <tbody class="text-center">
                   <tr>
                     <td
-                      v-for="quarter in game.quarters"
-                      :key="`home-${quarter.QuarterID}`"
+                      v-for="period in game.periods"
+                      :key="`home-${period.PeriodID}`"
                     >
-                      {{ quarter.AwayScore || "-" }}
+                      {{ period.AwayScore || "-" }}
                     </td>
                   </tr>
                   <tr>
                     <td
-                      v-for="quarter in game.quarters"
-                      :key="`away-${quarter.QuarterID}`"
+                      v-for="period in game.periods"
+                      :key="`away-${period.PeriodID}`"
                     >
-                      {{ quarter.HomeScore || "-" }}
+                      {{ period.HomeScore || "-" }}
                     </td>
                   </tr>
                 </tbody>
@@ -279,7 +275,7 @@
           v-if="canAdd"
           @click="addToWatchlist"
           type="button"
-          class="sm:hiddenflex w-full items-center justify-center bg-mantis-500 hover:bg-mantis-600 py-2 rounded"
+          class="sm:hidden flex w-full items-center justify-center bg-mantis-500 hover:bg-mantis-600 py-2 rounded"
         >
           <svg
             class="mr-1 inline-block h-3 w-3"
@@ -310,6 +306,29 @@
           </svg>
         </button>
         <button
+          @click="toggleInGameInfoPanel"
+          type="button"
+          class="w-full flex justify-center space-x-2 bg-gray-800 text-white py-2 hover:bg-gray-900 transition duration-300 ease-in-out"
+        >
+          <svg
+            class="h-4 w-4 transform transition duration-300 ease-in-out"
+            :class="{
+              'rotate-0': !inGameInfoPanelOpen,
+              'rotate-180': inGameInfoPanelOpen,
+            }"
+            xmlns="http://www.w3.org/2000/svg"
+            viewBox="0 0 20 20"
+            fill="currentColor"
+          >
+            <path
+              fill-rule="evenodd"
+              d="M16.707 10.293a1 1 0 010 1.414l-6 6a1 1 0 01-1.414 0l-6-6a1 1 0 111.414-1.414L9 14.586V3a1 1 0 012 0v11.586l4.293-4.293a1 1 0 011.414 0z"
+              clip-rule="evenodd"
+            />
+          </svg>
+          <span>Live InGame Info</span>
+        </button>
+        <!-- <button
           @click="toggleGameNotificationsSetting"
           type="button"
           class="w-full flex justify-center space-x-2 bg-mantis-500 rounded text-white py-2 hover:bg-mantis-600"
@@ -322,7 +341,7 @@
               clip-rule="evenodd"
             ></path>
           </svg>
-        </button>
+        </button> -->
       </div>
       <GameNotificationSettings
         v-if="watchlist && settingsOpen"
