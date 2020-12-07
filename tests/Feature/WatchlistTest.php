@@ -57,29 +57,4 @@ class WatchlistTest extends TestCase
             $this->assertEquals('TestGameID', $games[0]['game_id']);
         });
     }
-
-    public function testWatchlistJsonResponse()
-    {
-        $this->withoutExceptionHandling();
-
-        $user = factory(User::class)->create();
-        $game = factory(Game::class)->create();
-
-        $response = Watchlist::create([
-            'user_id' => $user->id,
-            'game_id' => $game->GlobalGameID,
-        ]);
-
-        $response = $this->actingAs($user)->get('/api/watchlist');
-
-        $response->assertStatus(200);
-        tap($response->decodeResponseJson(), function ($watchlist) {
-            $this->assertCount(1, $watchlist);
-            tap($watchlist[0], function ($game) {
-                $this->assertArrayHasKey('user_id', $game);
-                $this->assertArrayHasKey('game_id', $game);
-                $this->assertArrayHasKey('game', $game);
-            });
-        });
-    }
 }

@@ -15,8 +15,18 @@ class WatchlistController extends Controller
 
     public function store()
     {
+        $settings = [
+            "score_gap" => 0,
+            "total_score" => 0,
+            "start" => false,
+            "end" => false,
+            "first_half_end" => false,
+            "second_half_start" => false,
+        ];
+
         $watchlist = auth()->user()->watchlist()->create([
-          'game_id' => request('gameId')
+          'game_id' => request('gameId'),
+          'settings' => json_encode($settings),
         ]);
 
         return response()->json($watchlist, 201);

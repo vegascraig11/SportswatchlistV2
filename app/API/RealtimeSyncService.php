@@ -8,9 +8,14 @@ use App\API\NcaabApiService;
 use App\API\NcaafApiService;
 use App\API\NflApiService;
 use App\API\NhlApiService;
+use App\Events\GameHasEnded;
 use App\Events\GameStarted;
+use App\Events\GameStatus;
 use App\Events\GameStatusUpdated;
+use App\Events\WatchlistGameStatusChanged;
 use App\Game;
+use App\Notifications\GameHasStarted;
+use App\Watchlist;
 use Carbon\Carbon;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Redis;
@@ -167,16 +172,36 @@ class RealtimeSyncService
 
     public function notifyStart($games)
     {
-        $games->each(function ($game) {
-            $sent = Redis::get("{$game->GlobalGameID}-notify");
+        if (!$games->count()) {
+            return;
+        }
 
-            if ($sent) {
-                return;
+        $watchlist = Watchlist::whereIn('game_id', $games->pluck('GlobalGameID')->values())->get();
+
+        foreach($games as $game) {
+            $lastStatus = Redis::get("game_{$game->GlobalGameID}_last_status");
+
+            if (!$lastStatus) {
+                $lastStatus = $game->Status;
+                Redis::set("game_{$game->GlobalGameID}_last_status", $game->Status);
             }
 
-            event(new GameStarted($game->toArray()));
-            Redis::set("{$game->GlobalGameID}-notify", true);
-        });
+            if (!($lastStatus == 'Scheduled' && $game->Status == 'InProgress')) {
+                Redis::set("game_{$game->GlobalGameID}_last_status", $game->Status);
+                continue;
+            }
+
+            foreach ($watchlist as $g) {
+                if (Redis::get("user_{$g->user->id}-game_{$game->GlobalGameID}-start_notified")) {
+                    continue;
+                }
+
+                $g->user->notify(new GameHasStarted($game));
+                $message = $game->awayTeam->name . ' vs ' . $game->homeTeam->name . ' has started.';
+                event(new WatchlistGameStatusChanged($message, $g->user->id));
+                Redis::set("user_{$g->user->id}-game_{$game->GlobalGameID}-start_notified", true);
+            }
+        }
     }
 
     public function notifyUpdate($games)

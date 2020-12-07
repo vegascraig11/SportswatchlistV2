@@ -8,9 +8,11 @@ class Watchlist extends Model
 {
   protected $guarded = [];
 
-  protected $dates = ['game_time'];
-
   protected $with = ['game'];
+
+  protected $casts = [
+    'settings' => 'json',
+  ];
 
   public function user()
   {

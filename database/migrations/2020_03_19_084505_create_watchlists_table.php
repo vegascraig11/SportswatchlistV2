@@ -19,6 +19,7 @@ class CreateWatchlistsTable extends Migration
 
             $table->string('game_id');
             $table->bigInteger('user_id');
+            $table->json('settings');
         });
     }
 

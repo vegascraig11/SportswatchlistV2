@@ -437,7 +437,7 @@ export default {
       this.week = week;
     },
     setDate(index) {
-      this.$store.commit("setDate", this.week[index].dateTime);
+      this.$store.commit("setDate", this.week[index].dateTime.toString());
     },
     previousDay() {
       this.$store.commit(
