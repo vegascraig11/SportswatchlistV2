@@ -8,6 +8,7 @@ const WatchlistMixin = {
   data() {
     return {
       game: this.initialGameData,
+      added: false,
     };
   },
   created() {
@@ -23,7 +24,7 @@ const WatchlistMixin = {
   },
   computed: {
     inWatchlist() {
-      return this.$store.state.watchlist.includes(this.game.game_id.toString());
+      return this.$store.state.watchlist.includes(this.game.game_id);
     },
     canAdd() {
       return (
@@ -51,8 +52,8 @@ const WatchlistMixin = {
       const promise = this.loggedIn ? this.addToDB() : this.addToLocal();
 
       promise
-        .then(response => {
-          this.$store.dispatch("fetchWatchlist");
+        .then(async response => {
+          await this.$store.dispatch("fetchWatchlist");
           flash({
             body: "Added to watchlist successfully!",
             type: "success",

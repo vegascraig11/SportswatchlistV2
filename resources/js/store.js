@@ -82,7 +82,7 @@ const store = new Vuex.Store({
           .then(response => {
             ctx.commit(
               "setWatchlist",
-              response.data.map(game => game.game_id)
+              response.data.map(game => parseInt(game.game_id))
             );
             ctx.commit("setAllWatchlist", response.data);
           })

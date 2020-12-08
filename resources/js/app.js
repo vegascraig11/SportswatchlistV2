@@ -24,7 +24,7 @@ axios
       if (watchlist.status === 200) {
         store.commit(
           "setWatchlist",
-          watchlist.data.map(game => game.game_id)
+          watchlist.data.map(game => parseInt(game.game_id))
         );
         store.commit("setAllWatchlist", watchlist.data);
       }
