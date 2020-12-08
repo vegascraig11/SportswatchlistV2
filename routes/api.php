@@ -17,20 +17,15 @@ Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
     return $request->user();
 });
 
-
 Route::get('nba/gamesByDate/{date}', 'NBAGamesController@gamesByDate');
-
 Route::get('nhl/gamesByDate/{date}', 'NHLGamesController@gamesByDate');
-
 Route::get('mlb/gamesByDate/{date}', 'MLBGamesController@gamesByDate');
-
 Route::get('ncaab/gamesByDate/{date}', 'NCAABGamesController@gamesByDate');
-
 Route::get('ncaaf/gamesByDate/{date}', 'NCAAFGamesController@gamesByDate');
-
 Route::get('nfl/gamesByDate/{date}', 'NFLGamesController@gamesByDate');
 
 Route::get('games', 'GameController@index');
+Route::get('banners', 'BannerController@index');
 
 Route::middleware('auth:sanctum')->group(function () {
     Route::get('watchlist', 'WatchlistController@index');
@@ -38,7 +33,6 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::post('watchlist', 'WatchlistController@store');
     Route::delete('watchlist/{watchlist}', 'WatchlistController@destroy');
 
-    Route::get('banners', 'BannerController@index');
     Route::post('banners', 'BannerController@store');
     Route::delete('banners/{banner}', 'BannerController@destroy');
 
