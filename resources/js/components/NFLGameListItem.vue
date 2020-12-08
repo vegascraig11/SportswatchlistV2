@@ -234,7 +234,7 @@
                 {{ stringTime }}
               </p>
               <div class="mt-2 flex items-center justify-center">
-                <div v-if="quarters" class="border rounded overflow-hidden">
+                <div class="border rounded overflow-hidden">
                   <table class="w-full text-center">
                     <thead class="bg-swl-black-dark text-white">
                       <tr>

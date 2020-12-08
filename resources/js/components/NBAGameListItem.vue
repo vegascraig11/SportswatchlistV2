@@ -222,16 +222,16 @@
                 </div>
               </div>
             </div>
-            <div
-              class="col-span-3 flex justify-center items-center rounded overflow-hidden border"
-            >
-              <table class="w-full text-center">
+            <div class="col-span-3 flex flex-col items-center">
+              <p class="text-center">{{ stringTime }}</p>
+              <table class="mt-2 text-center border">
                 <thead class="bg-swl-black-dark text-white">
                   <tr>
+                    <th>&nbsp;</th>
                     <th
                       v-for="quarter in game.quarters"
                       :key="`q-${quarter.QuarterID}`"
-                      class="px-2"
+                      class="px-3"
                       :class="
                         game.currentQuarter == quarter.Name
                           ? 'bg-mantis-500'
@@ -244,6 +244,7 @@
                 </thead>
                 <tbody class="text-center">
                   <tr>
+                    <td class="px-3">{{ game.away_team.name }}</td>
                     <td
                       v-for="quarter in game.quarters"
                       :key="`home-${quarter.QuarterID}`"
@@ -252,6 +253,7 @@
                     </td>
                   </tr>
                   <tr>
+                    <td class="px-3">{{ game.home_team.name }}</td>
                     <td
                       v-for="quarter in game.quarters"
                       :key="`away-${quarter.QuarterID}`"
@@ -276,6 +278,12 @@
                   :alt="game.home_team.full_name"
                 />
               </div>
+            </div>
+          </div>
+          <div class="flex bg-gray-200 py-2">
+            <div class="w-1/2 text-center">{{ quarter }}</div>
+            <div class="w-1/2 text-center">
+              Time Remaining: {{ time_remaining || "-" }}
             </div>
           </div>
         </div>
@@ -441,6 +449,16 @@ export default {
         .tz(this.game.game_time, moment.tz.guess())
         .zoneAbbr();
     },
+    stringTime() {
+      return (
+        momentTimezone
+          .tz(this.game.game_time, "America/New_York")
+          .local()
+          .format("LLL") +
+        " " +
+        this.zone
+      );
+    },
     overUnder() {
       if (!this.winner) return "";
       const { home_team, away_team, over_under } = this.game;
@@ -500,6 +518,33 @@ export default {
       if (!this.game.point_spread) return null;
       const spread = -1 * this.game.point_spread;
       return spread >= 0 ? `+${spread}` : spread;
+    },
+    quarter() {
+      if (["F/OT", "Final"].includes(this.game.status)) return "Final";
+
+      if (!this.game.quarter) return "-";
+
+      let quarter = "";
+      switch (this.game.quarter) {
+        case 1:
+          return "1st";
+        case 2:
+          return "2nd";
+        case 3:
+          return "3rd";
+        default:
+          return this.game.quarter + "th";
+      }
+    },
+    time_remaining() {
+      const out = [
+        this.game.time_remaining_minutes,
+        this.game.time_remaining_seconds,
+      ]
+        .filter(item => item)
+        .join(":");
+
+      return out || "-";
     },
   },
   methods: {

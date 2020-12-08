@@ -226,17 +226,14 @@
                 {{ stringTime }}
               </p>
               <div class="mt-2 flex items-center justify-center">
-                <div
-                  v-if="game.periods && !canceled"
-                  class="border rounded overflow-hidden"
-                >
+                <div v-if="game.periods" class="border rounded overflow-hidden">
                   <table class="w-full text-center">
                     <thead class="bg-swl-black-dark text-white">
                       <tr>
                         <th>&nbsp;</th>
                         <th
                           class="px-2"
-                          v-for="period in game.periods"
+                          v-for="period in periods"
                           :key="`q-${period.PeriodID}`"
                           :class="{
                             'bg-mantis-500': game.period === period.Name,
@@ -250,7 +247,7 @@
                       <tr>
                         <td class="px-2">{{ game.away_team.name }}</td>
                         <td
-                          v-for="period in game.periods"
+                          v-for="period in periods"
                           :key="`away-${period.PeriodID}`"
                         >
                           {{ period.AwayScore || emptyScore }}
@@ -473,10 +470,21 @@ export default {
       settingsOpen: false,
       notificationSettings: {},
       inGameInfoPanelOpen: false,
+      emptyPeriods: [],
     };
   },
   created() {
     this.added = this.inWatchlist;
+
+    this.emptyPeriods = Array.from(Array(4).keys()).map(key => {
+      return {
+        PeriodID: `empty-period-${key}`,
+        GameID: this.game.game_id,
+        Name: key + 1,
+        AwayScore: 0,
+        HomeScore: 0,
+      };
+    });
   },
   computed: {
     ballLocation() {
@@ -596,9 +604,9 @@ export default {
 
       if (!stadium) return "USA";
 
-      return `${stadium.Name}, ${stadium.City}, ${
-        stadium.State ? stadium.State + "," : ""
-      } ${stadium.Country}`;
+      return [stadium.Name, stadium.City, stadium.State, stadium.Country]
+        .filter(entry => entry)
+        .join(", ");
     },
     runLineLabel() {
       if (this.game.game_type === "mlb") {
@@ -638,6 +646,9 @@ export default {
         name: "",
         fullName: "",
       };
+    },
+    periods() {
+      return this.game.periods.length ? this.game.periods : this.emptyPeriods;
     },
   },
   methods: {

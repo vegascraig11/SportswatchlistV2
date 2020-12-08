@@ -40,7 +40,9 @@ class NHLJSONBuilder implements JSONBuilder
             'periods' => $all->Periods,
             'period' => $all->Period,
             'over_under' => $all->OverUnder,
-            'point_spread' => $all->PointSpread
+            'point_spread' => $all->PointSpread,
+            'time_remaining_minutes' => $all->TimeRemainingMinutes,
+            'time_remaining_seconds' => $all->TimeRemainingSeconds,
         ];
 	}
 }

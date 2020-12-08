@@ -208,7 +208,7 @@
         <div v-if="inGameInfoPanelOpen" class="border-t">
           <div class="grid grid-cols-7 p-6 gap-6">
             <div class="col-span-2">
-              <div class="flex justify-between items-center">
+              <div class="flex justify-end items-center space-x-2">
                 <img
                   class="h-16 w-16"
                   v-if="game.away_team.logo"
@@ -220,15 +220,21 @@
                 </div>
               </div>
             </div>
-            <div class="col-span-3 flex justify-center items-center">
-              <table class="w-full text-center border">
+            <div class="col-span-3 flex flex-col items-center">
+              <p class="text-center">{{ stringTime }}</p>
+              <table class="mt-2 text-center border">
                 <thead class="bg-swl-black-dark text-white">
                   <tr>
+                    <th>&nbsp;</th>
                     <th
-                      v-for="period in game.periods"
+                      v-for="period in periods"
                       :key="`q-${period.PeriodID}`"
-                      class="px-2"
-                      :class="game.period == period.Name ? 'bg-mantis-500' : ''"
+                      class="px-3"
+                      :class="
+                        game.currentQuarter == period.Name
+                          ? 'bg-mantis-500'
+                          : ''
+                      "
                     >
                       {{ period.Name }}
                     </th>
@@ -236,26 +242,28 @@
                 </thead>
                 <tbody class="text-center">
                   <tr>
+                    <td class="px-3">{{ game.away_team.name }}</td>
                     <td
-                      v-for="period in game.periods"
+                      v-for="period in periods"
                       :key="`home-${period.PeriodID}`"
                     >
-                      {{ period.AwayScore || "-" }}
+                      {{ period.AwayScore }}
                     </td>
                   </tr>
                   <tr>
+                    <td class="px-3">{{ game.home_team.name }}</td>
                     <td
-                      v-for="period in game.periods"
+                      v-for="period in periods"
                       :key="`away-${period.PeriodID}`"
                     >
-                      {{ period.HomeScore || "-" }}
+                      {{ period.HomeScore }}
                     </td>
                   </tr>
                 </tbody>
               </table>
             </div>
             <div class="col-span-2">
-              <div class="flex justify-between items-center">
+              <div class="flex items-center space-x-2">
                 <div>
                   <p class="text-4xl">{{ game.home_team.score || "0" }}</p>
                 </div>
@@ -266,6 +274,12 @@
                   :alt="game.home_team.full_name"
                 />
               </div>
+            </div>
+          </div>
+          <div class="flex bg-gray-200 py-2">
+            <div class="w-1/2 text-center">{{ period }}</div>
+            <div class="w-1/2 text-center">
+              Time Remaining: {{ time_remaining || "-" }}
             </div>
           </div>
         </div>
@@ -376,10 +390,21 @@ export default {
       settingsOpen: false,
       notificationSettings: {},
       inGameInfoPanelOpen: false,
+      emptyPeriods: [],
     };
   },
   created() {
     this.added = this.inWatchlist;
+
+    this.emptyPeriods = Array.from(Array(4).keys()).map(key => {
+      return {
+        PeriodID: `empty-period-${key}`,
+        GameID: this.game.game_id,
+        Name: key + 1,
+        AwayScore: 0,
+        HomeScore: 0,
+      };
+    });
   },
   computed: {
     statusLabel() {
@@ -431,6 +456,16 @@ export default {
         .tz(this.game.game_time, moment.tz.guess())
         .zoneAbbr();
     },
+    stringTime() {
+      return (
+        momentTimezone
+          .tz(this.game.game_time, "America/New_York")
+          .local()
+          .format("LLL") +
+        " " +
+        this.zone
+      );
+    },
     overUnder() {
       if (!this.winner) return "";
       const { home_team, away_team, over_under } = this.game;
@@ -459,9 +494,9 @@ export default {
 
       if (!stadium) return "USA";
 
-      return `${stadium.Name}, ${stadium.City}, ${
-        stadium.State ? stadium.State + "," : ""
-      } ${stadium.Country}`;
+      return [stadium.Name, stadium.City, stadium.State, stadium.Country]
+        .filter(entry => entry)
+        .join(", ");
     },
     runLineLabel() {
       return "Point Spread";
@@ -490,6 +525,36 @@ export default {
       if (!this.game.point_spread) return null;
       const spread = -1 * this.game.point_spread;
       return spread >= 0 ? `+${spread}` : spread;
+    },
+    period() {
+      if (["F/OT", "Final"].includes(this.game.status)) return "Final";
+
+      if (!this.game.period) return "-";
+
+      let period = "";
+      switch (this.game.period) {
+        case 1:
+          return "1st";
+        case 2:
+          return "2nd";
+        case 3:
+          return "3rd";
+        default:
+          return this.game.period + "th";
+      }
+    },
+    time_remaining() {
+      const out = [
+        this.game.time_remaining_minutes,
+        this.game.time_remaining_seconds,
+      ]
+        .filter(item => item)
+        .join(":");
+
+      return out || "-";
+    },
+    periods() {
+      return this.game.periods.length ? this.game.periods : this.emptyPeriods;
     },
   },
   methods: {

@@ -211,9 +211,9 @@
       </div>
       <transition name="slide-down">
         <div v-if="inGameInfoPanelOpen" class="border-t">
-          <div class="grid grid-cols-7 p-6">
+          <div class="grid grid-cols-7 gap-4 py-6">
             <div class="col-span-2">
-              <div class="flex justify-between items-center">
+              <div class="flex justify-end items-center space-x-4">
                 <img
                   class="h-16 w-16"
                   v-if="game.away_team.logo"
@@ -225,11 +225,43 @@
                 </div>
               </div>
             </div>
-            <div class="col-span-3 flex justify-center items-center">
-              content
+            <div class="col-span-3">
+              <p class="text-center">{{ stringTime }}</p>
+              <div class="mt-2 flex justify-center">
+                <table class="border">
+                  <thead class="bg-swl-black-dark text-white">
+                    <tr>
+                      <th class="px-1 sm:px-2">&nbsp;</th>
+                      <th class="px-1 sm:px-2" v-for="period in game.periods">
+                        {{ period.Name }}
+                      </th>
+                    </tr>
+                  </thead>
+                  <tbody class="text-center">
+                    <tr>
+                      <td class="px-2">{{ game.away_team.name }}</td>
+                      <td
+                        v-for="period in game.periods"
+                        :key="`away-run-${period.PeriodID}`"
+                      >
+                        {{ period.AwayScore || "0" }}
+                      </td>
+                    </tr>
+                    <tr>
+                      <td class="px-2">{{ game.home_team.name }}</td>
+                      <td
+                        v-for="period in game.periods"
+                        :key="`home-run-${period.PeriodID}`"
+                      >
+                        {{ period.HomeScore || "0" }}
+                      </td>
+                    </tr>
+                  </tbody>
+                </table>
+              </div>
             </div>
             <div class="col-span-2">
-              <div class="flex justify-between items-center">
+              <div class="flex items-center space-x-4">
                 <div>
                   <p class="text-4xl">{{ game.home_team.score || "0" }}</p>
                 </div>
@@ -240,6 +272,12 @@
                   :alt="game.home_team.full_name"
                 />
               </div>
+            </div>
+          </div>
+          <div class="flex bg-gray-200 py-2">
+            <div class="w-1/2 text-center">{{ period }}</div>
+            <div class="w-1/2 text-center">
+              Time Remaining: {{ time_remaining || "-" }}
             </div>
           </div>
         </div>
@@ -403,6 +441,16 @@ export default {
         .tz(this.game.game_time, moment.tz.guess())
         .zoneAbbr();
     },
+    stringTime() {
+      return (
+        momentTimezone
+          .tz(this.game.game_time, "America/New_York")
+          .local()
+          .format("LLL") +
+        " " +
+        this.zone
+      );
+    },
     overUnder() {
       if (!this.winner) return "";
       const { home_team, away_team, over_under } = this.game;
@@ -474,6 +522,33 @@ export default {
       return this.game.away_team.point_spread_money_line > 0
         ? "+" + this.game.away_team.point_spread_money_line
         : this.game.away_team.point_spread_money_line;
+    },
+    period() {
+      if (["F/OT", "Final"].includes(this.game.status)) return "Final";
+
+      if (!this.game.period) return "-";
+
+      let period = "";
+      switch (this.game.period) {
+        case 1:
+          return "1st";
+        case 2:
+          return "2nd";
+        case 3:
+          return "3rd";
+        default:
+          return this.game.period + "th";
+      }
+    },
+    time_remaining() {
+      const out = [
+        this.game.time_remaining_minutes,
+        this.game.time_remaining_seconds,
+      ]
+        .filter(item => item)
+        .join(":");
+
+      return out || "-";
     },
   },
   methods: {

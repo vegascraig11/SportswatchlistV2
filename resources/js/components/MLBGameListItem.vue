@@ -244,7 +244,7 @@
       </div>
       <transition name="slide-down">
         <div v-if="inGameInfoPanelOpen" class="border-t">
-          <div class="flex space-x-4 justify-center py-6 px-2 sm:p-6">
+          <div class="flex space-x-6 justify-center py-6 px-2 sm:p-6">
             <div class="">
               <div
                 class="flex flex-col space-x-2 sm:flex-row justify-between items-center"
@@ -261,14 +261,88 @@
                   </p>
                 </div>
               </div>
+              <div>
+                <div class="grid grid-cols-3 grid-rows-2">
+                  <div
+                    class="col-span-1 col-start-2 flex items-center justify-center"
+                  >
+                    <svg
+                      class="inline-block w-6 h-6 border-2 rounded border-gray-700"
+                      fill="currentColor"
+                      viewBox="0 0 20 20"
+                      xmlns="http://www.w3.org/2000/svg"
+                    >
+                      <path
+                        fill-rule="evenodd"
+                        d="M14.707 12.707a1 1 0 01-1.414 0L10 9.414l-3.293 3.293a1 1 0 01-1.414-1.414l4-4a1 1 0 011.414 0l4 4a1 1 0 010 1.414z"
+                        clip-rule="evenodd"
+                      ></path>
+                    </svg>
+                  </div>
+                  <div
+                    class="col-span-1 col-start-1 row-start-2 flex items-center justify-center"
+                  >
+                    <svg
+                      class="inline-block w-6 h-6 border-2 rounded border-gray-700"
+                      fill="currentColor"
+                      viewBox="0 0 20 20"
+                      xmlns="http://www.w3.org/2000/svg"
+                    >
+                      <path
+                        fill-rule="evenodd"
+                        d="M12.707 5.293a1 1 0 010 1.414L9.414 10l3.293 3.293a1 1 0 01-1.414 1.414l-4-4a1 1 0 010-1.414l4-4a1 1 0 011.414 0z"
+                        clip-rule="evenodd"
+                      ></path>
+                    </svg>
+                  </div>
+                  <div
+                    class="col-span-1 col-start-3 row-start-2 flex items-center justify-center"
+                  >
+                    <svg
+                      class="inline-block w-6 h-6 border-2 rounded border-gray-700"
+                      fill="currentColor"
+                      viewBox="0 0 20 20"
+                      xmlns="http://www.w3.org/2000/svg"
+                    >
+                      <path
+                        fill-rule="evenodd"
+                        d="M7.293 14.707a1 1 0 010-1.414L10.586 10 7.293 6.707a1 1 0 011.414-1.414l4 4a1 1 0 010 1.414l-4 4a1 1 0 01-1.414 0z"
+                        clip-rule="evenodd"
+                      ></path>
+                    </svg>
+                  </div>
+                </div>
+                <div class="mt-2">
+                  <div class="grid grid-cols-5 gap-1">
+                    <span class="inline-block">B</span>
+                    <div class="w-4 h-4 rounded-full bg-gray-300"></div>
+                    <div class="w-4 h-4 rounded-full bg-gray-300"></div>
+                    <div class="w-4 h-4 rounded-full bg-gray-300"></div>
+                    <div class="w-4 h-4 rounded-full bg-gray-300"></div>
+                  </div>
+                  <div class="grid grid-cols-5 gap-1">
+                    <span class="inline-block">S</span>
+                    <div class="w-4 h-4 rounded-full bg-gray-300"></div>
+                    <div class="w-4 h-4 rounded-full bg-gray-300"></div>
+                    <div class="w-4 h-4 rounded-full bg-gray-300"></div>
+                  </div>
+                  <div class="grid grid-cols-5 gap-1">
+                    <span class="inline-block">O</span>
+                    <div class="w-4 h-4 rounded-full bg-gray-300"></div>
+                    <div class="w-4 h-4 rounded-full bg-gray-300"></div>
+                    <div class="w-4 h-4 rounded-full bg-gray-300"></div>
+                  </div>
+                </div>
+              </div>
             </div>
-            <div class="flex justify-center items-center">
-              <div v-if="game.innings.length" class="border">
+            <div>
+              <p class="text-center">{{ stringTime }}</p>
+              <div class="border mt-2">
                 <table class="w-full">
                   <thead class="bg-swl-black-dark text-white">
                     <tr>
                       <th class="px-1 sm:px-2">&nbsp;</th>
-                      <th class="px-1 sm:px-2" v-for="inning in game.innings">
+                      <th class="px-1 sm:px-2" v-for="inning in innings">
                         {{ inning.InningNumber }}
                       </th>
                       <th class="px-1 sm:px-2">R</th>
@@ -280,7 +354,7 @@
                     <tr>
                       <td class="px-2">{{ game.away_team.name }}</td>
                       <td
-                        v-for="inning in game.innings"
+                        v-for="inning in innings"
                         :key="`away-run-${inning.InningID}`"
                       >
                         {{ inning.AwayTeamRuns || "0" }}
@@ -429,10 +503,21 @@ export default {
       settingsOpen: false,
       notificationSettings: {},
       inGameInfoPanelOpen: false,
+      emptyInnings: [],
     };
   },
   created() {
     this.added = this.inWatchlist;
+
+    this.emptyInnings = Array.from(Array(9).keys()).map(key => {
+      return {
+        InningID: `empty-inning-${key}`,
+        GameID: this.game.game_id,
+        InningNumber: key + 1,
+        AwayTeamRuns: 0,
+        HomeTeamRuns: 0,
+      };
+    });
   },
   computed: {
     statusLabel() {
@@ -474,6 +559,16 @@ export default {
         .tz(this.game.game_time, moment.tz.guess())
         .zoneAbbr();
     },
+    stringTime() {
+      return (
+        momentTimezone
+          .tz(this.game.game_time, "America/New_York")
+          .local()
+          .format("LLL") +
+        " " +
+        this.zone
+      );
+    },
     overUnder() {
       if (!this.winner) return "";
       const { home_team, away_team, over_under } = this.game;
@@ -509,19 +604,8 @@ export default {
         stadium.State ? stadium.State + "," : ""
       } ${stadium.Country}`;
     },
-    inningHomeScore() {
-      return this.game.innings.length
-        ? this.game.innings.find(
-            inning => inning.InningNumber == this.game.inning
-          ).HomeTeamRuns || 0
-        : 0;
-    },
-    inningAwayScore() {
-      return this.game.innings.length
-        ? this.game.innings.find(
-            inning => inning.InningNumber == this.game.inning
-          ).AwayTeamRuns || 0
-        : 0;
+    innings() {
+      return this.game.innings.length ? this.game.innings : this.emptyInnings;
     },
     homeTeamMoneyLine() {
       if (this.game.home_team.money_line)
