@@ -8,9 +8,6 @@ use App\API\NcaabApiService;
 use App\API\NcaafApiService;
 use App\API\NflApiService;
 use App\API\NhlApiService;
-use App\Events\GameHasEnded;
-use App\Events\GameStarted;
-use App\Events\GameStatus;
 use App\Events\GameStatusUpdated;
 use App\Events\WatchlistGameStatusChanged;
 use App\Game;
@@ -196,8 +193,8 @@ class RealtimeSyncService
                     continue;
                 }
 
-                $g->user->notify(new GameHasStarted($game));
                 $message = $game->awayTeam->name . ' vs ' . $game->homeTeam->name . ' has started.';
+                $g->user->notify(new GameHasStarted($message));
                 event(new WatchlistGameStatusChanged($message, $g->user->id));
                 Redis::set("user_{$g->user->id}-game_{$game->GlobalGameID}-start_notified", true);
             }

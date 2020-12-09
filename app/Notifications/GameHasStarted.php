@@ -11,14 +11,16 @@ class GameHasStarted extends Notification
 {
     use Queueable;
 
+    public $message;
+
     /**
      * Create a new notification instance.
      *
      * @return void
      */
-    public function __construct()
+    public function __construct($message)
     {
-        //
+        $this->message = $message;
     }
 
     /**
@@ -41,8 +43,8 @@ class GameHasStarted extends Notification
     public function toMail($notifiable)
     {
         return (new MailMessage)
-                    ->line('The introduction to the notification.')
-                    ->action('Notification Action', url('/'))
+                    ->line('Dear user,')
+                    ->line($this->message)
                     ->line('Thank you for using our application!');
     }
 
