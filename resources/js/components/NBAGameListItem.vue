@@ -229,7 +229,7 @@
                   <tr>
                     <th>&nbsp;</th>
                     <th
-                      v-for="quarter in game.quarters"
+                      v-for="quarter in quarters"
                       :key="`q-${quarter.QuarterID}`"
                       class="px-3"
                       :class="
@@ -246,7 +246,7 @@
                   <tr>
                     <td class="px-3">{{ game.away_team.name }}</td>
                     <td
-                      v-for="quarter in game.quarters"
+                      v-for="quarter in quarters"
                       :key="`home-${quarter.QuarterID}`"
                     >
                       {{ quarter.AwayScore || "-" }}
@@ -255,7 +255,7 @@
                   <tr>
                     <td class="px-3">{{ game.home_team.name }}</td>
                     <td
-                      v-for="quarter in game.quarters"
+                      v-for="quarter in quarters"
                       :key="`away-${quarter.QuarterID}`"
                     >
                       {{ quarter.HomeScore || "-" }}
@@ -394,10 +394,21 @@ export default {
       settingsOpen: false,
       notificationSettings: {},
       inGameInfoPanelOpen: false,
+      emptyQuarters: [],
     };
   },
   created() {
     this.added = this.inWatchlist;
+
+    this.emptyQuarters = Array.from(Array(4).keys()).map(key => {
+      return {
+        QuarterID: `empty-quarter-${key}`,
+        GameID: this.game.game_id,
+        Name: key + 1,
+        AwayScore: 0,
+        HomeScore: 0,
+      };
+    });
   },
   computed: {
     statusLabel() {
@@ -450,14 +461,14 @@ export default {
         .zoneAbbr();
     },
     stringTime() {
-      return (
-        momentTimezone
-          .tz(this.game.game_time, "America/New_York")
-          .local()
-          .format("LLL") +
-        " " +
-        this.zone
-      );
+      return this.canceled
+        ? "Canceled"
+        : momentTimezone
+            .tz(this.game.game_time, "America/New_York")
+            .local()
+            .format("LLL") +
+            " " +
+            this.zone;
     },
     overUnder() {
       if (!this.winner) return "";
@@ -545,6 +556,11 @@ export default {
         .join(":");
 
       return out || "-";
+    },
+    quarters() {
+      return this.game.quarters.length
+        ? this.game.quarters
+        : this.emptyQuarters;
     },
   },
   methods: {
