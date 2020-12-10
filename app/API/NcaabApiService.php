@@ -242,7 +242,7 @@ class NcaabApiService extends SportsDataApiService
             'GlobalAwayTeamID' => $game->GlobalAwayTeamID,
             'GlobalHomeTeamID' => $game->GlobalHomeTeamID,
             'Status' => $game->Status,
-            'StadiumID' => $game->Stadium->StadiumID,
+            'StadiumID' => $game->Stadium->StadiumID ?? 1,
             'All' => json_encode($game),
             'created_at' => $date,
             'updated_at' => $date,

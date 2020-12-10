@@ -20,6 +20,6 @@ class Team extends Model
     {
         $obj = json_decode($this->All);
 
-    	return isset($obj->WikipediaLogoUrl) ? $obj->WikipediaLogoUrl : $obj->TeamLogoUrl;
+    	return $obj->WikipediaLogoUrl ?? $obj->TeamLogoUrl ?? '';
     }
 }
