@@ -183,20 +183,32 @@ class RealtimeSyncService
                 Redis::set("game_{$game->GlobalGameID}_last_status", $game->Status);
             }
 
-            if (!($lastStatus == 'Scheduled' && $game->Status == 'InProgress')) {
-                Redis::set("game_{$game->GlobalGameID}_last_status", $game->Status);
-                continue;
+            // Game Start
+            if ($lastStatus == 'Scheduled' && $game->Status == 'InProgress') {
+                foreach ($watchlist as $g) {
+                    if (Redis::get("user_{$g->user->id}-game_{$game->GlobalGameID}-start_notified")) {
+                        continue;
+                    }
+
+                    $message = $game->awayTeam->name . ' vs ' . $game->homeTeam->name . ' has started.';
+                    $g->user->notify(new GameHasStarted($message));
+                    event(new WatchlistGameStatusChanged($message, $g->user->id));
+                    Redis::set("user_{$g->user->id}-game_{$game->GlobalGameID}-start_notified", true);
+                }
             }
 
-            foreach ($watchlist as $g) {
-                if (Redis::get("user_{$g->user->id}-game_{$game->GlobalGameID}-start_notified")) {
-                    continue;
-                }
+            // Game End
+            if ($lastStatus == 'InProgress' && array_search($game->Status, ['Final', 'F/OT']) !== false) {
+                foreach ($watchlist as $g) {
+                    if (Redis::get("user_{$g->user->id}-game_{$game->GlobalGameID}-end_notified")) {
+                        continue;
+                    }
 
-                $message = $game->awayTeam->name . ' vs ' . $game->homeTeam->name . ' has started.';
-                $g->user->notify(new GameHasStarted($message));
-                event(new WatchlistGameStatusChanged($message, $g->user->id));
-                Redis::set("user_{$g->user->id}-game_{$game->GlobalGameID}-start_notified", true);
+                    $message = $game->awayTeam->name . ' vs ' . $game->homeTeam->name . ' has ended.';
+                    $g->user->notify(new GameHasStarted($message));
+                    event(new WatchlistGameStatusChanged($message, $g->user->id));
+                    Redis::set("user_{$g->user->id}-game_{$game->GlobalGameID}-end_notified", true);
+                }
             }
         }
     }
