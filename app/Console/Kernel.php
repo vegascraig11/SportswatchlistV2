@@ -28,16 +28,16 @@ class Kernel extends ConsoleKernel
     protected function schedule(Schedule $schedule)
     {
         $schedule->call(function () {
-            SyncGames::dispatch('nba');
-            SyncGames::dispatch('nfl');
-            SyncGames::dispatch('nhl');
-            SyncGames::dispatch('mlb');
-            SyncGames::dispatch('ncaaf');
-            SyncGames::dispatch('ncaab');
+            SyncGames::dispatch('nba')->onQueue('realtime');
+            SyncGames::dispatch('nfl')->onQueue('realtime');
+            SyncGames::dispatch('nhl')->onQueue('realtime');
+            SyncGames::dispatch('mlb')->onQueue('realtime');
+            SyncGames::dispatch('ncaaf')->onQueue('realtime');
+            SyncGames::dispatch('ncaab')->onQueue('realtime');
         })->everyMinute();
 
         $schedule->call(function () {
-            DailySync::dispatch();
+            DailySync::dispatch()->onQueue('daily');
         })->everySixHours();
     }
 
