@@ -3,6 +3,7 @@
 namespace App\Console;
 
 use App\API\RealtimeSyncService;
+use App\Jobs\DailySync;
 use App\Jobs\SyncGames;
 use Illuminate\Console\Scheduling\Schedule;
 use Illuminate\Foundation\Console\Kernel as ConsoleKernel;
@@ -34,6 +35,10 @@ class Kernel extends ConsoleKernel
             SyncGames::dispatch('ncaaf');
             SyncGames::dispatch('ncaab');
         })->everyMinute();
+
+        $schedule->call(function () {
+            DailySync::dispatch();
+        })->everySixHours();
     }
 
     /**
