@@ -38,7 +38,7 @@ class Kernel extends ConsoleKernel
 
         $schedule->call(function () {
             DailySync::dispatch()->onQueue('daily');
-        })->everySixHours();
+        })->cron('0 0,6,12,18 * * *');
     }
 
     /**
