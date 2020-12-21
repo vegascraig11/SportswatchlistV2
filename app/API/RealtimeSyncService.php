@@ -71,15 +71,12 @@ class RealtimeSyncService
             ->whereDate('Date', '<', now()->toDateString())
             ->get();
 
-        \Illuminate\Support\Facades\Log::debug('Games with Scheduled status = ' . $scheduledInDb->count());
-
 
         if (!($inProgress || $recentlyLive || $inProgressInDb->count() > 0 || $scheduledInDb->count() > 0)) {
             return null;
         }
 
         if (!$inProgress && !$recentlyLive && $inProgressInDb->count() > 0) {
-            \Illuminate\Support\Facades\Log::debug('Updating InProgress games from the database...');
             $grouped = $inProgressInDb->groupBy('GameType');
             $grouped->each(function ($league) use ($service) {
                 $dates = $league->map(function ($game) {
@@ -87,7 +84,6 @@ class RealtimeSyncService
                 })->unique();
 
                 $dates->each(function ($date) use ($service) {
-                    \Illuminate\Support\Facades\Log::debug("Updating {$service->getLeague()} games on date " . Carbon::parse($date)->toISOString());
                     return $this->updateStats($service, $date, true);
                 });
             });
@@ -96,7 +92,6 @@ class RealtimeSyncService
         }
 
         if (!$inProgress && !$recentlyLive && $inProgressInDb->count() == 0 && $scheduledInDb->count() > 0) {
-            \Illuminate\Support\Facades\Log::debug('Updating Scheduled games from the database...');
             $grouped = $scheduledInDb->groupBy('GameType');
             $grouped->each(function ($league) use ($service) {
                 $dates = $league->map(function ($game) {
@@ -104,15 +99,12 @@ class RealtimeSyncService
                 })->unique();
 
                 $dates->each(function ($date) use ($service) {
-                    \Illuminate\Support\Facades\Log::debug("Updating {$service->getLeague()} games on date " . Carbon::parse($date)->toISOString());
                     return $this->updateStats($service, $date, true);
                 });
             });
 
             return;
         }
-
-        \Illuminate\Support\Facades\Log::debug('Updating...');
 
         return $this->updateStats($service);
     }
