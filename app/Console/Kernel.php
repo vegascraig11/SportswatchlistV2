@@ -26,11 +26,7 @@ class Kernel extends ConsoleKernel
      */
     protected function schedule(Schedule $schedule)
     {
-        // $schedule->command('inspire')
-        //          ->hourly();
-        $service = new RealtimeSyncService();
-
-        $schedule->call(function () use ($service) {
+        $schedule->call(function () {
             SyncGames::dispatch('nba');
             SyncGames::dispatch('nfl');
             SyncGames::dispatch('nhl');
