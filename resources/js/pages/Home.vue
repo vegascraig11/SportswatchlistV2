@@ -85,6 +85,17 @@ export default {
       }, 5000);
     });
 
+    if (this.$store.getters.isLoggedIn) {
+      window.Echo.channel(
+        `${this.$store.state.user.id}-watchlist-update`
+      ).listen("WatchlistGameStatusChanged", e => {
+        this.messages.push(e.message);
+        setTimeout(() => {
+          this.messages.splice(this.messages.indexOf(e.message), 1);
+        }, 5000);
+      });
+    }
+
     this.attributes.push({
       key: "today",
       highlight: true,

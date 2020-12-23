@@ -15,9 +15,9 @@ class WatchlistGameStatusChanged implements ShouldBroadcastNow
 {
     use Dispatchable, InteractsWithSockets, SerializesModels;
 
-    $public $message;
+    public $message;
 
-    $private $userId;
+    private $userId;
 
     /**
      * Create a new event instance.

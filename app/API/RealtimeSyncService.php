@@ -11,6 +11,7 @@ use App\API\NhlApiService;
 use App\Events\GameStatusUpdated;
 use App\Events\WatchlistGameStatusChanged;
 use App\Game;
+use App\Jobs\Notify;
 use App\Notifications\GameHasStarted;
 use App\Watchlist;
 use Carbon\Carbon;
@@ -150,58 +151,12 @@ class RealtimeSyncService
                 return $game['GlobalGameID'];
             })->toArray());
 
-            $this->notifyStart($games);
+            Notify::dispatch($games)->onQueue('notifications');
             $this->notifyUpdate($games);
         } catch (\Throwable $exception) {
             report($exception);
             DB::rollback();
             return null;
-        }
-    }
-
-    public function notifyStart($games)
-    {
-        if (!$games->count()) {
-            return;
-        }
-
-        $watchlist = Watchlist::whereIn('game_id', $games->pluck('GlobalGameID')->values())->get();
-
-        foreach($games as $game) {
-            $lastStatus = Redis::get("game_{$game->GlobalGameID}_last_status");
-
-            if (!$lastStatus) {
-                $lastStatus = $game->Status;
-                Redis::set("game_{$game->GlobalGameID}_last_status", $game->Status);
-            }
-
-            // Game Start
-            if ($lastStatus == 'Scheduled' && $game->Status == 'InProgress') {
-                foreach ($watchlist as $g) {
-                    if (Redis::get("user_{$g->user->id}-game_{$game->GlobalGameID}-start_notified")) {
-                        continue;
-                    }
-
-                    $message = $game->awayTeam->name . ' vs ' . $game->homeTeam->name . ' has started.';
-                    $g->user->notify(new GameHasStarted($message));
-                    event(new WatchlistGameStatusChanged($message, $g->user->id));
-                    Redis::set("user_{$g->user->id}-game_{$game->GlobalGameID}-start_notified", true);
-                }
-            }
-
-            // Game End
-            if ($lastStatus == 'InProgress' && array_search($game->Status, ['Final', 'F/OT']) !== false) {
-                foreach ($watchlist as $g) {
-                    if (Redis::get("user_{$g->user->id}-game_{$game->GlobalGameID}-end_notified")) {
-                        continue;
-                    }
-
-                    $message = $game->awayTeam->name . ' vs ' . $game->homeTeam->name . ' has ended.';
-                    $g->user->notify(new GameHasStarted($message));
-                    event(new WatchlistGameStatusChanged($message, $g->user->id));
-                    Redis::set("user_{$g->user->id}-game_{$game->GlobalGameID}-end_notified", true);
-                }
-            }
         }
     }
 
