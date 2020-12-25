@@ -19,4 +19,24 @@
     animation: spinAround 1s infinite linear;
 }
 
+.vue-notification-group {
+    @apply w-full max-w-md px-4 !important;
+}
+
+.notify {
+    @apply mr-8 mt-4 p-6 rounded w-full origin-top-left space-y-2 border-l-4 border-transparent;
+}
+
+.notify.warn {
+    @apply bg-yellow-200 text-yellow-800 border-yellow-800;
+}
+
+.notify.success {
+    @apply bg-green-200 text-green-800 border-green-800;
+}
+
+.notify.error {
+    @apply bg-red-200 text-red-800 border-red-800;
+}
+
 @tailwind utilities;

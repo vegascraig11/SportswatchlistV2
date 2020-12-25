@@ -128,6 +128,17 @@ export default {
       this.$emit("save-settings", this.settings);
     },
     onSaved() {
+      this.$success(
+        "Saved",
+        "Successfully saved your notification settings for the game."
+      );
+      this.saving = false;
+    },
+    onSaveError() {
+      this.$error(
+        "Error",
+        "An error occured while trying to save your notification settings for the game. Please try again."
+      );
       this.saving = false;
     },
   },

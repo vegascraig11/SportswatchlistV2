@@ -109,7 +109,7 @@ const WatchlistMixin = {
       this.$http
         .patch("/api/user/watchlist/" + this.game.game_id, { settings })
         .then(response => this.$refs.notificationSettings.onSaved())
-        .catch(err => console.log(err));
+        .catch(err => this.$refs.notificationSettings.onSaveError());
     },
   },
 };

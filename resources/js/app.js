@@ -5,6 +5,7 @@ import VCalendar from "v-calendar";
 import axios from "axios";
 import router from "./router";
 import store from "./store";
+import "./helpers/notifications";
 
 import App from "./containers/App";
 

@@ -351,6 +351,7 @@
       </div>
     </footer>
     <flash-message />
+    <notifications group="notifications" classes="notify" />
   </div>
 </template>
 
