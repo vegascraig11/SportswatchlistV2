@@ -32,6 +32,7 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::get('watchlist/raw', 'WatchlistController@raw');
     Route::post('watchlist', 'WatchlistController@store');
     Route::delete('watchlist/{watchlist}', 'WatchlistController@destroy');
+    Route::patch('/user/watchlist/{gameId}', 'WatchlistController@update');
 
     Route::post('banners', 'BannerController@store');
     Route::delete('banners/{banner}', 'BannerController@destroy');

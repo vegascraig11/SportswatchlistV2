@@ -282,13 +282,20 @@
           </div>
         </div>
       </transition>
-
-      <div class="flex border-t">
+      <GameNotificationSettings
+        ref="notificationSettings"
+        :notification-settings="notificationSettings"
+        v-if="watchlist && settingsOpen"
+        @save-settings="saveSettings"
+      />
+      <div
+        class="flex items-center justify-between text-white font-semibold border-t"
+      >
         <button
           v-if="canAdd"
           @click="addToWatchlist"
           type="button"
-          class="sm:hidden flex w-full items-center justify-center bg-mantis-500 hover:bg-mantis-600 py-2 rounded"
+          class="sm:hidden flex w-full items-center justify-center bg-mantis-500 hover:bg-mantis-600 py-2"
         >
           <svg
             class="mr-1 inline-block h-3 w-3"
@@ -328,9 +335,24 @@
         </button>
         <button
           v-if="watchlist"
+          @click="toggleGameNotificationsSetting"
+          type="button"
+          class="w-full flex justify-center space-x-2 bg-mantis-500 text-white py-2 hover:bg-mantis-600"
+        >
+          <span>Game Notifications</span>
+          <svg class="h-4 w-4" fill="currentColor" viewBox="0 0 20 20">
+            <path
+              fill-rule="evenodd"
+              d="M18 5v8a2 2 0 01-2 2h-5l-5 4v-4H4a2 2 0 01-2-2V5a2 2 0 012-2h12a2 2 0 012 2zM7 8H5v2h2V8zm2 0h2v2H9V8zm6 0h-2v2h2V8z"
+              clip-rule="evenodd"
+            ></path>
+          </svg>
+        </button>
+        <button
+          v-if="watchlist"
           @click="removeFromWatchlist"
           type="button"
-          class="w-full flex justify-center space-x-2 bg-red-600 rounded text-white py-2 hover:bg-red-700"
+          class="w-full flex justify-center space-x-2 bg-red-600 text-white py-2 hover:bg-red-700"
         >
           <span>Remove from Watchlist</span>
           <svg class="h-4 w-4" fill="currentColor" viewBox="0 0 20 20">
@@ -341,25 +363,7 @@
             ></path>
           </svg>
         </button>
-        <!-- <button
-          @click="toggleGameNotificationsSetting"
-          type="button"
-          class="w-full flex justify-center space-x-2 bg-mantis-500 rounded text-white py-2 hover:bg-mantis-600"
-        >
-          <span>Game Notifications</span>
-          <svg class="h-4 w-4" fill="currentColor" viewBox="0 0 20 20">
-            <path
-              fill-rule="evenodd"
-              d="M18 5v8a2 2 0 01-2 2h-5l-5 4v-4H4a2 2 0 01-2-2V5a2 2 0 012-2h12a2 2 0 012 2zM7 8H5v2h2V8zm2 0h2v2H9V8zm6 0h-2v2h2V8z"
-              clip-rule="evenodd"
-            ></path>
-          </svg>
-        </button> -->
       </div>
-      <GameNotificationSettings
-        v-if="watchlist && settingsOpen"
-        v-model="notificationSettings"
-      />
     </div>
   </div>
 </template>
@@ -387,7 +391,6 @@ export default {
     return {
       added: false,
       settingsOpen: false,
-      notificationSettings: {},
       inGameInfoPanelOpen: false,
     };
   },

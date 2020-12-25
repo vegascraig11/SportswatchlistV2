@@ -361,8 +361,10 @@
         </div>
       </transition>
       <GameNotificationSettings
+        ref="notificationSettings"
+        :notification-settings="notificationSettings"
         v-if="watchlist && settingsOpen"
-        v-model="notificationSettings"
+        @save-settings="saveSettings"
       />
       <div
         class="flex items-center justify-between text-white font-semibold border-t"
@@ -371,7 +373,7 @@
           v-if="canAdd"
           @click="addToWatchlist"
           type="button"
-          class="sm:hidden flex w-full items-center justify-center bg-mantis-500 hover:bg-mantis-600 py-2 rounded-bl"
+          class="sm:hidden flex w-full items-center justify-center bg-mantis-500 hover:bg-mantis-600 py-2"
         >
           <svg
             class="mr-1 inline-block h-3 w-3"
@@ -385,41 +387,6 @@
             ></path>
           </svg>
           <span class="text-xs">Add to Watchlist</span>
-        </button>
-        <button
-          v-if="watchlist"
-          @click="settingsOpen = !settingsOpen"
-          type="button"
-          class="w-full flex justify-center space-x-2 bg-green-500 text-white py-2 hover:bg-green-700"
-        >
-          <span>Notification Settings</span>
-          <svg
-            class="w-4 h-4"
-            fill="currentColor"
-            viewBox="0 0 20 20"
-            xmlns="http://www.w3.org/2000/svg"
-          >
-            <path
-              fill-rule="evenodd"
-              d="M18 5v8a2 2 0 01-2 2h-5l-5 4v-4H4a2 2 0 01-2-2V5a2 2 0 012-2h12a2 2 0 012 2zM7 8H5v2h2V8zm2 0h2v2H9V8zm6 0h-2v2h2V8z"
-              clip-rule="evenodd"
-            ></path>
-          </svg>
-        </button>
-        <button
-          v-if="watchlist"
-          @click="removeFromWatchlist"
-          type="button"
-          class="w-full flex justify-center space-x-2 bg-red-600 text-white py-2 hover:bg-red-700"
-        >
-          <span>Remove from Watchlist</span>
-          <svg class="h-4 w-4" fill="currentColor" viewBox="0 0 20 20">
-            <path
-              fill-rule="evenodd"
-              d="M10 18a8 8 0 100-16 8 8 0 000 16zM8.707 7.293a1 1 0 00-1.414 1.414L8.586 10l-1.293 1.293a1 1 0 101.414 1.414L10 11.414l1.293 1.293a1 1 0 001.414-1.414L11.414 10l1.293-1.293a1 1 0 00-1.414-1.414L10 8.586 8.707 7.293z"
-              clip-rule="evenodd"
-            ></path>
-          </svg>
         </button>
         <button
           @click="toggleInGameInfoPanel"
@@ -443,6 +410,36 @@
             />
           </svg>
           <span>Live InGame Info</span>
+        </button>
+        <button
+          v-if="watchlist"
+          @click="toggleGameNotificationsSetting"
+          type="button"
+          class="w-full flex justify-center space-x-2 bg-mantis-500 text-white py-2 hover:bg-mantis-600"
+        >
+          <span>Game Notifications</span>
+          <svg class="h-4 w-4" fill="currentColor" viewBox="0 0 20 20">
+            <path
+              fill-rule="evenodd"
+              d="M18 5v8a2 2 0 01-2 2h-5l-5 4v-4H4a2 2 0 01-2-2V5a2 2 0 012-2h12a2 2 0 012 2zM7 8H5v2h2V8zm2 0h2v2H9V8zm6 0h-2v2h2V8z"
+              clip-rule="evenodd"
+            ></path>
+          </svg>
+        </button>
+        <button
+          v-if="watchlist"
+          @click="removeFromWatchlist"
+          type="button"
+          class="w-full flex justify-center space-x-2 bg-red-600 text-white py-2 hover:bg-red-700"
+        >
+          <span>Remove from Watchlist</span>
+          <svg class="h-4 w-4" fill="currentColor" viewBox="0 0 20 20">
+            <path
+              fill-rule="evenodd"
+              d="M10 18a8 8 0 100-16 8 8 0 000 16zM8.707 7.293a1 1 0 00-1.414 1.414L8.586 10l-1.293 1.293a1 1 0 101.414 1.414L10 11.414l1.293 1.293a1 1 0 001.414-1.414L11.414 10l1.293-1.293a1 1 0 00-1.414-1.414L10 8.586 8.707 7.293z"
+              clip-rule="evenodd"
+            ></path>
+          </svg>
         </button>
       </div>
     </div>
@@ -470,7 +467,6 @@ export default {
     return {
       added: false,
       settingsOpen: false,
-      notificationSettings: {},
       inGameInfoPanelOpen: false,
     };
   },

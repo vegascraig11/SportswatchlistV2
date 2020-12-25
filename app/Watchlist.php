@@ -11,7 +11,7 @@ class Watchlist extends Model
   protected $with = ['game'];
 
   protected $casts = [
-    'settings' => 'json',
+    'settings' => 'object',
   ];
 
   public function user()

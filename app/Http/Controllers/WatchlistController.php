@@ -26,7 +26,7 @@ class WatchlistController extends Controller
 
         $watchlist = auth()->user()->watchlist()->create([
           'game_id' => request('gameId'),
-          'settings' => json_encode($settings),
+          'settings' => $settings,
         ]);
 
         return response()->json($watchlist, 201);
@@ -35,6 +35,16 @@ class WatchlistController extends Controller
     public function destroy(Watchlist $watchlist)
     {
         $watchlist->delete();
+
+        return response()->json([], 204);
+    }
+
+    public function update($gameId)
+    {
+        $entry = auth()->user()->watchlist()->where('game_id', $gameId)->firstOrFail();
+
+        $entry->settings = request()->settings;
+        $entry->save();
 
         return response()->json([], 204);
     }
