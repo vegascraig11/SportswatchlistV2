@@ -68,7 +68,7 @@
     <div>
       <button
         type="button"
-        class="relative flex items-center space-x-2 px-4 py-2 bg-mantis-500 text-white rounded hover:bg-mantis-600 transition duration-150 ease-out overflow-hidden"
+        class="relative flex items-center px-4 py-2 bg-mantis-500 text-white rounded hover:bg-mantis-600 transition duration-150 ease-out overflow-hidden"
         @click="saveSettings"
       >
         <span
