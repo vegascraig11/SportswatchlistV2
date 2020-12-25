@@ -20,7 +20,7 @@
 }
 
 .vue-notification-group {
-    @apply w-full max-w-md px-4 !important;
+    @apply w-full max-w-md px-4 text-sm !important;
 }
 
 .notify {

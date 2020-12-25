@@ -352,6 +352,83 @@
     </footer>
     <flash-message />
     <notifications group="notifications" classes="notify" />
+    <div class="fixed inset-0 pointer-events-none">
+      <transition
+        enter-class="transform -translate-y-10 opacity-0"
+        enter-to-class="transform translate-y-0 opacity-100"
+        enter-acitve-class="transition duration-150 ease-out"
+        leave-active-class="transition duration-150 ease-out"
+        leave-to-class="transform -translate-y-10 opacity-0"
+        leave-class="transform translate-y-0 opacity-100"
+      >
+        <div
+          v-if="showDialog"
+          class="relative w-full p-4 max-w-xl mx-auto bg-white text-gray-800 text-sm shadow-lg rounded-lg mt-4 pointer-events-auto"
+        >
+          <button
+            @click="hideDialog"
+            type="button"
+            class="absolute top-0 right-0 rounded-full bg-gray-200 p-2 mt-1 mr-1 hover:bg-gray-400 transition ease-out duration-150"
+          >
+            <svg
+              class="w-4 h-4"
+              fill="none"
+              stroke="currentColor"
+              viewBox="0 0 24 24"
+              xmlns="http://www.w3.org/2000/svg"
+            >
+              <path
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                stroke-width="2"
+                d="M6 18L18 6M6 6l12 12"
+              ></path>
+            </svg>
+          </button>
+          <div class="border-2 p-4 border-mantis-500 rounded-lg text-center">
+            <p>
+              Become an early adopter of <strong>Sports Watch List</strong> -
+              let us know your email and we'll send you instructions on how to
+              create a custom scoreboard for your favorite teams!
+            </p>
+            <div class="mt-4">
+              <label for="email" class="sr-only">Email</label>
+              <input
+                v-model="email"
+                type="email"
+                class="w-full rounded border border-gray-500 placeholder-gray-600 px-3 py-2"
+                placeholder="johndoe@domain.com"
+              />
+            </div>
+            <div class="mt-4">
+              <button
+                type="button"
+                class="w-full relative flex items-center justify-center px-4 py-2 bg-mantis-500 text-white rounded hover:bg-mantis-600 transition duration-150 ease-out overflow-hidden"
+                @click="submitEmail"
+                :disabled="submitting"
+              >
+                <span
+                  v-if="submitting"
+                  class="absolute inset-0 z-20 grid place-items-center"
+                >
+                  <span
+                    class="block h-5 w-5 border-2 border-white rounded-full animate-spin"
+                    style="border-bottom-color: transparent"
+                  ></span>
+                </span>
+                <span :class="{ 'text-transparent': submitting }">Submit</span>
+              </button>
+            </div>
+            <p class="mt-4 text-gray-600" @click="hideDialog">
+              If you already have a Sports Watch List account, log in
+              <router-link to="login" class="font-semibold hover:underline"
+                >here</router-link
+              >.
+            </p>
+          </div>
+        </div>
+      </transition>
+    </div>
   </div>
 </template>
 
@@ -371,11 +448,27 @@ export default {
       attributes: [],
       time: {},
       week: [],
+      idle: 0,
+      interval: null,
+      showDialog: false,
+      submitting: false,
+      email: "",
     };
   },
   watch: {
     date(newValue) {
       this.buildWeekRow(newValue);
+    },
+    idle(newValue) {
+      const val = newValue > 10;
+
+      if (val) {
+        this.showDialog = true;
+        [("mousemove", "click", "keyup")].forEach(event =>
+          document.body.removeEventListener(event, this.clearIdle)
+        );
+        if (this.interval) clearInterval(this.interval);
+      }
     },
   },
   created() {
@@ -390,6 +483,20 @@ export default {
     });
 
     this.updateTime();
+  },
+  mounted() {
+    if (!(this.emailRegistered || this.dialogShown || this.isLoggedIn)) {
+      ["mousemove", "click", "keyup"].forEach(event =>
+        document.body.addEventListener(event, this.clearIdle)
+      );
+      this.interval = setInterval(() => this.idle++, 1000);
+    }
+  },
+  beforeDestroy() {
+    ["mousemove", "click", "keyup"].forEach(event =>
+      document.body.removeEventListener(event, this.clearIdle)
+    );
+    if (this.interval) clearInterval(this.interval);
   },
   computed: {
     date() {
@@ -412,6 +519,12 @@ export default {
     },
     selectedLeagues() {
       return this.$store.state.selectedLeagues;
+    },
+    emailRegistered() {
+      return !!window.localStorage.getItem("emailRegistered");
+    },
+    dialogShown() {
+      return !!window.sessionStorage.getItem("dialogShown");
     },
   },
   methods: {
@@ -525,6 +638,33 @@ export default {
         window.events.$emit("clear-search");
       }
     }, 500),
+    clearIdle() {
+      this.idle = 0;
+    },
+    submitEmail() {
+      this.submitting = true;
+      this.$http
+        .post("/api/subscriptions", { email: this.email })
+        .then(() => {
+          this.$success(
+            "Thank You!",
+            "Your instructions on how to create a custom scoreboard of your favorite teams will be sent to you shortly."
+          );
+          this.showDialog = false;
+          window.localStorage.setItem("emailRegistered", true);
+        })
+        .catch(() =>
+          this.$error(
+            "Whoops...",
+            "Unfortunately that didn't work. Please try again!"
+          )
+        )
+        .finally(() => (this.submitting = false));
+    },
+    hideDialog() {
+      window.sessionStorage.setItem("dialogShown", true);
+      this.showDialog = false;
+    },
   },
 };
 </script>

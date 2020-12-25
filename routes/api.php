@@ -27,6 +27,8 @@ Route::get('nfl/gamesByDate/{date}', 'NFLGamesController@gamesByDate');
 Route::get('games', 'GameController@index');
 Route::get('banners', 'BannerController@index');
 
+Route::post('subscriptions', 'SubscriptionsController@store');
+
 Route::middleware('auth:sanctum')->group(function () {
     Route::get('watchlist', 'WatchlistController@index');
     Route::get('watchlist/raw', 'WatchlistController@raw');
