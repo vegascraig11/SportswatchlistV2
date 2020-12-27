@@ -13,6 +13,7 @@ const WatchlistMixin = {
     return {
       game: this.initialGameData,
       added: false,
+      refreshing: false,
     };
   },
   created() {
@@ -110,6 +111,14 @@ const WatchlistMixin = {
         .patch("/api/user/watchlist/" + this.game.game_id, { settings })
         .then(response => this.$refs.notificationSettings.onSaved())
         .catch(err => this.$refs.notificationSettings.onSaveError());
+    },
+    refresh() {
+      this.refreshing = true;
+      this.$http
+        .get("/api/games/" + this.game.game_id)
+        .then(response => (this.game = response.data))
+        .catch(err => console.log(err))
+        .finally(() => (this.refreshing = false));
     },
   },
 };

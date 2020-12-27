@@ -25,6 +25,7 @@ Route::get('ncaaf/gamesByDate/{date}', 'NCAAFGamesController@gamesByDate');
 Route::get('nfl/gamesByDate/{date}', 'NFLGamesController@gamesByDate');
 
 Route::get('games', 'GameController@index');
+Route::get('games/{gameId}', 'GameController@show');
 Route::get('banners', 'BannerController@index');
 
 Route::post('subscriptions', 'SubscriptionsController@store');

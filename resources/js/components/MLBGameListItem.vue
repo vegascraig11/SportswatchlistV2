@@ -205,19 +205,47 @@
           </table>
         </div>
       </div>
-      <div
-        class="w-full px-2 py-2 flex items-center text-xs text-gray-700 tracking-wide border-t"
-      >
-        <svg
-          class="h-4 w-4 text-gray-600 fill-current"
-          xmlns="http://www.w3.org/2000/svg"
-          viewBox="0 0 20 20"
+      <div class="flex justify-between border-t">
+        <div
+          class="w-full px-2 py-2 flex items-center text-xs text-gray-700 tracking-wide"
         >
-          <path
-            d="M10 2c-2.8 0-5 2.2-5 5 0 4.8 5 11 5 11s5-6.2 5-11C15 4.2 12.8 2 10 2zM10 9.8c-1.5 0-2.7-1.2-2.7-2.7s1.2-2.7 2.7-2.7c1.5 0 2.7 1.2 2.7 2.7S11.5 9.8 10 9.8z"
-          />
-        </svg>
-        <p class="pl-2">{{ venue }}</p>
+          <svg
+            class="h-4 w-4 text-gray-600 fill-current"
+            xmlns="http://www.w3.org/2000/svg"
+            viewBox="0 0 20 20"
+          >
+            <path
+              d="M10 2c-2.8 0-5 2.2-5 5 0 4.8 5 11 5 11s5-6.2 5-11C15 4.2 12.8 2 10 2zM10 9.8c-1.5 0-2.7-1.2-2.7-2.7s1.2-2.7 2.7-2.7c1.5 0 2.7 1.2 2.7 2.7S11.5 9.8 10 9.8z"
+            />
+          </svg>
+          <p class="pl-2">{{ venue }}</p>
+        </div>
+        <div class="flex items-center">
+          <button
+            type="button"
+            v-if="inGameInfoPanelOpen"
+            class="flex items-center space-x-2 mr-4 px-4 py-1 bg-mantis-500 text-white font-medium rounded hover:bg-mantis-600"
+            @click="refresh"
+          >
+            <span
+              ><svg
+                class="w-4 h-4"
+                :class="{ 'animate-spin': refreshing }"
+                fill="none"
+                stroke="currentColor"
+                viewBox="0 0 24 24"
+                xmlns="http://www.w3.org/2000/svg"
+              >
+                <path
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                  stroke-width="2"
+                  d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15"
+                ></path></svg
+            ></span>
+            <span>Refresh</span>
+          </button>
+        </div>
       </div>
       <div
         v-if="canAdd"

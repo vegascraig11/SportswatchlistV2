@@ -13,4 +13,11 @@ class GameController extends Controller
 
         return Game::whereIn('GlobalGameID', $ids)->get();
     }
+
+    public function show($gameId)
+    {
+        $game = Game::where('GlobalGameID', $gameId)->first();
+
+        return response()->json($game, 200);
+    }
 }
