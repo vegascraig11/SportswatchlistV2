@@ -19,13 +19,33 @@ const WatchlistMixin = {
   created() {
     window.Echo.channel(`game-updates-${this.game.game_id}`).listen(
       "GameStatusUpdated",
-      e => {
-        this.game = e.game;
-        console.log(
-          `game ${e.game.game_id} updated -- status ${e.game.status}`
+      e => (this.game = e.game)
+    );
+  },
+  watch: {
+    game(newValue, oldValue) {
+      if (
+        oldValue.status === "Scheduled" &&
+        newValue.status === "InProgress" &&
+        (this.inWatchlist || this.added)
+      ) {
+        this.$success(
+          `${this.game.game_type.toUpperCase()} Game is Starting`,
+          `The game between ${newValue.away_team.full_name} and ${newValue.home_team.full_name} is startng. Please check your game feed for detailed game information.`
         );
       }
-    );
+
+      if (
+        oldValue.status === "InProgress" &&
+        ["Final", "F/OT"].includes(newValue.status) &&
+        (this.inWatchlist || this.added)
+      ) {
+        this.$success(
+          `${this.game.game_type.toUpperCase()} Game is Ending`,
+          `The game between ${newValue.away_team.full_name} and ${newValue.home_team.full_name} is ending. Please check your game feed for detailed game information.`
+        );
+      }
+    },
   },
   computed: {
     inWatchlist() {

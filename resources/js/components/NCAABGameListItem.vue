@@ -577,8 +577,8 @@ export default {
     },
     time_remaining() {
       const out = [
-        this.game.time_remaining_minutes,
-        this.game.time_remaining_seconds,
+        this.game.time_remaining_minutes || "00",
+        ("0000" + this.game.time_remaining_seconds).slice(-2),
       ]
         .filter(item => item)
         .join(":");
