@@ -97,12 +97,6 @@
                     </span>
                     <div class="flex items-center w-full">
                       <p>{{ game.away_team.rotation_number }}</p>
-                      <img
-                        class="ml-1 sm:ml-4 h-8 w-8 sm:h-12 sm:w-12"
-                        v-if="game.away_team.logo"
-                        :src="game.away_team.logo"
-                        :alt="game.away_team.full_name"
-                      />
                       <div
                         class="ml-2 flex-1 justify-between space-x-2 sm:space-x-0"
                       >
@@ -161,12 +155,6 @@
                     </span>
                     <div class="flex items-center w-full">
                       <p>{{ game.home_team.rotation_number }}</p>
-                      <img
-                        class="ml-1 sm:ml-4 h-8 w-8 sm:h-12 sm:w-12"
-                        v-if="game.home_team.logo"
-                        :src="game.home_team.logo"
-                        :alt="game.home_team.full_name"
-                      />
                       <div
                         class="ml-2 flex-1 justify-between space-x-2 sm:space-x-0"
                       >
@@ -277,12 +265,7 @@
               <div
                 class="flex flex-col space-x-2 sm:flex-row justify-between items-center"
               >
-                <img
-                  class="h-10 w-10 sm:h-16 sm:w-16"
-                  v-if="game.away_team.logo"
-                  :src="game.away_team.logo"
-                  :alt="game.away_team.full_name"
-                />
+                <div class="text-2xl">{{ game.away_team.name }}</div>
                 <div>
                   <p class="text-2xl sm:text-4xl">
                     {{ game.away_team.runs || "0" }}
@@ -422,12 +405,7 @@
                     {{ game.home_team.runs || "0" }}
                   </p>
                 </div>
-                <img
-                  class="h-10 w-10 sm:h-16 sm:w-16"
-                  v-if="game.home_team.logo"
-                  :src="game.home_team.logo"
-                  :alt="game.home_team.full_name"
-                />
+                <div class="text-2xl">{{ game.home_team.name }}</div>
               </div>
             </div>
           </div>
