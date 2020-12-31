@@ -16,16 +16,16 @@ class Notify implements ShouldQueue
 {
     use Dispatchable, InteractsWithQueue, Queueable, SerializesModels;
 
-    protected $games;
+    protected $game;
 
     /**
      * Create a new job instance.
      *
      * @return void
      */
-    public function __construct($games)
+    public function __construct($game)
     {
-        $this->games = $games;
+        $this->game = $game;
     }
 
     /**
@@ -35,42 +35,40 @@ class Notify implements ShouldQueue
      */
     public function handle()
     {
-        $watchlist = Watchlist::whereIn('game_id', $this->games->pluck('GlobalGameID')->values())->get();
+        $watchlist = Watchlist::where('game_id', $this->game->GlobalGameID)->get();
 
-        foreach ($games as $game) {
-            $lastStatus = Redis::get("game_{$game->GlobalGameID}_last_status");
-            
-            if (!$lastStatus) {
-                $lastStatus = $game->Status;
-                Redis::set("game_{$game->GlobalGameID}_last_status", $game->Status);
-            }
+        $lastStatus = Redis::get("game_{$this->game->GlobalGameID}_last_status");
+        
+        if (!$lastStatus) {
+            $lastStatus = $this->game->Status;
+            Redis::set("game_{$this->game->GlobalGameID}_last_status", $this->game->Status);
+        }
 
-            // Game Start
-            if ($lastStatus == 'Scheduled' && $game->Status == 'InProgress') {
-                foreach ($watchlist as $g) {
-                    if (Redis::get("user_{$g->user->id}-game_{$game->GlobalGameID}-start_notified")) {
-                        continue;
-                    }
-
-                    $message = $game->awayTeam->name . ' vs ' . $game->homeTeam->name . ' has started.';
-                    $g->user->notify(new GameHasStarted($message));
-                    event(new WatchlistGameStatusChanged($message, $g->user->id));
-                    Redis::set("user_{$g->user->id}-game_{$game->GlobalGameID}-start_notified", true);
+        // Game Start
+        if ($lastStatus == 'Scheduled' && $this->game->Status == 'InProgress') {
+            foreach ($watchlist as $g) {
+                if (Redis::get("user_{$g->user->id}-game_{$this->game->GlobalGameID}-start_notified")) {
+                    continue;
                 }
+
+                $message = $this->game->awayTeam->name . ' vs ' . $this->game->homeTeam->name . ' has started.';
+                $g->user->notify(new GameHasStarted($message));
+                event(new WatchlistGameStatusChanged($message, $g->user->id));
+                Redis::set("user_{$g->user->id}-game_{$this->game->GlobalGameID}-start_notified", true);
             }
+        }
 
-            // Game End
-            if ($lastStatus == 'InProgress' && array_search($game->Status, ['Final', 'F/OT']) !== false) {
-                foreach ($watchlist as $g) {
-                    if (Redis::get("user_{$g->user->id}-game_{$game->GlobalGameID}-end_notified")) {
-                        continue;
-                    }
-
-                    $message = $game->awayTeam->name . ' vs ' . $game->homeTeam->name . ' has ended.';
-                    $g->user->notify(new GameHasStarted($message));
-                    event(new WatchlistGameStatusChanged($message, $g->user->id));
-                    Redis::set("user_{$g->user->id}-game_{$game->GlobalGameID}-end_notified", true);
+        // Game End
+        if ($lastStatus == 'InProgress' && array_search($this->game->Status, ['Final', 'F/OT']) !== false) {
+            foreach ($watchlist as $g) {
+                if (Redis::get("user_{$g->user->id}-game_{$this->game->GlobalGameID}-end_notified")) {
+                    continue;
                 }
+
+                $message = $this->game->awayTeam->name . ' vs ' . $this->game->homeTeam->name . ' has ended.';
+                $g->user->notify(new GameHasStarted($message));
+                event(new WatchlistGameStatusChanged($message, $g->user->id));
+                Redis::set("user_{$g->user->id}-game_{$this->game->GlobalGameID}-end_notified", true);
             }
         }
     }

@@ -16,6 +16,7 @@ use App\Notifications\GameHasStarted;
 use App\Watchlist;
 use Carbon\Carbon;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Redis;
 
 class RealtimeSyncService
@@ -149,9 +150,8 @@ class RealtimeSyncService
             DB::commit();
             $games = Game::whereIn('GlobalGameID', $mapped->map(function ($game) {
                 return $game['GlobalGameID'];
-            })->toArray());
+            })->toArray())->get();
 
-            Notify::dispatch($games)->onQueue('notifications');
             $this->notifyUpdate($games);
         } catch (\Throwable $exception) {
             report($exception);
@@ -163,6 +163,7 @@ class RealtimeSyncService
     public function notifyUpdate($games)
     {
         $games->each(function ($game) {
+            Notify::dispatch($game)->onQueue('notifications');
             event(new GameStatusUpdated($game));
         });
     }
