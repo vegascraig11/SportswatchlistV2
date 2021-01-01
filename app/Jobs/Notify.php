@@ -3,6 +3,7 @@
 namespace App\Jobs;
 
 use App\Events\WatchlistGameStatusChanged;
+use App\Notifications\GameHasEnded;
 use App\Notifications\GameHasStarted;
 use App\Watchlist;
 use Illuminate\Bus\Queueable;
@@ -51,7 +52,7 @@ class Notify implements ShouldQueue
                     continue;
                 }
 
-                $message = $this->game->awayTeam->name . ' vs ' . $this->game->homeTeam->name . ' has started.';
+                $message = $this->game->awayTeam->full_name . ' vs ' . $this->game->homeTeam->full_name . ' has started.';
                 $g->user->notify(new GameHasStarted($message));
                 event(new WatchlistGameStatusChanged($message, $g->user->id));
                 Redis::set("user_{$g->user->id}-game_{$this->game->GlobalGameID}-start_notified", true);
@@ -65,8 +66,8 @@ class Notify implements ShouldQueue
                     continue;
                 }
 
-                $message = $this->game->awayTeam->name . ' vs ' . $this->game->homeTeam->name . ' has ended.';
-                $g->user->notify(new GameHasStarted($message));
+                $message = $this->game->awayTeam->full_name . ' vs ' . $this->game->homeTeam->full_name . ' has ended.';
+                $g->user->notify(new GameHasEnded($message));
                 event(new WatchlistGameStatusChanged($message, $g->user->id));
                 Redis::set("user_{$g->user->id}-game_{$this->game->GlobalGameID}-end_notified", true);
             }

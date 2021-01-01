@@ -138,26 +138,18 @@ class RealtimeSyncService
             return $service->mapGame($game);
         });
 
-        try {
-            DB::beginTransaction();
-            $mapped->each(function ($game) {
-                DB::table('games')
-                    ->updateOrInsert(
-                        ['GlobalGameID' => $game['GlobalGameID']],
-                        $game
-                    );
-            });
-            DB::commit();
-            $games = Game::whereIn('GlobalGameID', $mapped->map(function ($game) {
-                return $game['GlobalGameID'];
-            })->toArray())->get();
+        $mapped->each(function ($game) {
+            DB::table('games')
+                ->updateOrInsert(
+                    ['GlobalGameID' => $game['GlobalGameID']],
+                    $game
+                );
+        });
+        $games = Game::whereIn('GlobalGameID', $mapped->map(function ($game) {
+            return $game['GlobalGameID'];
+        })->toArray())->get();
 
-            $this->notifyUpdate($games);
-        } catch (\Throwable $exception) {
-            report($exception);
-            DB::rollback();
-            return null;
-        }
+        $this->notifyUpdate($games);
     }
 
     public function notifyUpdate($games)
