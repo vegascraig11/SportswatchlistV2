@@ -352,7 +352,7 @@
     </footer>
     <flash-message />
     <notifications group="notifications" classes="notify" />
-    <div class="fixed inset-0 pointer-events-none">
+    <div class="fixed inset-0 pointer-events-none px-4">
       <transition
         enter-class="transform -translate-y-10 opacity-0"
         enter-to-class="transform translate-y-0 opacity-100"
@@ -451,6 +451,7 @@ export default {
       idle: 0,
       interval: null,
       showDialog: false,
+      dialogShown: false,
       submitting: false,
       email: "",
     };
@@ -485,7 +486,7 @@ export default {
     this.updateTime();
   },
   mounted() {
-    if (!(this.emailRegistered || this.dialogShown || this.isLoggedIn)) {
+    if (!(this.dialogShown || this.isLoggedIn)) {
       ["mousemove", "click", "keyup"].forEach(event =>
         document.body.addEventListener(event, this.clearIdle)
       );
@@ -519,12 +520,6 @@ export default {
     },
     selectedLeagues() {
       return this.$store.state.selectedLeagues;
-    },
-    emailRegistered() {
-      return !!window.localStorage.getItem("emailRegistered");
-    },
-    dialogShown() {
-      return !!window.sessionStorage.getItem("dialogShown");
     },
   },
   methods: {
@@ -651,7 +646,7 @@ export default {
             "Your instructions on how to create a custom scoreboard of your favorite teams will be sent to you shortly."
           );
           this.showDialog = false;
-          window.localStorage.setItem("emailRegistered", true);
+          this.dialogShown = true;
         })
         .catch(() =>
           this.$error(
@@ -662,7 +657,7 @@ export default {
         .finally(() => (this.submitting = false));
     },
     hideDialog() {
-      window.sessionStorage.setItem("dialogShown", true);
+      this.dialogShown = true;
       this.showDialog = false;
     },
   },
