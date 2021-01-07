@@ -52,7 +52,7 @@ class Notify implements ShouldQueue
                     continue;
                 }
 
-                $message = $this->game->toArray()['away_team']['full_name'] . ' vs ' . $this->game->toArray()['home_team']['full_name'] . ' has started.';
+                $message = $this->game->awayTeam->full_name . ' vs ' . $this->game->homeTeam->full_name . ' has started. Please check the website live stats to see updated information on the game.';
                 $g->user->notify(new GameHasStarted($message));
                 event(new WatchlistGameStatusChanged($message, $g->user->id));
                 Redis::set("user_{$g->user->id}-game_{$this->game->GlobalGameID}-start_notified", true);

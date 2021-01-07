@@ -147,7 +147,7 @@ class RealtimeSyncService
         });
         $games = Game::whereIn('GlobalGameID', $mapped->map(function ($game) {
             return $game['GlobalGameID'];
-        })->toArray())->get();
+        })->toArray())->with(['homeTeam', 'awayTeam'])->get();
 
         $this->notifyUpdate($games);
     }
