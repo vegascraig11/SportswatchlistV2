@@ -4,10 +4,10 @@
 
     <form class="max-w-sm" @submit.prevent="login">
       <p
-        class="mt-2 pl-6 py-2 pr-2 border-l-4 border-green-800 bg-green-200 text-green-800"
-        v-if="message"
+        class="mt-2 pl-6 py-2 pr-2 border-l-4 border-red-800 bg-red-200 text-red-800"
+        v-if="errors.email"
       >
-        {{ message }}
+        {{ errors.email[0] }}
       </p>
       <div class="mt-2">
         <label for="email">Email</label>
@@ -57,11 +57,6 @@ export default {
       errors: {},
     };
   },
-  computed: {
-    message() {
-      return this.$store.state.registerMessage;
-    },
-  },
   methods: {
     login() {
       const { email, password } = this;
@@ -75,18 +70,16 @@ export default {
           if (this.$store.getters.isAdmin) {
             this.$router.push("/admin");
           } else if (this.$route.query.r) {
-            console.log("go to the path in the query");
             this.$router.push(this.$route.query.r);
           } else {
-            console.log("redirect to the default page");
             this.$router.push("/my-watchlist");
           }
-          flash({
-            body: "Logged in successfully!",
-            type: "success",
-          });
+          this.$success("Welcome Back!", "You are now logged in. ");
         })
-        .catch(err => console.log(err));
+        .catch(err => {
+          this.$error("Login Error", "Failed to login!");
+          this.errors = err.response.data.errors;
+        });
     },
   },
 };
