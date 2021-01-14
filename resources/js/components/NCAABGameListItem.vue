@@ -342,7 +342,7 @@
           <span>Live InGame Info</span>
         </button>
         <button
-          v-if="watchlist"
+          v-if="watchlist && isLoggedIn"
           @click="toggleGameNotificationsSetting"
           type="button"
           class="w-full flex justify-center space-x-2 bg-mantis-500 text-white py-2 hover:bg-mantis-600"

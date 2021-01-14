@@ -6,60 +6,60 @@
     </div>
     <template v-else>
       <div v-if="watchlist.length" class="mt-6">
-        <div v-for="(entry, index) in watchlist">
+        <div v-for="game in watchlist">
           <NBAGameListItem
             @game-removed="removeGame"
-            v-if="entry.game.game_type === 'nba'"
+            v-if="game.game_type === 'nba'"
             :watchlist="true"
-            :initialGameData="entry.game"
+            :initialGameData="game"
             class="mt-6 first:mt-0"
-            :key="`wg-${entry.id}`"
-            :notification-settings="entry.settings"
+            :key="`wg-${game.id}`"
+            :notification-settings="game.settings"
           />
           <MLBGameListItem
             @game-removed="removeGame"
-            v-if="entry.game.game_type === 'mlb'"
+            v-if="game.game_type === 'mlb'"
             :watchlist="true"
-            :initialGameData="entry.game"
+            :initialGameData="game"
             class="mt-6 first:mt-0"
-            :key="`wg-${entry.id}`"
-            :notification-settings="entry.settings"
+            :key="`wg-${game.id}`"
+            :notification-settings="game.settings"
           />
           <NFLGameListItem
             @game-removed="removeGame"
-            v-if="entry.game.game_type === 'nfl'"
+            v-if="game.game_type === 'nfl'"
             :watchlist="true"
-            :initialGameData="entry.game"
+            :initialGameData="game"
             class="mt-6 first:mt-0"
-            :key="`wg-${entry.id}`"
-            :notification-settings="entry.settings"
+            :key="`wg-${game.id}`"
+            :notification-settings="game.settings"
           />
           <NHLGameListItem
             @game-removed="removeGame"
-            v-if="entry.game.game_type === 'nhl'"
+            v-if="game.game_type === 'nhl'"
             :watchlist="true"
-            :initialGameData="entry.game"
+            :initialGameData="game"
             class="mt-6 first:mt-0"
-            :key="`wg-${entry.id}`"
-            :notification-settings="entry.settings"
+            :key="`wg-${game.id}`"
+            :notification-settings="game.settings"
           />
           <NCAABGameListItem
             @game-removed="removeGame"
-            v-if="entry.game.game_type === 'ncaab'"
+            v-if="game.game_type === 'ncaab'"
             :watchlist="true"
-            :initialGameData="entry.game"
+            :initialGameData="game"
             class="mt-6 first:mt-0"
-            :key="`wg-${entry.id}`"
-            :notification-settings="entry.settings"
+            :key="`wg-${game.id}`"
+            :notification-settings="game.settings"
           />
           <NCAAFGameListItem
             @game-removed="removeGame"
-            v-if="entry.game.game_type === 'ncaaf'"
+            v-if="game.game_type === 'ncaaf'"
             :watchlist="true"
-            :initialGameData="entry.game"
+            :initialGameData="game"
             class="mt-6 first:mt-0"
-            :key="`wg-${entry.id}`"
-            :notification-settings="entry.settings"
+            :key="`wg-${game.id}`"
+            :notification-settings="game.settings"
           />
         </div>
       </div>
@@ -96,8 +96,11 @@ export default {
     };
   },
   created() {
-    // this.getGames();
-    this.getWatchlist();
+    if (this.$store.getters.isLoggedIn) {
+      this.getWatchlist();
+    } else {
+      this.getGames();
+    }
   },
   methods: {
     removeGame(gameId) {
@@ -119,7 +122,13 @@ export default {
       this.loading = true;
       this.$http
         .get("/api/watchlist")
-        .then(response => (this.watchlist = response.data))
+        .then(
+          response =>
+            (this.watchlist = response.data.map(game => ({
+              ...game.game,
+              settings: game.settings,
+            })))
+        )
         .catch(err => console.log(err))
         .finally(() => (this.loading = false));
     },

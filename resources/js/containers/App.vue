@@ -471,6 +471,11 @@ export default {
         if (this.interval) clearInterval(this.interval);
       }
     },
+    loggedIn(val) {
+      if (val && this.interval) {
+        clearInterval(this.interval);
+      }
+    },
   },
   created() {
     this.time = new Date();
@@ -486,7 +491,9 @@ export default {
     this.updateTime();
   },
   mounted() {
-    if (!(this.dialogShown || this.isLoggedIn)) {
+    if (this.loggedIn) return;
+
+    if (this.dialogShown) {
       ["mousemove", "click", "keyup"].forEach(event =>
         document.body.addEventListener(event, this.clearIdle)
       );

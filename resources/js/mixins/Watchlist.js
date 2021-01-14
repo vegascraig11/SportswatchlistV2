@@ -57,6 +57,9 @@ const WatchlistMixin = {
         !["Final", "F/OT", "Canceled", "Postponed"].includes(this.game.status)
       );
     },
+    isLoggedIn() {
+      return this.$store.getters.isLoggedIn;
+    },
   },
   methods: {
     ordinalSuffixOf(i) {
