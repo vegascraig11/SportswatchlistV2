@@ -41,49 +41,70 @@
                 >
               </div>
             </nav>
-            <button class="lg:hidden group relative p-4">
-              <svg
-                viewBox="0 0 20 20"
-                xmlns="http://www.w3.org/2000/svg"
-                class="fill-current h-6 w-6"
+            <div class="relative" ref="userDropdown">
+              <button
+                @click="mobileDropdown = !mobileDropdown"
+                type="button"
+                class="lg:hidden p-4 focus:outline-none focus:ring transition ease-in duration-150 rounded"
               >
-                <title>Menu</title>
-                <path d="M0 3h20v2H0V3zm0 6h20v2H0V9zm0 6h20v2H0v-2z"></path>
-              </svg>
-              <div
-                class="mt-1 text-sm invisible absolute right-0 w-48 py-1 bg-gray-800 border border-gray-800 rounded overflow-hidden group-hover:visible z-50"
+                <svg
+                  viewBox="0 0 20 20"
+                  xmlns="http://www.w3.org/2000/svg"
+                  class="fill-current h-6 w-6"
+                >
+                  <title>Menu</title>
+                  <path d="M0 3h20v2H0V3zm0 6h20v2H0V9zm0 6h20v2H0v-2z"></path>
+                </svg>
+              </button>
+              <transition
+                enter-class="transform scale-90 opacity-0"
+                enter-to-class="transform scale-100 opacity-100"
+                enter-active-class="transition duration-100 ease-in"
+                leave-active-class="transition duration-75 ease-in"
+                leave-class="transform scale-100 opacity-100"
+                leave-to-class="transform scale-90 opacity-0"
               >
-                <router-link
-                  class="block py-2 hover:bg-gray-900"
-                  to="/my-watchlist"
-                  >My Watchlist</router-link
+                <div
+                  v-if="mobileDropdown"
+                  class="text-sm absolute origin-top-right right-0 w-56 p-2 bg-gray-800 border border-gray-800 rounded z-50"
                 >
-                <router-link class="block py-2 hover:bg-gray-900" to="/faq"
-                  >FAQ's</router-link
-                >
-                <div v-if="loggedIn" class="border-t mt-2">
-                  <p class="mb-2 block py-2 font-semibold">{{ username }}</p>
-                  <p
-                    class="block py-2 cursor-pointer hover:bg-gray-900"
-                    @click="logout"
-                  >
-                    Logout
-                  </p>
-                </div>
-                <div v-else class="px-2 border-t mt-2">
                   <router-link
-                    to="/signup"
-                    class="block py-2 mb-2 hover:bg-gray-900"
-                    >Sign Up</router-link
+                    class="block p-2 hover:bg-gray-900 transition ease-in duration-150 rounded"
+                    to="/my-watchlist"
+                    >My Watchlist</router-link
                   >
                   <router-link
-                    to="/login"
-                    class="block py-2 px-4 py-2 bg-mantis-500 hover:bg-green-500 rounded-sm"
-                    >Login</router-link
+                    class="block p-2 hover:bg-gray-900 transition ease-in duration-150 rounded"
+                    to="/faq"
+                    >FAQ's</router-link
                   >
+                  <div v-if="loggedIn" class="border-t mt-2">
+                    <p class="mb-2 px-2 block py-2 font-semibold">
+                      {{ username }}
+                    </p>
+                    <button
+                      type="button"
+                      class="block w-full text-left p-2 cursor-pointer hover:bg-gray-900 transition ease-in duration-150 rounded focus:outline-none"
+                      @click="logout"
+                    >
+                      Logout
+                    </button>
+                  </div>
+                  <div v-else class="border-t mt-2 py-2">
+                    <router-link
+                      to="/signup"
+                      class="block p-2 mb-2 hover:bg-gray-900 transition ease-in duration-150 rounded"
+                      >Sign Up</router-link
+                    >
+                    <router-link
+                      to="/login"
+                      class="block p-2 bg-mantis-500 hover:bg-opacity-90 transition ease-in duration-150 rounded-sm"
+                      >Login</router-link
+                    >
+                  </div>
                 </div>
-              </div>
-            </button>
+              </transition>
+            </div>
           </div>
         </div>
       </div>
@@ -225,7 +246,13 @@
               </v-date-picker>
             </div>
             <div class="flex items-center py-2">
-              <button @click="previousDay" type="button" class="px-2">
+              <button
+                @click="previousDay"
+                type="button"
+                class="px-2"
+                :disabled="loadingLeagues"
+                :class="{ 'cursor-wait': loadingLeagues }"
+              >
                 <svg
                   class="h-5 w-5"
                   aria-hidden="true"
@@ -246,9 +273,13 @@
                         v-for="(day, index) in week"
                         :key="`row-${day.date}`"
                         class="flex flex-col items-center mx-1 leading-tight font-semibold"
-                        :class="index === 3 ? 'text-white' : ''"
+                        :class="{
+                          'text-white': index === 3,
+                          'cursor-wait': loadingLeagues,
+                        }"
                         type="button"
                         @click="setDate(index)"
+                        :disabled="loadingLeagues"
                       >
                         <span class="text-xs uppercase">{{ day.day }}</span>
                         <span>{{ day.date }}</span>
@@ -257,7 +288,13 @@
                   </tr>
                 </tbody>
               </table>
-              <button @click="nextDay" type="button" class="px-2">
+              <button
+                @click="nextDay"
+                type="button"
+                class="px-2"
+                :disabled="loadingLeagues"
+                :class="{ 'cursor-wait': loadingLeagues }"
+              >
                 <svg
                   class="h-5 w-5"
                   aria-hidden="true"
@@ -454,6 +491,7 @@ export default {
       dialogShown: false,
       submitting: false,
       email: "",
+      mobileDropdown: false,
     };
   },
   watch: {
@@ -475,6 +513,16 @@ export default {
       if (val && this.interval) {
         clearInterval(this.interval);
       }
+    },
+    mobileDropdown(val) {
+      if (val) {
+        document.body.addEventListener("click", this.clickAwayListener);
+      } else {
+        document.body.removeEventListener("click", this.clickAwayListener);
+      }
+    },
+    $route() {
+      this.mobileDropdown = false;
     },
   },
   created() {
@@ -505,6 +553,8 @@ export default {
       document.body.removeEventListener(event, this.clearIdle)
     );
     if (this.interval) clearInterval(this.interval);
+
+    document.body.removeEventListener("click", this.clickAwayListener);
   },
   computed: {
     date() {
@@ -528,8 +578,18 @@ export default {
     selectedLeagues() {
       return this.$store.state.selectedLeagues;
     },
+    loadingLeagues() {
+      return !!this.$store.state.loading.length;
+    },
   },
   methods: {
+    clickAwayListener(e) {
+      if (this.$refs.userDropdown.contains(e.target)) {
+        return;
+      }
+
+      this.mobileDropdown = false;
+    },
     updateDate(e) {
       if (!e) return;
 
@@ -553,15 +613,18 @@ export default {
       this.week = week;
     },
     setDate(index) {
+      if (this.loadingLeagues) return;
       this.$store.commit("setDate", this.week[index].dateTime.toString());
     },
     previousDay() {
+      if (this.loadingLeagues) return;
       this.$store.commit(
         "setDate",
         moment(this.date).subtract(1, "days").toString()
       );
     },
     nextDay() {
+      if (this.loadingLeagues) return;
       this.$store.commit(
         "setDate",
         moment(this.date).add(1, "days").toString()
@@ -605,6 +668,7 @@ export default {
       this.$store
         .dispatch("logout")
         .then(() => {
+          this.$success("Success", "You were logged out successfully.");
           this.$router.push("/");
         })
         .catch(err => {

@@ -14,6 +14,7 @@ const store = new Vuex.Store({
     allWatchlist: [],
     leagues: ["nfl", "ncaaf", "nba", "ncaab", "mlb", "nhl"],
     selectedLeagues: [],
+    loading: [],
   },
   mutations: {
     setDate: (state, newDate) => (state.date = newDate),
@@ -50,6 +51,18 @@ const store = new Vuex.Store({
           "watchlist",
           JSON.stringify(state.watchlist)
         );
+      }
+    },
+    loading: (state, league) => {
+      if (league.loading) {
+        state.loading.push(league.league);
+      } else {
+        const index = state.loading.indexOf(league.league);
+        if (index !== -1) {
+          const loading = state.loading;
+          loading.splice(index, 1);
+          state.loading = loading;
+        }
       }
     },
   },
@@ -97,10 +110,6 @@ const store = new Vuex.Store({
             ctx.commit("unauthenticate");
             ctx.commit("setUser", {});
             window.localStorage.setItem("loggedIn", false);
-            flash({
-              body: "Logged out successfully!",
-              type: "success",
-            });
             resolve(true);
           })
           .catch(reject);

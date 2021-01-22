@@ -1,5 +1,5 @@
-const mix = require('laravel-mix');
-require('laravel-mix-purgecss');
+const mix = require("laravel-mix");
+require("laravel-mix-purgecss");
 /*
  |--------------------------------------------------------------------------
  | Mix Asset Management
@@ -11,15 +11,10 @@ require('laravel-mix-purgecss');
  |
  */
 
-mix.js('resources/js/app.js', 'public/js')
-    .postCss('resources/css/app.css', 'public/css')
-    .options({
-    	postCss: [
-    		require('tailwindcss')('./tailwind.config.js'),
-    		require('autoprefixer')
-    	]
-    });
+mix.js("resources/js/app.js", "public/js")
+    .postCss("resources/css/app.css", "public/css", [require("tailwindcss")])
+    .disableNotifications();
 
 if (mix.inProduction()) {
-    mix.purgeCss().extract().version();
+    mix.extract().version();
 }

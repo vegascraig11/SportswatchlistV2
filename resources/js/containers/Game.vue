@@ -116,6 +116,7 @@ export default {
   methods: {
     getGames() {
       this.loading = true;
+      this.$store.commit("loading", { league: this.league, loading: true });
       const formattedDate = this.getFormattedDate();
 
       this.$http
@@ -131,6 +132,10 @@ export default {
           if (this.getFormattedDate() === formattedDate) {
             this.loading = false;
           }
+          this.$store.commit("loading", {
+            league: this.league,
+            loading: false,
+          });
         });
     },
     getFormattedDate() {

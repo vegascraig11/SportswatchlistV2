@@ -1,6 +1,12 @@
 const defaultTheme = require("tailwindcss/defaultTheme");
 
 module.exports = {
+  purge: [
+    "./resources/**/*.blade.php",
+    "./resources/**/*.js",
+    "./resources/**/*.vue",
+  ],
+  darkMode: false,
   theme: {
     extend: {
       fontSize: {
@@ -30,14 +36,12 @@ module.exports = {
     },
   },
   variants: {
-    visibility: ["group-hover"],
+    extend: {
+      backgroundOpacity: ["disabled"],
+      cursor: ["disabled"],
+    },
   },
   plugins: [],
-  purge: [
-    "./resources/js/pages/**/*.vue",
-    "./resources/js/components/**/*.vue",
-    "./resources/js/containers/**/*.vue",
-  ],
   experimental: {
     applyComplexClasses: true,
   },
