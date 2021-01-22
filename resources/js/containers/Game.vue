@@ -2,7 +2,7 @@
   <div>
     <template class="px-2 sm:px-0 py-6">
       <h2 class="text-xl font-semibold mt-6">{{ header }}</h2>
-      <div v-if="loading" class="flex justify-center py-6">
+      <div v-if="loading" class="flex justify-center py-6 z-40">
         <loading></loading>
       </div>
       <template v-else>

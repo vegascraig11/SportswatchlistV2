@@ -21,13 +21,14 @@
           </svg>
           <span class="ml-2">{{ time }}</span>
         </div>
-        <v-calendar
-          class="mt-4"
-          is-dark
-          :attributes="attributes"
-          @dayclick="dayClicked"
-        >
-        </v-calendar>
+
+        <div class="mt-4">
+          <app-calendar
+            :selected-date="stateDate"
+            @date-selected="dateSelected"
+            :disabled="loadingLeagues"
+          ></app-calendar>
+        </div>
 
         <div class="mt-4 px-6">
           <div
@@ -42,65 +43,39 @@
         </div>
       </div>
     </aside>
-    <div class="fixed top-0 right-0 mr-10 mt-10 shadow-lg overflow-hidden">
-      <transition-group name="list" tag="p">
-        <div
-          class="relative bg-white rounded overflow-hidden shadow-lg mt-4 first:mt-0"
-          v-for="message in messages"
-          :key="message"
-        >
-          <div class="absolute left-0 top-0 bottom-0 w-2 bg-green-500"></div>
-          <div class="border border-gray-100 pl-8 pr-6 py-2">
-            <span>{{ message }}</span>
-          </div>
-        </div>
-      </transition-group>
-    </div>
   </div>
 </template>
 
 <script>
 import moment from "moment";
 import Game from "./../containers/Game";
+import Calendar from "../components/Calendar";
 
 export default {
   components: {
+    "app-calendar": Calendar,
     "game-container": Game,
   },
   data() {
     return {
       time: "",
-      attributes: [],
       banners: [],
-      messages: [],
     };
   },
   created() {
     this.time = new Date();
 
     window.Echo.channel("game-start").listen("GameStarted", e => {
-      this.messages.push(e.message);
-      setTimeout(() => {
-        this.messages.splice(this.messages.indexOf(e.message), 1);
-      }, 5000);
+      this.$success("Game Has Started", e.message);
     });
 
     if (this.$store.getters.isLoggedIn) {
       window.Echo.channel(
         `${this.$store.state.user.id}-watchlist-update`
       ).listen("WatchlistGameStatusChanged", e => {
-        this.messages.push(e.message);
-        setTimeout(() => {
-          this.messages.splice(this.messages.indexOf(e.message), 1);
-        }, 5000);
+        this.$success("Game Update", e.message);
       });
     }
-
-    this.attributes.push({
-      key: "today",
-      highlight: true,
-      dates: new Date(),
-    });
 
     this.updateTime();
     this.getBanners();
@@ -114,6 +89,12 @@ export default {
     leagues() {
       return this.$store.state.leagues;
     },
+    stateDate() {
+      return this.$store.state.date;
+    },
+    loadingLeagues() {
+      return !!this.$store.state.loading.length;
+    },
   },
   methods: {
     updateTime() {
@@ -121,8 +102,8 @@ export default {
         this.time = moment(new Date()).toDate();
       }, 1000);
     },
-    dayClicked(e) {
-      this.$store.commit("setDate", moment(e.date).toString());
+    dateSelected(e) {
+      this.$store.commit("setDate", e);
     },
     getBanners() {
       this.$http

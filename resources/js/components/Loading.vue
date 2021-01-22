@@ -17,7 +17,7 @@ export default {};
 
 <style scoped>
 .lds-roller {
-  z-index: 50;
+  z-index: 40;
   display: inline-block;
   position: relative;
   width: 80px;

@@ -2,6 +2,10 @@
 
 @tailwind components;
 
+button {
+    @apply focus:outline-none;
+}
+
 .admin-links.router-link-exact-active {
     @apply text-white bg-mantis-500 hover:bg-mantis-400;
 }

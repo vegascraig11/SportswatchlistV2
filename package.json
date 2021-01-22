@@ -25,6 +25,7 @@
         "autoprefixer": "^9",
         "is-valid-domain": "^0.0.14",
         "laravel-echo": "^1.8.1",
+        "luxon": "^1.25.0",
         "moment": "^2.24.0",
         "moment-timezone": "^0.5.28",
         "postcss": "^7",

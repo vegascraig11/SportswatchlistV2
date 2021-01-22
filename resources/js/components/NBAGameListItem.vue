@@ -6,9 +6,7 @@
           <table class="w-full">
             <thead class="bg-gray-900 text-white text-xxs sm:text-xs uppercase">
               <tr class="whitespace-no-wrap">
-                <th
-                  class="sm:w-1/3 pl-4 sm:pr-32 py-2 text-left flex items-strech"
-                >
+                <th class="pl-4 py-2 text-left flex items-strech">
                   <span>NBA | {{ gameTime }}</span>
                   <div
                     v-if="canAdd"

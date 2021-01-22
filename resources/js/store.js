@@ -1,12 +1,12 @@
 import Vue from "vue";
 import Vuex from "vuex";
 import axios from "axios";
-import moment from "moment";
+import { DateTime } from "luxon";
 Vue.use(Vuex);
 
 const store = new Vuex.Store({
   state: {
-    date: moment(new Date()).toString(),
+    date: DateTime.local(),
     auth: false,
     user: {},
     registerMessage: "",
