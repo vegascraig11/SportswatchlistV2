@@ -200,7 +200,7 @@
           </div>
         </div>
         <div class="flex">
-          <date-picker :date="date"></date-picker>
+          <date-picker></date-picker>
           <div class="flex items-center py-2">
             <button
               @click="previousDay"
@@ -339,6 +339,9 @@ export default {
       } else {
         document.body.removeEventListener("click", this.clickAwayListener);
       }
+    },
+    stateDate(val) {
+      this.date = val;
     },
     date() {
       this.buildWeekRow();

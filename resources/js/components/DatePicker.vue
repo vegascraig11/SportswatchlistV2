@@ -40,11 +40,17 @@ export default {
     AppDropdown,
   },
   data() {
-    let date = DateTime.local();
-
     return {
-      date,
+      date: null,
     };
+  },
+  created() {
+    this.date = this.stateDate || DateTime.local();
+  },
+  watch: {
+    stateDate(val) {
+      this.date = val;
+    },
   },
   computed: {
     prettyDate() {
