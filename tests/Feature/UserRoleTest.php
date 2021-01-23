@@ -15,12 +15,10 @@ class UserRoleTest extends TestCase
     /** @test */
     public function userHasRoles()
     {
-        $role = factory(Role::class)->create(['name' => 'admin']);
-        $user = factory(User::class)->create();
+        $role = Role::factory()->create(['name' => 'admin']);
+        $user = User::factory()->create();
 
         $user->roles()->attach($role->id);
-
-        dd($user->is_admin);
 
         $this->assertTrue($user->isAdmin());
     }

@@ -8,8 +8,8 @@ use App\Role;
 use App\User;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Foundation\Testing\WithFaker;
+use Illuminate\Support\Facades\Bus;
 use Illuminate\Support\Facades\Event;
-use Illuminate\Support\Facades\Queue;
 use Illuminate\Support\Facades\Storage;
 use Tests\TestCase;
 
@@ -22,19 +22,19 @@ class UserExportToCSVTest extends TestCase
     {
         $this->withoutExceptionHandling();
 
-        Queue::fake();
+        Bus::fake();
 
-        $admin = factory(User::class)->create([
+        $admin = User::factory()->create([
             'name' => 'Test Name',
             'email' => 'email@domain.com',
         ]);
-        $role = factory(Role::class)->create(['name' => 'admin']);
+        $role = Role::factory()->create(['name' => 'admin']);
         $admin->roles()->attach($role->id);
 
         $this->actingAs($admin)
             ->postJson('/api/export')
             ->assertStatus(200);
-        Queue::assertPushed(ExportToCSV::class);
+        Bus::assertDispatched(ExportToCSV::class);
     }
 
     /** @test */
@@ -43,15 +43,15 @@ class UserExportToCSVTest extends TestCase
         Event::fake();
         Storage::fake();
 
-        $admin = factory(User::class)->create([
+        $admin = User::factory()->create([
             'name' => 'Test Name',
             'email' => 'email@domain.com',
         ]);
-        $otherUser = factory(User::class)->create([
+        $otherUser = User::factory()->create([
             'name' => 'Other User',
             'email' => 'otheremail@service.com',
         ]);
-        $role = factory(Role::class)->create(['name' => 'admin']);
+        $role = Role::factory()->create(['name' => 'admin']);
         $admin->roles()->attach($role->id);
 
         $job = new ExportToCSV;
@@ -83,12 +83,12 @@ EOD;
         Storage::fake();
         Storage::put('exports/users.csv', $contents);
 
-        $admin = factory(User::class)->create([
+        $admin = User::factory()->create([
             'name' => 'Test Name',
             'email' => 'email@domain.com',
         ]);
         
-        $role = factory(Role::class)->create(['name' => 'admin']);
+        $role = Role::factory()->create(['name' => 'admin']);
         $admin->roles()->attach($role->id);
 
         $response = $this->actingAs($admin)->get('/export/download');
@@ -104,7 +104,7 @@ EOD;
     /** @test */
     public function onlyAdminsCanExport()
     {
-        $user = factory(User::class)->create();
+        $user = User::factory()->create();
 
         $this->actingAs($user)
             ->postJson('/api/export')
@@ -114,7 +114,7 @@ EOD;
     /** @test */
     public function onlyAdminsCanDownloadExportedCSV()
     {
-        $user = factory(User::class)->create();
+        $user = User::factory()->create();
 
         $this->actingAs($user)
             ->get('/export/download')

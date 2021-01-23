@@ -18,7 +18,7 @@ class WatchlistTest extends TestCase
     {
         $this->withoutExceptionHandling();
 
-        $user = factory(User::class)->create([
+        $user = User::factory()->create([
             'name' => 'John Doe',
             'email' => 'john@example.com'
         ]);
@@ -38,7 +38,7 @@ class WatchlistTest extends TestCase
         $this->withoutExceptionHandling();
 
         // Setup
-        $user = factory(User::class)->create([
+        $user = User::factory()->create([
             'name' => 'John Doe',
             'email' => 'john@example.com'
         ]);
