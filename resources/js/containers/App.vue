@@ -215,9 +215,6 @@ export default {
     leagues() {
       return this.$store.state.leagues;
     },
-    selectedLeagues() {
-      return this.$store.state.selectedLeagues;
-    },
     loadingLeagues() {
       return !!this.$store.state.loading.length;
     },
