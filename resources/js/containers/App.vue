@@ -247,6 +247,13 @@ export default {
       this.dialogShown = true;
       this.showDialog = false;
     },
+    setLeague(league) {
+      if (this.$route.name !== "home") {
+        this.$router.push("/");
+      }
+
+      this.$store.commit("setLeague", league);
+    },
   },
 };
 </script>
