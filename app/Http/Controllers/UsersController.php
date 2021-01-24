@@ -40,6 +40,8 @@ class UsersController extends Controller
             'verification_token' => Str::random(32),
         ]);
 
+        $user->sendEmailVerificationNotification();
+
         return response()->json($user, 200);
     }
 
@@ -69,7 +71,7 @@ class UsersController extends Controller
         }
 
         if ($user->markEmailAsVerified()) {
-            event(new Verified($request->user()));
+            event(new Verified($user));
             $user->verification_token = null;
             $user->save();
         }
