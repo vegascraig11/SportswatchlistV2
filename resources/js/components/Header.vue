@@ -331,6 +331,9 @@ export default {
     loadingLeagues() {
       return !!this.$store.state.loading.length;
     },
+    username() {
+      return this.$store.state.user.name;
+    },
   },
   watch: {
     mobileDropdown(val) {

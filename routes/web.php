@@ -11,6 +11,9 @@
 |
 */
 
+Route::post('/register', 'UsersController@register');
 Route::get('banners/{filename}', 'BannerController@show');
 Route::get('export/download', 'DownloadCSVController@index');
 Route::get('{any}', 'FrontEndController')->where('any', '^(?!api).*$');
+
+// @TODO: password.reset route

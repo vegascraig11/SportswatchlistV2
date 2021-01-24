@@ -30,7 +30,10 @@ Route::get('banners', 'BannerController@index');
 
 Route::post('subscriptions', 'SubscriptionsController@store');
 
-Route::middleware('auth:sanctum')->group(function () {
+Route::post('resend', 'UsersController@resendVerificationEmail');
+Route::get('verify-email', 'UsersController@verifyEmail')->name('verification.verify');
+
+Route::middleware(['auth:sanctum', 'verified'])->group(function () {
     Route::get('watchlist', 'WatchlistController@index');
     Route::get('watchlist/raw', 'WatchlistController@raw');
     Route::post('watchlist', 'WatchlistController@store');

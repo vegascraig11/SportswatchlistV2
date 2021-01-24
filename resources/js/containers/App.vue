@@ -203,9 +203,6 @@ export default {
     date() {
       return this.$store.state.date;
     },
-    username() {
-      return this.$store.state.user.name;
-    },
     loggedIn() {
       return this.$store.getters.isLoggedIn;
     },

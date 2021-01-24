@@ -1,111 +1,133 @@
 <template>
   <div class="px-2 sm:px-0 py-6">
-    <h2 class="text-xl font-semibold">Register</h2>
+    <h2 class="text-xl font-semibold md:text-center text-gray-500">Register</h2>
 
-    <form class="max-w-sm" @submit.prevent="register">
-      <div class="mt-2">
-        <label for="firstname">First Name</label>
-        <div>
-          <input
-            class="w-full px-2 py-1 border rounded"
-            :class="errors.firstname ? 'border-red-500' : ''"
-            type="text"
-            v-model="firstname"
-            id="firstname"
-            required
-            placeholder="John"
-          />
+    <div class="mt-2 md:flex justify-center">
+      <form class="max-w-sm" @submit.prevent="register">
+        <div class="mt-2">
+          <label for="firstname" class="uppercase">First Name</label>
+          <div>
+            <input
+              class="w-full px-3 py-2 border rounded mt-1 focus:outline-none focus:ring transition duration-150 ease-in"
+              :class="errors.firstname ? 'border-red-500' : ''"
+              type="text"
+              v-model="firstname"
+              id="firstname"
+              required
+              placeholder="John"
+            />
+          </div>
+          <p v-if="errors.firstname" class="text-red-700">
+            {{ errors.firstname[0] }}
+          </p>
         </div>
-        <p v-if="errors.firstname" class="text-red-700">
-          {{ errors.firstname[0] }}
-        </p>
-      </div>
-      <div class="mt-2">
-        <label for="lastname">Last Name</label>
-        <div>
-          <input
-            class="w-full px-2 py-1 border rounded"
-            :class="errors.lastname ? 'border-red-500' : ''"
-            type="text"
-            v-model="lastname"
-            id="lastname"
-            required
-            placeholder="Doe"
-          />
+        <div class="mt-2">
+          <label for="lastname" class="uppercase">Last Name</label>
+          <div>
+            <input
+              class="w-full px-3 py-2 border rounded mt-1 focus:outline-none focus:ring transition duration-150 ease-in"
+              :class="errors.lastname ? 'border-red-500' : ''"
+              type="text"
+              v-model="lastname"
+              id="lastname"
+              required
+              placeholder="Doe"
+            />
+          </div>
+          <p v-if="errors.lastname" class="text-red-700">
+            {{ errors.lastname[0] }}
+          </p>
         </div>
-        <p v-if="errors.lastname" class="text-red-700">
-          {{ errors.lastname[0] }}
-        </p>
-      </div>
-      <div class="mt-2">
-        <label for="email">Email</label>
-        <div>
-          <input
-            class="w-full px-2 py-1 border rounded"
-            :class="errors.email ? 'border-red-500' : ''"
-            type="email"
-            v-model="email"
-            id="email"
-            required
-            placeholder="john@example.com"
-          />
+        <div class="mt-2">
+          <label for="email" class="uppercase">Email</label>
+          <div>
+            <input
+              class="w-full px-3 py-2 border rounded mt-1 focus:outline-none focus:ring transition duration-150 ease-in"
+              :class="errors.email ? 'border-red-500' : ''"
+              type="email"
+              v-model="email"
+              id="email"
+              required
+              placeholder="john@example.com"
+            />
+          </div>
+          <p v-if="errors.email" class="text-red-700">{{ errors.email[0] }}</p>
         </div>
-        <p v-if="errors.email" class="text-red-700">{{ errors.email[0] }}</p>
-      </div>
-      <div class="mt-2">
-        <label for="password">Password</label>
-        <div>
-          <input
-            class="w-full px-2 py-1 border rounded"
-            :class="errors.password ? 'border-red-500' : ''"
-            type="password"
-            v-model="password"
-            id="password"
-            required
-            placeholder="Password"
-          />
+        <div class="mt-2">
+          <label for="password" class="uppercase">Password</label>
+          <div>
+            <input
+              class="w-full px-3 py-2 border rounded mt-1 focus:outline-none focus:ring transition duration-150 ease-in"
+              :class="errors.password ? 'border-red-500' : ''"
+              type="password"
+              v-model="password"
+              id="password"
+              required
+              placeholder="Password"
+            />
+          </div>
+          <p v-if="errors.password" class="text-red-700">
+            {{ errors.password[0] }}
+          </p>
         </div>
-        <p v-if="errors.password" class="text-red-700">
-          {{ errors.password[0] }}
-        </p>
-      </div>
-      <div class="mt-2">
-        <label for="confirmPassword">Confirm Password</label>
-        <div>
-          <input
-            class="w-full px-2 py-1 border rounded"
-            :class="errors.confirmPassword ? 'border-red-500' : ''"
-            type="password"
-            v-model="confirmPassword"
-            id="confirmPassword"
-            required
-            placeholder="Confirm Password"
-          />
-        </div>
-        <p v-if="errors.confirmPassword" class="text-red-700">
-          {{ errors.confirmPassword[0] }}
-        </p>
-      </div>
-      <div class="mt-4">
-        <label for="agreement" class="flex align-center">
-          <input v-model="agreement" type="checkbox" id="agreement" />
-          <span class="ml-2" :class="errors.agreement ? 'text-red-500' : ''"
-            >I agree to the
-            <a class="underline text-gray-700 cursor-pointer" href="#"
-              >terms and conditions</a
-            >
-            of Sports Watchlist.</span
+        <div class="mt-2">
+          <label for="confirmPassword" class="uppercase"
+            >Confirm Password</label
           >
-        </label>
-      </div>
-      <div class="mt-4">
-        <button
-          class="bg-mantis-500 text-white px-4 py-2 font-semibold rounded hover:bg-green-500"
-        >
-          Sign Up
-        </button>
-      </div>
-    </form>
+          <div>
+            <input
+              class="w-full px-3 py-2 border rounded mt-1 focus:outline-none focus:ring transition duration-150 ease-in"
+              :class="errors.confirmPassword ? 'border-red-500' : ''"
+              type="password"
+              v-model="confirmPassword"
+              id="confirmPassword"
+              required
+              placeholder="Confirm Password"
+            />
+          </div>
+          <p v-if="errors.confirmPassword" class="text-red-700">
+            {{ errors.confirmPassword[0] }}
+          </p>
+        </div>
+        <div class="mt-4">
+          <label for="agreement" class="flex align-center">
+            <input v-model="agreement" type="checkbox" id="agreement" />
+            <span class="ml-2" :class="errors.agreement ? 'text-red-500' : ''"
+              >I agree to the
+              <a class="underline text-gray-700 cursor-pointer" href="#"
+                >terms and conditions</a
+              >
+              of Sports Watchlist.</span
+            >
+          </label>
+        </div>
+        <div class="mt-4">
+          <button
+            class="relative w-full bg-mantis-500 text-white text-sm px-4 py-3 font-semibold rounded hover:bg-opacity-90 uppercase transition duration-150 ease-in disabled:bg-opacity-90 disabled:cursor-wait"
+            :disabled="working"
+          >
+            <span :class="{ 'text-transparent': working }">Sign Up</span>
+            <div
+              v-if="working"
+              class="absolute inset-0 flex items-center justify-center"
+            >
+              <svg
+                class="h-8 w-8 animate-spin"
+                fill="none"
+                xmlns="http://www.w3.org/2000/svg"
+                viewBox="0 0 24 24"
+              >
+                <path
+                  d="M6.708 6a8 8 0 1010.583 0"
+                  stroke="currentColor"
+                  stroke-width="2"
+                />
+              </svg>
+            </div>
+          </button>
+        </div>
+      </form>
+    </div>
   </div>
 </template>
 
@@ -120,6 +142,7 @@ export default {
       confirmPassword: "",
       agreement: "",
       errors: {},
+      working: false,
     };
   },
   methods: {
@@ -134,6 +157,8 @@ export default {
       } = this;
 
       if (!this.validateFields()) return;
+
+      this.working = true;
 
       axios
         .post("/register", {
@@ -152,7 +177,9 @@ export default {
         .catch(err => {
           this.$error("Register Error", err.response.data.message);
           this.errors = err.response.data.errors;
-        });
+          this.working = false;
+        })
+        .finally(() => (this.working = false));
     },
     validateFields() {
       const {

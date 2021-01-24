@@ -77,11 +77,11 @@ const store = new Vuex.Store({
         axios
           .get("sanctum/csrf-cookie")
           .then(() => axios.post("login", { email, password }))
-          .then(async response => {
-            const user = await axios.get("api/user");
+          .then(() => axios.get("api/user"))
+          .then(response => {
             window.localStorage.setItem("loggedIn", true);
             ctx.commit("authenticate");
-            ctx.commit("setUser", user.data);
+            ctx.commit("setUser", response.data);
             ctx.dispatch("fetchWatchlist");
             resolve(true);
           })
