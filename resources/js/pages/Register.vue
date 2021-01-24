@@ -169,8 +169,8 @@ export default {
         })
         .then(response => {
           this.$success(
-            "Success",
-            "Your account has been created successfully. You can now login."
+            "Verify Your Email",
+            "Your account has been created successfully. Please verify your email address by following the instrucitons sent to your email address."
           );
           this.$router.push("/login");
         })
