@@ -60,9 +60,9 @@
         v-for="day in daysInMonth"
         :key="`day-${day}`"
         :class="{
-          'bg-mantis-500 text-white': day == today,
-          'border-2 border-mantis-500 bg-gray-200': day == selected,
-          'hover:bg-gray-200 cursor-pointer': day != today,
+          'bg-mantis-500 text-white': day == selected,
+          'border-2 border-mantis-500 bg-gray-200': day == today,
+          'hover:bg-gray-200 cursor-pointer': day != selected,
           'cursor-wait': disabled,
         }"
         @click="selectDate(day)"
