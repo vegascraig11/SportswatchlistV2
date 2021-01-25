@@ -5,37 +5,20 @@
     <div class="mt-2 md:flex justify-center">
       <form class="max-w-sm" @submit.prevent="register">
         <div class="mt-2">
-          <label for="firstname" class="uppercase">First Name</label>
+          <label for="name" class="uppercase">Name</label>
           <div>
             <input
               class="w-full px-3 py-2 border rounded mt-1 focus:outline-none focus:ring transition duration-150 ease-in"
-              :class="errors.firstname ? 'border-red-500' : ''"
+              :class="errors.name ? 'border-red-500' : ''"
               type="text"
-              v-model="firstname"
-              id="firstname"
+              v-model="name"
+              id="name"
               required
-              placeholder="John"
+              placeholder="John Doe"
             />
           </div>
-          <p v-if="errors.firstname" class="text-red-700">
-            {{ errors.firstname[0] }}
-          </p>
-        </div>
-        <div class="mt-2">
-          <label for="lastname" class="uppercase">Last Name</label>
-          <div>
-            <input
-              class="w-full px-3 py-2 border rounded mt-1 focus:outline-none focus:ring transition duration-150 ease-in"
-              :class="errors.lastname ? 'border-red-500' : ''"
-              type="text"
-              v-model="lastname"
-              id="lastname"
-              required
-              placeholder="Doe"
-            />
-          </div>
-          <p v-if="errors.lastname" class="text-red-700">
-            {{ errors.lastname[0] }}
+          <p v-if="errors.name" class="text-red-700">
+            {{ errors.name[0] }}
           </p>
         </div>
         <div class="mt-2">
@@ -71,22 +54,22 @@
           </p>
         </div>
         <div class="mt-2">
-          <label for="confirmPassword" class="uppercase"
+          <label for="password_confirmation" class="uppercase"
             >Confirm Password</label
           >
           <div>
             <input
               class="w-full px-3 py-2 border rounded mt-1 focus:outline-none focus:ring transition duration-150 ease-in"
-              :class="errors.confirmPassword ? 'border-red-500' : ''"
+              :class="errors.password_confirmation ? 'border-red-500' : ''"
               type="password"
-              v-model="confirmPassword"
-              id="confirmPassword"
+              v-model="password_confirmation"
+              id="password_confirmation"
               required
               placeholder="Confirm Password"
             />
           </div>
-          <p v-if="errors.confirmPassword" class="text-red-700">
-            {{ errors.confirmPassword[0] }}
+          <p v-if="errors.password_confirmation" class="text-red-700">
+            {{ errors.password_confirmation[0] }}
           </p>
         </div>
         <div class="mt-4">
@@ -135,11 +118,10 @@
 export default {
   data() {
     return {
-      firstname: "",
-      lastname: "",
+      name: "",
       email: "",
       password: "",
-      confirmPassword: "",
+      password_confirmation: "",
       agreement: "",
       errors: {},
       working: false,
@@ -147,14 +129,7 @@ export default {
   },
   methods: {
     register() {
-      const {
-        firstname,
-        lastname,
-        email,
-        password,
-        confirmPassword,
-        agreement,
-      } = this;
+      const { name, email, password, password_confirmation, agreement } = this;
 
       if (!this.validateFields()) return;
 
@@ -162,10 +137,10 @@ export default {
 
       axios
         .post("/register", {
-          name: `${firstname} ${lastname}`,
+          name,
           email,
           password,
-          password_confirmation: confirmPassword,
+          password_confirmation,
         })
         .then(response => {
           this.$success(
@@ -182,21 +157,10 @@ export default {
         .finally(() => (this.working = false));
     },
     validateFields() {
-      const {
-        firstname,
-        lastname,
-        email,
-        password,
-        confirmPassword,
-        agreement,
-      } = this;
+      const { name, email, password, password_confirmation, agreement } = this;
       const errors = {};
 
-      if (firstname.trim() === "")
-        errors["firstname"] = ["First name is required."];
-
-      if (lastname.trim() === "")
-        errors["lastname"] = ["Last name is required."];
+      if (name.trim() === "") errors["name"] = ["Name is required."];
 
       if (email.trim() === "") errors["email"] = ["Email is required."];
 
@@ -205,8 +169,8 @@ export default {
       if (password.length < 8)
         errors["password"] = ["Password needs to be at least 8 characters."];
 
-      if (password !== confirmPassword)
-        errors["confirmPassword"] = ["The passwords do not match."];
+      if (password !== password_confirmation)
+        errors["password_confirmation"] = ["The passwords do not match."];
 
       if (!agreement) {
         errors["agreement"] = [
