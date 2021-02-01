@@ -29,69 +29,71 @@
               >
             </div>
           </nav>
-          <div class="lg:hidden relative" ref="userDropdown">
-            <button
-              @click="mobileDropdown = !mobileDropdown"
-              type="button"
-              class="p-4 focus:outline-none focus:ring transition ease-in duration-150 rounded"
+          <div class="lg:hidden flex items-center">
+            <router-link
+              class="block p-2 hover:bg-gray-900 transition ease-in duration-150 rounded text-sm focus:outline-none"
+              to="/my-watchlist"
+              >My Watchlist</router-link
             >
-              <svg
-                viewBox="0 0 20 20"
-                xmlns="http://www.w3.org/2000/svg"
-                class="fill-current h-6 w-6"
+            <div class="relative" ref="userDropdown">
+              <button
+                @click="mobileDropdown = !mobileDropdown"
+                type="button"
+                class="p-4 focus:outline-none focus:ring transition ease-in duration-150 rounded"
               >
-                <title>Menu</title>
-                <path d="M0 3h20v2H0V3zm0 6h20v2H0V9zm0 6h20v2H0v-2z"></path>
-              </svg>
-            </button>
-            <transition
-              enter-class="transform scale-90 opacity-0"
-              enter-to-class="transform scale-100 opacity-100"
-              enter-active-class="transition duration-100 ease-in"
-              leave-active-class="transition duration-75 ease-in"
-              leave-class="transform scale-100 opacity-100"
-              leave-to-class="transform scale-90 opacity-0"
-            >
-              <div
-                v-if="mobileDropdown"
-                class="text-sm absolute origin-top-right right-0 w-56 p-2 bg-gray-800 border border-gray-800 rounded z-50"
+                <svg
+                  viewBox="0 0 20 20"
+                  xmlns="http://www.w3.org/2000/svg"
+                  class="fill-current h-6 w-6"
+                >
+                  <title>Menu</title>
+                  <path d="M0 3h20v2H0V3zm0 6h20v2H0V9zm0 6h20v2H0v-2z"></path>
+                </svg>
+              </button>
+              <transition
+                enter-class="transform scale-90 opacity-0"
+                enter-to-class="transform scale-100 opacity-100"
+                enter-active-class="transition duration-100 ease-in"
+                leave-active-class="transition duration-75 ease-in"
+                leave-class="transform scale-100 opacity-100"
+                leave-to-class="transform scale-90 opacity-0"
               >
-                <router-link
-                  class="block p-2 hover:bg-gray-900 transition ease-in duration-150 rounded"
-                  to="/my-watchlist"
-                  >My Watchlist</router-link
+                <div
+                  v-if="mobileDropdown"
+                  class="text-sm absolute origin-top-right right-0 w-56 p-2 bg-gray-800 border border-gray-800 rounded z-50"
                 >
-                <router-link
-                  class="block p-2 hover:bg-gray-900 transition ease-in duration-150 rounded"
-                  to="/faq"
-                  >FAQ's</router-link
-                >
-                <div v-if="loggedIn" class="border-t mt-2">
-                  <p class="mb-2 px-2 block py-2 font-semibold">
-                    {{ username }}
-                  </p>
-                  <button
-                    type="button"
-                    class="block w-full text-left p-2 cursor-pointer hover:bg-gray-900 transition ease-in duration-150 rounded focus:outline-none"
-                    @click="logout"
-                  >
-                    Logout
-                  </button>
-                </div>
-                <div v-else class="border-t mt-2 py-2">
                   <router-link
-                    to="/signup"
-                    class="block p-2 mb-2 hover:bg-gray-900 transition ease-in duration-150 rounded"
-                    >Sign Up</router-link
+                    class="block p-2 hover:bg-gray-900 transition ease-in duration-150 rounded"
+                    to="/faq"
+                    >FAQ's</router-link
                   >
-                  <router-link
-                    to="/login"
-                    class="block p-2 bg-mantis-500 hover:bg-opacity-90 transition ease-in duration-150 rounded-sm"
-                    >Login</router-link
-                  >
+                  <div v-if="loggedIn" class="border-t mt-2">
+                    <p class="mb-2 px-2 block py-2 font-semibold">
+                      {{ username }}
+                    </p>
+                    <button
+                      type="button"
+                      class="block w-full text-left p-2 cursor-pointer hover:bg-gray-900 transition ease-in duration-150 rounded focus:outline-none"
+                      @click="logout"
+                    >
+                      Logout
+                    </button>
+                  </div>
+                  <div v-else class="border-t mt-2 py-2">
+                    <router-link
+                      to="/signup"
+                      class="block p-2 mb-2 hover:bg-gray-900 transition ease-in duration-150 rounded"
+                      >Sign Up</router-link
+                    >
+                    <router-link
+                      to="/login"
+                      class="block p-2 bg-mantis-500 hover:bg-opacity-90 transition ease-in duration-150 rounded-sm"
+                      >Login</router-link
+                    >
+                  </div>
                 </div>
-              </div>
-            </transition>
+              </transition>
+            </div>
           </div>
         </div>
       </div>
