@@ -193,7 +193,7 @@ export default {
           } else if (this.$route.query.r) {
             this.$router.push(this.$route.query.r);
           } else {
-            this.$router.push("/my-watchlist");
+            this.$router.push("/");
           }
           this.$success("Welcome Back!", "You are now logged in. ");
         })
