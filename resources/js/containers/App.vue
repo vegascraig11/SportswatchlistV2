@@ -184,7 +184,7 @@ export default {
   mounted() {
     if (this.loggedIn) return;
 
-    if (this.dialogShown) {
+    if (!this.dialogShown) {
       ["mousemove", "click", "keyup"].forEach(event =>
         document.body.addEventListener(event, this.clearIdle)
       );
