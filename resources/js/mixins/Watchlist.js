@@ -82,10 +82,12 @@ const WatchlistMixin = {
       promise
         .then(async response => {
           await this.$store.dispatch("fetchWatchlist");
-          flash({
-            body: "Added to watchlist successfully!",
-            type: "success",
-          });
+          this.$success(
+            "Added to Watchlist",
+            `[${this.game.game_type.toUpperCase()}] ${
+              this.game.away_team.full_name
+            } vs ${this.game.home_team.full_name} was added to your watchlist.`
+          );
           this.added = true;
         })
         .catch(err => console.log(err));
@@ -106,10 +108,14 @@ const WatchlistMixin = {
       promise
         .then(response => {
           this.$store.dispatch("fetchWatchlist");
-          flash({
-            body: "Removed from watchlist successfully!",
-            type: "success",
-          });
+          this.$success(
+            "Removed from Watchlist",
+            `[${this.game.game_type.toUpperCase()}] ${
+              this.game.away_team.full_name
+            } vs ${
+              this.game.home_team.full_name
+            } was removed from your watchlist.`
+          );
           this.added = false;
           this.$emit("game-removed", response);
         })
