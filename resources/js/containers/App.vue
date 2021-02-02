@@ -152,8 +152,6 @@ export default {
   },
   data() {
     return {
-      idle: 0,
-      interval: null,
       showDialog: false,
       dialogShown: false,
       submitting: false,
@@ -161,14 +159,6 @@ export default {
     };
   },
   watch: {
-    idle(newValue) {
-      const val = newValue > 10;
-
-      if (val) {
-        this.showDialog = true;
-        if (this.interval) clearInterval(this.interval);
-      }
-    },
     loggedIn(val) {
       if (val && this.interval) {
         clearInterval(this.interval);
@@ -180,12 +170,10 @@ export default {
     if (this.loggedIn) return;
 
     if (!this.dialogShown) {
-      this.interval = setInterval(() => this.idle++, 1000);
+      setTimeout(() => this.showDialog = true, 5000);
     }
   },
   beforeDestroy() {
-    if (this.interval) clearInterval(this.interval);
-
     document.body.removeEventListener("click", this.clickAwayListener);
   },
   computed: {
@@ -209,9 +197,6 @@ export default {
     },
   },
   methods: {
-    clearIdle() {
-      this.idle = 0;
-    },
     submitEmail() {
       this.submitting = true;
       this.$http
