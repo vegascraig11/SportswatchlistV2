@@ -40,8 +40,6 @@
               <a href="#">Advertise with Us</a>
               <span class="px-4">|</span>
               <a href="#">Privacy Policy</a>
-              <span class="px-4">|</span>
-              <a href="#">Sports Betting</a>
             </div>
           </div>
         </div>
@@ -168,9 +166,6 @@ export default {
 
       if (val) {
         this.showDialog = true;
-        [("mousemove", "click", "keyup")].forEach(event =>
-          document.body.removeEventListener(event, this.clearIdle)
-        );
         if (this.interval) clearInterval(this.interval);
       }
     },
@@ -185,16 +180,10 @@ export default {
     if (this.loggedIn) return;
 
     if (!this.dialogShown) {
-      ["mousemove", "click", "keyup"].forEach(event =>
-        document.body.addEventListener(event, this.clearIdle)
-      );
       this.interval = setInterval(() => this.idle++, 1000);
     }
   },
   beforeDestroy() {
-    ["mousemove", "click", "keyup"].forEach(event =>
-      document.body.removeEventListener(event, this.clearIdle)
-    );
     if (this.interval) clearInterval(this.interval);
 
     document.body.removeEventListener("click", this.clickAwayListener);
