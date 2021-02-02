@@ -288,7 +288,7 @@
           <input
             @keyup="search"
             type="text"
-            class="w-full pl-8 pr-4 py-2 bg-swl-black-light rounded placeholder-gray-400"
+            class="w-full pl-8 pr-4 py-2 bg-swl-black-light rounded placeholder-gray-400 focus:outline-none focus:text-gray-900 focus:bg-gray-100 focus:ring focus:ring-opacity-50 transition ease-in duration-150"
             placeholder="Search"
           />
         </div>
