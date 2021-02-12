@@ -77,7 +77,7 @@ const store = new Vuex.Store({
         axios
           .get("sanctum/csrf-cookie")
           .then(() => axios.post("login", { email, password }))
-          // .then(() => axios.get("api/user")) - removed due
+          .then(() => axios.get("api/user"))
           .then(response => {
             window.localStorage.setItem("loggedIn", true);
             ctx.commit("authenticate");
